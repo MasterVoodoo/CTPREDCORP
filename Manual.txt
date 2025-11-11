@@ -1,0 +1,162 @@
+	🔹 1. Entry & Global Files
+
+> index.html
+
+	- The main HTML entry point.
+
+	- Typically you won’t edit much here (Vite injects the React app), but <title> and meta tags can be changed here.
+
+> src/main.tsx
+
+	-React root renderer. Usually not edited unless adding providers or global wrappers.
+ 
+> src/App.tsx
+
+	- The central app container. Defines routing and main layout.
+
+> src/index.css & src/styles/globals.css
+
+	- Global CSS styles (fonts, resets, body styles).
+
+	- Edit here for global theme changes (background, default font).
+
+	🔹 2. Components (Website Sections)
+
+(Located in src/components/)
+
+> Header.tsx → Navigation bar (menu links, logo).
+
+> Hero.tsx → Homepage hero/banner section.
+
+> Footer.tsx → Footer content (socials, copyright).
+
+> About.tsx → Main About page.
+
+> ContactPage.tsx → Contact page form & details.
+
+> ServicesPage.tsx / ServicesPageCombined.tsx → Services listing.
+
+> PropertiesPage.tsx → Property listings page.
+
+> UnitDetailsPage.tsx → Individual property/unit detail page.
+
+> ScheduleAppointment.tsx → Appointment booking section.
+
+> ManagementTeam.tsx, BoardOfDirectors.tsx, ModernManagementTeam.tsx → Management/Team sections.
+
+> InvestorRelations.tsx, FinancialReports.tsx, Compliance.tsx, PoliciesProcedures.tsx → Investor/Corporate governance pages.
+
+> TenantsPortal.tsx → Tenant portal landing.
+
+> Services.tsx → Reusable services section.
+
+> Statistics.tsx → Stats/numbers section.
+
+> FeaturedListings.tsx → Featured property highlights.
+
+> AllAvailableSpaces.tsx / SearchResults.tsx → Property search system.
+
+	🔹 3. UI Components
+
+(Located in src/components/ui/ → These are reusable UI building blocks.)
+
+> button.tsx → Buttons
+
+> card.tsx → Cards
+
+> form.tsx → Forms
+
+> table.tsx → Tables
+
+> carousel.tsx → Image sliders
+
+> navigation-menu.tsx → Dropdown/menus
+
+> tooltip.tsx, popover.tsx, dialog.tsx → Popups/modals
+
+	🔹 4. About Page Subcomponents
+
+(Located in src/components/about/)
+
+> ModernManagementTeam.tsx → Management team section.
+
+> CtpBfBuildingProperty.tsx → Displays CTP BF property details.
+
+> CtpAlphaTowerProperty.tsx → Displays Alpha Tower property details.
+
+> AdminPage.tsx → Admin portal page.
+
+> CtpRedCorpProperty.tsx → CTP Red Corp property page.
+
+> AllAvailableSpaces.tsx → Full list of available spaces.
+
+> FeaturedListings.tsx → Featured property highlights.
+
+> SearchResults.tsx → Search results page.
+
+> FinancialReports.tsx → Investor financial reports page.
+
+> InvestorRelations.tsx → Investor relations section.
+
+> ManagementTeam.tsx → Management team display.
+
+> Hero.tsx → Homepage hero section (banner).
+
+> Header.tsx → Website header/navigation bar.
+
+> ServicesPageCombined.tsx → Services page with combined view.
+
+> ContactPage.tsx → Contact form & company contact info.
+
+> PropertiesPage.tsx → Property listings page.
+
+	> TeamSection.tsx → Displays team members.
+
+> AwardsSection.tsx → Awards list.
+
+> ValuesSection.tsx → Company values.
+
+> AboutConstants.tsx → Holds constants/data for About page (text, labels).
+
+	🔹 5. Data Files
+
+(Located in src/data/)
+
+> unitsData.json / unitsData.ts → Unit listings (IDs, descriptions, sizes, availability).
+
+> buildingData.ts, floorData.ts, ctpBF.ts, ctpAlpha.ts, etc. → Building-specific data.
+
+> financialData.ts → Data for financial reports.
+
+> ctpData.ts → General company data.
+
+	🔹 6. Assets
+
+> Located in src/assets/ → All images (logos, banners, icons).
+	- Replace images here (keep same filename or update imports).
+
+	🔹 7. Guidelines
+
+> src/guidelines/Guidelines.md → Internal development/style guidelines.
+
+> src/guidelines/DELETE_THESE_FILES.md → Old cleanup notes.
+
+	🔹 8. Config & Build
+
+> vite.config.ts → Vite configuration (aliases, build settings).
+
+> package.json → Dependencies and available scripts (npm run dev, npm run build).
+
+	⚙️ How to Edit
+
+> Text Content → Look inside components/*.tsx or data/*.ts/json.
+
+> Images → Replace in src/assets/.
+
+> Navigation Links → Edit Header.tsx.
+
+> Global Styles (fonts, colors) → Edit src/styles/globals.css or Tailwind config (if used).
+
+> Property Listings → Update src/data/unitsData.* files.
+
+> Team/About Info → Edit src/components/about/*.tsx.
