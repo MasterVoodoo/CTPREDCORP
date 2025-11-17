@@ -1,7 +1,7 @@
 
-  # CTP RED WEBSITE (Jom's Copy)
+  # CTP RED WEBSITE
 
-  This is a code bundle for CTP RED WEBSITE (Jom's Copy). The original project is available at https://www.figma.com/design/j0zNfel7sqqoID8nqVxOyz/CTP-RED-WEBSITE--Jom-s-Copy-.
+  This is a code bundle for CTP RED WEBSITE. The original project is available at https://www.figma.com/design/j0zNfel7sqqoID8nqVxOyz/CTP-RED-WEBSITE--Jom-s-Copy-.
 
   ## Running the code
 
