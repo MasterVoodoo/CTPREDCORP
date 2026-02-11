@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, React } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -214,7 +214,7 @@ export default function UnitDetailsPage({
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 mb-6">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-primary mb-2">
-                    ${unit.price.toLocaleString()}
+                    ₱{unit.price.toLocaleString()}
                   </div>
                   <div className="text-gray-600 mb-4">
                     per month

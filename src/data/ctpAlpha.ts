@@ -237,7 +237,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years"],
       includedUtilities: ["Internet", "Security", "HVAC"],
-      additionalCosts: ["Parking: $250/month"]
+      additionalCosts: ["Parking: ₱250/month"]
     }
   },
   "CAT-307": {
@@ -269,7 +269,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years"],
       includedUtilities: ["Internet", "Security", "HVAC"],
-      additionalCosts: ["Parking: $250/month"]
+      additionalCosts: ["Parking: ₱250/month"]
     }
   },
   "CAT-801": {
@@ -304,7 +304,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Security"],
-      additionalCosts: ["HVAC: $150/month", "Parking: $300/month"]
+      additionalCosts: ["HVAC: ₱150/month", "Parking: ₱300/month"]
     }
   },
   "CAT-802": {
@@ -339,7 +339,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Security"],
-      additionalCosts: ["HVAC: $150/month", "Parking: $300/month"]
+      additionalCosts: ["HVAC: ₱150/month", "Parking: ₱300/month"]
     }
   }
 };

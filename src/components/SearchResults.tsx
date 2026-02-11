@@ -172,7 +172,7 @@ export default function SearchResults({
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-2xl font-bold text-primary">
-                          ${unit.price.toLocaleString()}
+                          ₱{unit.price.toLocaleString()}
                         </span>
                         <span className="text-gray-600">/month</span>
                       </div>

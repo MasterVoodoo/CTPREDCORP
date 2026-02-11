@@ -128,7 +128,7 @@ export const featuredListings: FeaturedListing[] = [
     location: "1 floor",
     size: "1,400 sq ft",
     capacity: "10 people",
-    price: "$3,800/month",
+    price: "₱3,800/month",
     image: "https://images.unsplash.com/photo-1573852858648-0290e8b1f3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     status: "Available"
   },
@@ -140,7 +140,7 @@ export const featuredListings: FeaturedListing[] = [
     location: "1 floor",
     size: "1,200 sq ft",
     capacity: "8 people",
-    price: "$3,500/month",
+    price: "₱3,500/month",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     status: "Available"
   },
@@ -152,7 +152,7 @@ export const featuredListings: FeaturedListing[] = [
     location: "1 floor",
     size: "1,300 sq ft",
     capacity: "9 people",
-    price: "$3,600/month",
+    price: "₱3,600/month",
     image: "https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     status: "Available"
   }

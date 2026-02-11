@@ -1,3 +1,4 @@
+import React from "react";
 import { ArrowLeft, MapPin, Square, Users, Building2, Filter } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -281,7 +282,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div>
                       <p className="text-2xl font-bold text-primary">
-                        ${unit.price.toLocaleString()}
+                        ₱{unit.price.toLocaleString()}
                       </p>
                       <p className="text-sm text-gray-500">per month</p>
                     </div>

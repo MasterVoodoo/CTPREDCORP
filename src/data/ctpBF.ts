@@ -209,7 +209,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Security", "Cleaning"],
-      additionalCosts: ["HVAC: $200/month", "Parking: $200/month"]
+      additionalCosts: ["HVAC: ₱200/month", "Parking: ₱200/month"]
     }
   }
 };

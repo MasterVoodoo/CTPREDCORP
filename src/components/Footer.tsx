@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Phone,
   Mail,
@@ -9,7 +10,7 @@ import {
   Instagram,
 } from "lucide-react";
 import { Separator } from "./ui/separator";
-import ctpLogo from "figma:asset/8ed115b5c30a60d213ba162e5cfc8f35f079d16b.png";
+//import ctpLogo from "figma:asset/8ed115b5c30a60d213ba162e5cfc8f35f079d16b.png";
 
 const buildings = [
   {
@@ -23,7 +24,7 @@ const buildings = [
     phone: "+1 (555) 234-5678",
   },
   {
-    name: "CTP Executive Plaza",
+    name: "CTP BF Building",
     address: "11 President's Ave, Parañaque, Metro Manila",
     phone: "+1 (555) 345-6789",
   },

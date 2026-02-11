@@ -1,3 +1,4 @@
+import React from "react";
 import image_7cb049e3da17c47cff60c03167368fcdf36917e1 from 'figma:asset/7cb049e3da17c47cff60c03167368fcdf36917e1.png';
 import image_921bacae4fb3f71299da1dd7d8332e7e9a9c8452 from 'figma:asset/921bacae4fb3f71299da1dd7d8332e7e9a9c8452.png';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";

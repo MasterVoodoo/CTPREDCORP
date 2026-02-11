@@ -195,7 +195,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="text-2xl font-bold text-primary">
-                          ${unit.price.toLocaleString()}
+                          ₱{unit.price.toLocaleString()}
                         </div>
                         <div className="text-xs text-gray-500">per month</div>
                       </div>
