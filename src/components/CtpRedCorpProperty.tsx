@@ -241,7 +241,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                       </div>
                       <Button 
                         size="sm" 
-                        className="bg-primary hover:bg-accent text-white"
+                        className="bg-primary hover:bg-accent text-white cursor-pointer"
                         onClick={() => onViewDetails?.(unit.id)}
                       >
                         View Details
