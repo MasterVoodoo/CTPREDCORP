@@ -167,7 +167,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                     <div className="mb-4 text-sm text-gray-600">
                       <div className="flex items-center">
                         <Square className="h-4 w-4 mr-1" />
-                        {unit.size} sq ft
+                        {unit.size} sq m
                       </div>
                     </div>
 
@@ -291,7 +291,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Total Area:</span>
-                        <span className="font-semibold">{floor.totalSqft.toLocaleString()} sq ft</span>
+                        <span className="font-semibold">{floor.totalSqm.toLocaleString()} sq m</span>
                       </div>
                       {floor.condition && (
                         <div className="flex justify-between items-center">

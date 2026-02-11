@@ -161,7 +161,7 @@ export default function SearchResults({
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <Square className="h-4 w-4 mr-2 flex-shrink-0" />
-                        {unit.size.toLocaleString()} sq ft
+                        {unit.size.toLocaleString()} sq m
                       </div>
                     </div>
 

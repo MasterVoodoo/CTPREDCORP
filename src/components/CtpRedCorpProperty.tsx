@@ -127,7 +127,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                 <div className="text-sm text-gray-600">Available Units</div>
               </div>
             </div>
-            <Button className="bg-primary hover:bg-accent text-white w-full">
+            <Button className="bg-primary hover:bg-accent text-white w-full cursor-pointer">
               Schedule Building Tour
             </Button>
           </div>
@@ -211,7 +211,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                     <div className="mb-4 text-sm text-gray-600">
                       <div className="flex items-center">
                         <Square className="h-4 w-4 mr-1" />
-                        {unit.size} sq ft
+                        {unit.size} sq m
                       </div>
                     </div>
 
@@ -335,7 +335,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Total Area:</span>
-                        <span className="font-semibold">{floor.totalSqft.toLocaleString()} sq ft</span>
+                        <span className="font-semibold">{floor.totalSqm.toLocaleString()} sq m</span>
                       </div>
                       {floor.condition && (
                         <div className="flex justify-between items-center">

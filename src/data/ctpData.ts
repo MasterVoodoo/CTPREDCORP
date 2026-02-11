@@ -126,7 +126,7 @@ export const featuredListings: FeaturedListing[] = [
     title: "CTP Alpha Tower",
     building: "1709 Investment Dr, Muntinlupa",
     location: "1 floor",
-    size: "1,400 sq ft",
+    size: "130.13 sq m",
     capacity: "10 people",
     price: "₱3,800/month",
     image: "https://images.unsplash.com/photo-1573852858648-0290e8b1f3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -138,7 +138,7 @@ export const featuredListings: FeaturedListing[] = [
     title: "CTP Asean Tower",
     building: "Asean Drive, Alabang, Muntinlupa",
     location: "1 floor",
-    size: "1,200 sq ft",
+    size: "111.48 sq m",
     capacity: "8 people",
     price: "₱3,500/month",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -150,7 +150,7 @@ export const featuredListings: FeaturedListing[] = [
     title: "CTP BF Building",
     building: "Bonifacio Global City",
     location: "1 floor",
-    size: "1,300 sq ft",
+    size: "120.80 sq m",
     capacity: "9 people",
     price: "₱3,600/month",
     image: "https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -239,21 +239,21 @@ export const simpleBuildingStatistics: SimpleBuildingStats[] = [
     totalFloors: buildings["ctp-red-corp"].stats.totalFloors,
     totalUnits: buildings["ctp-red-corp"].stats.totalUnits,
     availableUnits: buildings["ctp-red-corp"].stats.availableUnits,
-    area: `${buildings["ctp-red-corp"].floorPlans[0].totalSqft.toLocaleString()} sq ft`,
+    area: `${buildings["ctp-red-corp"].floorPlans[0].totalSqm.toLocaleString()} sq m`,
   },
   {
     building: buildings["ctp-alpha-tower"].displayName,
     totalFloors: buildings["ctp-alpha-tower"].stats.totalFloors,
     totalUnits: buildings["ctp-alpha-tower"].stats.totalUnits,
     availableUnits: buildings["ctp-alpha-tower"].stats.availableUnits,
-    area: `${buildings["ctp-alpha-tower"].floorPlans[0].totalSqft.toLocaleString()} sq ft`,
+    area: `${buildings["ctp-alpha-tower"].floorPlans[0].totalSqm.toLocaleString()} sq m`,
   },
   {
     building: buildings["ctp-bf-building"].displayName,
     totalFloors: buildings["ctp-bf-building"].stats.totalFloors,
     totalUnits: buildings["ctp-bf-building"].stats.totalUnits,
     availableUnits: buildings["ctp-bf-building"].stats.availableUnits,
-    area: `${buildings["ctp-bf-building"].floorPlans[0].totalSqft.toLocaleString()} sq ft`,
+    area: `${buildings["ctp-bf-building"].floorPlans[0].totalSqm.toLocaleString()} sq m`,
   },
 ];
 
@@ -478,7 +478,7 @@ export const getFloorStats = (buildingId: string, floor: number) => {
     floor: floor,
     totalUnits: floorPlan.units,
     availableUnits: floorPlan.available,
-    totalArea: floorPlan.totalSqft,
+    totalArea: floorPlan.totalSqm,
     condition: floorPlan.condition,
     occupancyRate: Math.round(((floorPlan.units - floorPlan.available) / floorPlan.units) * 100),
     features: floorInfo.features,
@@ -489,7 +489,7 @@ export const getFloorStats = (buildingId: string, floor: number) => {
 // Get total building area by summing all floors
 export const getTotalBuildingArea = (buildingId: string): number => {
   const floorPlans = getBuildingFloorPlans(buildingId);
-  return floorPlans.reduce((total, plan) => total + plan.totalSqft, 0);
+  return floorPlans.reduce((total, plan) => total + plan.totalSqm, 0);
 };
 
 // Get total available area in a building
@@ -497,7 +497,7 @@ export const getAvailableBuildingArea = (buildingId: string): number => {
   const floorPlans = getBuildingFloorPlans(buildingId);
   return floorPlans
     .filter(plan => plan.available > 0)
-    .reduce((total, plan) => total + plan.totalSqft, 0);
+    .reduce((total, plan) => total + plan.totalSqm, 0);
 };
 
 // Check if a floor has available units

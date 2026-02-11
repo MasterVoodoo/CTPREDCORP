@@ -72,7 +72,7 @@ export interface BuildingContact {
 export interface BuildingFloorPlan {
   floor: number;
   units: number;
-  totalSqft: number;
+  totalSqm: number;
   available: number;
   condition: "Bare" | "Warm Shell" | "Fitted";
 }
@@ -90,6 +90,7 @@ export interface BuildingInfo {
   buildingFeatures: BuildingFeature[];
   floorPlans: BuildingFloorPlan[];
   heroImage: string;
+  image: string;
   badge: string;
   ctaTitle: string;
   ctaDescription: string;
@@ -111,14 +112,14 @@ export const ctpAlphaFloorPlans: BuildingFloorPlan[] = [
   { 
     floor: 3, // Floor 3 for units 304 and 307
     units: 2, 
-    totalSqft: 150.61, // 77.79 + 72.82
+    totalSqm: 14.00, // 7.23 + 6.77
     available: 2, 
     condition: "Warm Shell" 
   },
   { 
     floor: 8, // Floor 8 for units 801 and 802
     units: 2, 
-    totalSqft: 245.30, // 112.23 + 133.07
+    totalSqm: 22.79, // 10.43 + 12.36
     available: 2, 
     condition: "Bare" 
   }
@@ -201,6 +202,7 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
   ],
   floorPlans: ctpAlphaFloorPlans,
   heroImage: "https://images.unsplash.com/photo-1573852858648-0290e8b1f3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   badge: "Alpha Class Building",
   ctaTitle: "Experience Alpha-Class Excellence",
   ctaDescription: "Join the elite companies that have chosen CTP Alpha Tower as their headquarters. Contact us today to schedule a private tour and discover premium office solutions."
@@ -214,7 +216,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 3,
-    size: 77.79,
+    size: 7.23,
     capacity: 3,
     price: 3003,
     status: "Available",
@@ -225,7 +227,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     ],
     description: "Compact office space perfect for small teams in the heart of Makati CBD.",
     floorPlan: {
-      totalArea: 77.79,
+      totalArea: 7.23,
       privateOffices: 1,
       openWorkspace: 1,
       meetingRooms: 0,
@@ -246,7 +248,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 3,
-    size: 72.82,
+    size: 6.77,
     capacity: 3,
     price: 3004,
     status: "Available",
@@ -257,7 +259,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     ],
     description: "Efficient business suite ideal for startups and small enterprises in Makati.",
     floorPlan: {
-      totalArea: 72.82,
+      totalArea: 6.77,
       privateOffices: 1,
       openWorkspace: 1,
       meetingRooms: 0,
@@ -278,7 +280,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 8,
-    size: 112.23,
+    size: 10.43,
     capacity: 4,
     price: 3001,
     status: "Available",
@@ -292,7 +294,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     ],
     description: "High floor executive office with excellent views and customizable bare shell condition.",
     floorPlan: {
-      totalArea: 112.23,
+      totalArea: 10.43,
       privateOffices: 1,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -313,7 +315,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 8,
-    size: 133.07,
+    size: 12.36,
     capacity: 5,
     price: 3002,
     status: "Available",
@@ -327,7 +329,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     ],
     description: "Premium office space on the 8th floor with panoramic city views and flexible layout options.",
     floorPlan: {
-      totalArea: 133.07,
+      totalArea: 12.36,
       privateOffices: 2,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -364,7 +366,7 @@ export const getCtpAlphaFloorDetail = (floor: number): FloorInfo | null => {
 
 // Get total area for CTP Alpha Tower
 export const getCtpAlphaTotalArea = (): number => {
-  return ctpAlphaFloorPlans.reduce((total, plan) => total + plan.totalSqft, 0);
+  return ctpAlphaFloorPlans.reduce((total, plan) => total + plan.totalSqm, 0);
 };
 
 // Get available floors for CTP Alpha Tower

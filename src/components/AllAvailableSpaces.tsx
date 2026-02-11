@@ -266,7 +266,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                 <CardContent className="space-y-4">
                   <div className="flex items-center text-gray-600">
                     <Square className="h-4 w-4 mr-2" />
-                    <span className="text-sm">{unit.size.toLocaleString()} sq ft</span>
+                    <span className="text-sm">{unit.size.toLocaleString()} sq m</span>
                   </div>
 
                   <div className="flex items-center text-gray-600">

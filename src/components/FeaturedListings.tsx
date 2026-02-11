@@ -90,7 +90,7 @@ export default function FeaturedListings({
                     </p>
                   </div>
                   <Button
-                    className="bg-primary hover:bg-accent text-white"
+                    className="bg-primary hover:bg-accent text-white cursor-pointer"
                     onClick={() =>
                       onViewBuildingProperty?.(office.unitId)
                     }
@@ -106,7 +106,7 @@ export default function FeaturedListings({
         <div className="text-center mt-12">
           <Button
             variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-white"
+            className="border-primary text-primary hover:bg-primary hover:text-white cursor-pointer"
             onClick={onViewAllSpaces}
           >
             View All Available Spaces
