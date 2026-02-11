@@ -37,8 +37,7 @@ const services = [
 const additionalFeatures = [
   { icon: <Wifi className="h-6 w-6" />, text: "Enterprise-grade WiFi" },
   { icon: <Camera className="h-6 w-6" />, text: "CCTV surveillance" },
-  { icon: <Zap className="h-6 w-6" />, text: "Backup power systems" },
-  { icon: <Car className="h-6 w-6" />, text: "Valet parking available" }
+  { icon: <Zap className="h-6 w-6" />, text: "Backup power systems" }
 ];
 
 export default function Services() {

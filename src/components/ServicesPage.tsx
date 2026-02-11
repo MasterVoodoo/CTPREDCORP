@@ -82,7 +82,6 @@ export default function ServicesPage() {
       features: [
         "Reserved parking spaces",
         "Visitor parking management",
-        "Valet parking services",
         "Electric vehicle charging",
         "Security monitoring",
         "Monthly parking passes"

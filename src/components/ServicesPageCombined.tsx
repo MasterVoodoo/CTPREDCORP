@@ -118,7 +118,6 @@ export default function ServicesPageCombined() {
       features: [
         "Reserved parking spaces",
         "Visitor parking management",
-        "Valet parking services",
         "Electric vehicle charging",
         "Security monitoring",
         "Monthly parking passes",
@@ -179,10 +178,6 @@ export default function ServicesPageCombined() {
     {
       icon: <Zap className="h-6 w-6" />,
       text: "Backup power systems",
-    },
-    {
-      icon: <Car className="h-6 w-6" />,
-      text: "Valet parking available",
     },
   ];
 

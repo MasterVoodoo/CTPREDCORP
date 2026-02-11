@@ -417,11 +417,10 @@ export default function ContactPage() {
               <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
                 Additional Services Available
               </h3>
-              <div className="grid md:grid-cols-4 gap-6">
+              <div className="grid md:grid-cols-3 gap-6">
                 {[
                   { icon: HeadphonesIcon, title: "24/7 Support", desc: "Round-the-clock assistance" },
                   { icon: Shield, title: "Security", desc: "Professional security staff" },
-                  { icon: Car, title: "Valet Parking", desc: "Available during business hours" },
                   { icon: Calendar, title: "After Hours Access", desc: "Advance arrangement required" }
                 ].map((service, index) => (
                   <div key={index} className="text-center">

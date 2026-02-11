@@ -301,7 +301,7 @@ export const units: { [key: string]: Unit } = {
       availableFrom: "Available Now",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Premium Internet", "Security", "Concierge", "HVAC"],
-      additionalCosts: ["Valet parking: $300/month", "Executive services: $200/month"]
+      additionalCosts: ["Executive services: ₱200/month"]
     }
   },
   "CBF-103": {
