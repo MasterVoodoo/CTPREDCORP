@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, MapPin, Users, Building2, Square } from "lucide-react";
+import { ArrowLeft, MapPin, Building2, Square } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -162,10 +162,6 @@ export default function SearchResults({
                       <div className="flex items-center text-sm text-gray-600">
                         <Square className="h-4 w-4 mr-2 flex-shrink-0" />
                         {unit.size.toLocaleString()} sq ft
-                      </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Users className="h-4 w-4 mr-2 flex-shrink-0" />
-                        Up to {unit.capacity} people
                       </div>
                     </div>
 

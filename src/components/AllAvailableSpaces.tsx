@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowLeft, MapPin, Square, Users, Building2, Filter } from "lucide-react";
+import { ArrowLeft, MapPin, Square, Building2, Filter, Hotel } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -264,18 +264,13 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center text-gray-600">
-                      <Square className="h-4 w-4 mr-2" />
-                      <span className="text-sm">{unit.size.toLocaleString()} sq ft</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Users className="h-4 w-4 mr-2" />
-                      <span className="text-sm">{unit.capacity} people</span>
-                    </div>
+                  <div className="flex items-center text-gray-600">
+                    <Square className="h-4 w-4 mr-2" />
+                    <span className="text-sm">{unit.size.toLocaleString()} sq ft</span>
                   </div>
 
-                  <div className="text-center py-2">
+                  <div className="flex items-center text-gray-600">
+                  <Hotel className="h-4 w-4 mr-2" />
                     <p className="text-sm text-gray-500">Floor {unit.floor}</p>
                   </div>
 

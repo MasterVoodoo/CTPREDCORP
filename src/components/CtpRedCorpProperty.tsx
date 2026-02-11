@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Users, Square, Phone, Mail } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Square, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -164,14 +164,10 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                       <span className="text-sm text-gray-500">Floor {unit.floor}</span>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm text-gray-600">
+                    <div className="mb-4 text-sm text-gray-600">
                       <div className="flex items-center">
                         <Square className="h-4 w-4 mr-1" />
                         {unit.size} sq ft
-                      </div>
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1" />
-                        {unit.capacity} people
                       </div>
                     </div>
 

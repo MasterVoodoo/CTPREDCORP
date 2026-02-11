@@ -1,7 +1,6 @@
 import {
   MapPin,
   Square,
-  Users,
 } from "lucide-react";
 import {
   Card,
@@ -74,19 +73,11 @@ export default function FeaturedListings({
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center text-gray-600">
-                    <Square className="h-4 w-4 mr-2" />
-                    <span className="text-sm">
-                      {office.size}
-                    </span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Users className="h-4 w-4 mr-2" />
-                    <span className="text-sm">
-                      {office.capacity}
-                    </span>
-                  </div>
+                <div className="flex items-center text-gray-600">
+                  <Square className="h-4 w-4 mr-2" />
+                  <span className="text-sm">
+                    {office.size}
+                  </span>
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t">
