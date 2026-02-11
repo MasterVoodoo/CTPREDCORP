@@ -17,16 +17,19 @@ const buildings = [
     name: "CTP Alpha Tower",
     address: "1709 Investment Dr, Muntinlupa",
     phone: "+1 (555) 123-4567",
+    map: "https://maps.app.goo.gl/rzPgQHFY49L4UYpRA",
   },
   {
     name: "CTP Corporate Center",
     address: "Asean Drive, Alabang, Muntinlupa",
     phone: "+1 (555) 234-5678",
+    map: "https://maps.app.goo.gl/3Qw6E7DdYSKUzcsj9",
   },
   {
     name: "CTP BF Building",
     address: "11 President's Ave, Parañaque, Metro Manila",
     phone: "+1 (555) 345-6789",
+    map: "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
   },
 ];
 
@@ -69,9 +72,11 @@ export default function Footer() {
                 </h4>
                 <div className="flex items-start space-x-2 mb-2">
                   <MapPin className="h-4 w-4 text-primary mt-1" />
+                  <a href={building.map} target="_blank" rel="noopener noreferrer">
                   <p className="text-gray-300 text-sm">
                     {building.address}
                   </p>
+                  </a>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4 text-primary" />
