@@ -137,7 +137,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                   onClick={() => setSelectedFloor(floor)}
                   size="sm"
                 >
-                  Floor {floor}
+                  {floor === 0 ? "Ground Floor" : `Floor ${floor}`}
                 </Button>
               ))}
             </div>
@@ -161,7 +161,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
-                      <span className="text-sm text-gray-500">Floor {unit.floor}</span>
+                      <span className="text-sm text-gray-500">{unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}</span>
                     </div>
                     
                     <div className="mb-4 text-sm text-gray-600">
@@ -279,7 +279,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                 <Card key={floor.floor} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                      Floor {floor.floor}
+                      {floor.floor === 0 ? "Ground Floor" : `Floor ${floor.floor}`}
                       <Badge variant="outline">{floor.available} Available</Badge>
                     </CardTitle>
                   </CardHeader>
@@ -315,7 +315,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                       variant="outline"
                       onClick={() => setSelectedFloor(floor.floor)}
                     >
-                      View Floor {floor.floor} Units
+                      View {floor.floor === 0 ? "Ground Floor" : `Floor ${floor.floor}`} Units
                     </Button>
                   </CardContent>
                 </Card>

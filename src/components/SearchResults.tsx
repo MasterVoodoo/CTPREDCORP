@@ -77,7 +77,7 @@ export default function SearchResults({
               </h1>
               <div className="flex items-center space-x-2 text-gray-600 mt-1">
                 <MapPin className="h-4 w-4" />
-                <span>{building?.displayName} - Floor {floor}</span>
+                <span>{building?.displayName} - {floor === 0 ? "Ground Floor" : `Floor ${floor}`}</span>
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function SearchResults({
               No units found
             </h2>
             <p className="text-gray-600 mb-6">
-              There are no units available on Floor {floor} at {building?.displayName}. 
+              There are no units available on {floor === 0 ? "Ground Floor" : `Floor ${floor}`} at {building?.displayName}. 
               Try searching for a different floor or building.
             </p>
             <div className="space-x-4">
@@ -116,7 +116,7 @@ export default function SearchResults({
                   {filteredUnits.length} {filteredUnits.length === 1 ? 'Unit' : 'Units'} Found
                 </h2>
                 <p className="text-gray-600">
-                  Floor {floor} at {building?.displayName} • {building?.location}
+                  {floor === 0 ? "Ground Floor" : `Floor ${floor}`} at {building?.displayName} • {building?.location}
                 </p>
               </div>
               <div className="text-right">
@@ -157,7 +157,7 @@ export default function SearchResults({
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                        Floor {unit.floor}
+                        {unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <Square className="h-4 w-4 mr-2 flex-shrink-0" />

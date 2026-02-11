@@ -138,14 +138,14 @@ export const ctpAseanFloorPlans: BuildingFloorPlan[] = [
     condition: "Warm Shell" // Using the first unit's condition as representative
   },
   { 
-    floor: 11, // Lower Penthouse for LP03 and LP04
+    floor: 13, // Lower Penthouse for LP03 and LP04
     units: 2, 
     totalSqft: 928.07, // 461.2 + 466.87
     available: 2, 
     condition: "Bare" 
   },
   { 
-    floor: 12, // Upper Penthouse for UP02
+    floor: 14, // Upper Penthouse for UP02
     units: 1, 
     totalSqft: 310.12, 
     available: 1, 
@@ -189,9 +189,9 @@ export const ctpAseanFloorDetails: { [key: string]: FloorInfo } = {
     ],
     description: ""
   },
-  "ctp-red-corp-11": {
+  "ctp-red-corp-13": {
     buildingId: "ctp-red-corp",
-    floor: 11,
+    floor: 13,
     totalArea: 928.07,
     availableUnits: 2,
     totalUnits: 2,
@@ -206,9 +206,9 @@ export const ctpAseanFloorDetails: { [key: string]: FloorInfo } = {
     ],
     description: ""
   },
-  "ctp-red-corp-12": {
+  "ctp-red-corp-14": {
     buildingId: "ctp-red-corp",
-    floor: 12,
+    floor: 14,
     totalArea: 310.12,
     availableUnits: 1,
     totalUnits: 1,
@@ -235,10 +235,10 @@ export const ctpAseanBuildingInfo: BuildingInfo = {
   description: [
     "Situated on Asean Drive in Filinvest City, Alabang, Muntinlupa City, CTP Asean is positioned within a masterfully planned development that emphasizes sustainability and modern living.",
     "Filinvest City is a flagship project renowned for its strategic connectivity and accessibility, serving as a major gateway for commuters and a dynamic business district attracting multinational corporations and BPO companies.",
-    "CTP Asean is a Grade A, 13-storey office building developed by CTP R.E.D. III Corp. It offers a substantial Net Leasable Area of 24,933 square meters, indicating a large-scale, modern facility designed to accommodate various business and organizations. The building's prime location within Filinvest City offers convenient access to a diverse range of dining, entertainment, and retail options, thereby enhancing the overall work experience for occupants."
+    "CTP Asean is a Grade A, 14-storey office building (Ground Floor, 2nd-12th Floor, plus Lower and Upper Penthouse) developed by CTP R.E.D. III Corp. It offers a substantial Net Leasable Area of 24,933 square meters, indicating a large-scale, modern facility designed to accommodate various business and organizations. The building's prime location within Filinvest City offers convenient access to a diverse range of dining, entertainment, and retail options, thereby enhancing the overall work experience for occupants."
   ],
   stats: {
-    totalFloors: 4, // Ground, 10th, Lower Pent, Upper Pent
+    totalFloors: 14, // Ground Floor, 2nd-12th Floor, Lower Penthouse, Upper Penthouse
     totalUnits: 6, // GF12, 1001, 1008, LP03, LP04, UP02
     occupancyRate: 0,
     availableUnits: 6
@@ -378,7 +378,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     title: "Lower Penthouse (Unit LP03)",
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
-    floor: 11,
+    floor: 13,
     size: 461.2,
     capacity: 8,
     price: 2502,
@@ -412,7 +412,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     title: "Lower Penthouse (Unit LP04)",
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
-    floor: 11,
+    floor: 13,
     size: 466.87,
     capacity: 8,
     price: 2503,
@@ -446,7 +446,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     title: "Upper Penthouse Exclusive Suite",
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
-    floor: 12,
+    floor: 14,
     size: 310.12,
     capacity: 5,
     price: 2501,

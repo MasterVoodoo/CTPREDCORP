@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { ArrowLeft, MapPin, Calendar, Square, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -6,6 +7,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
+import { motion } from "framer-motion";
 
 interface CtpRedCorpPropertyProps {
   onBack: () => void;
@@ -14,10 +16,28 @@ interface CtpRedCorpPropertyProps {
 
 export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorpPropertyProps) {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("units");
 
   // Get building and units data from centralized sources
   const building = getBuildingById("ctp-red-corp");
   const availableUnits = getUnitsByBuilding("ctp-red-corp");
+  
+  // Get unique floors from available units
+  const uniqueFloors = [...new Set(availableUnits.map(unit => unit.floor))].sort((a, b) => a - b);
+  
+  // Helper function to get floor display name
+  const getFloorDisplayName = (floor: number): string => {
+    if (floor === 0) return "Ground Floor";
+    if (floor === 13) return "Lower Penthouse";
+    if (floor === 14) return "Upper Penthouse";
+    return `Floor ${floor}`;
+  };
+
+  const tabs = [
+    { id: "units", label: "Available Units" },
+    { id: "building", label: "Building Info" },
+    { id: "floor-plans", label: "Floor Plans" }
+  ];
 
   // Function to get status color styling
   const getStatusColor = (status: string) => {
@@ -113,11 +133,33 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
           </div>
         </div>
 
-        <Tabs defaultValue="units" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white border border-gray-200">
-            <TabsTrigger value="units">Available Units</TabsTrigger>
-            <TabsTrigger value="building">Building Info</TabsTrigger>
-            <TabsTrigger value="floor-plans">Floor Plans</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="relative grid w-full grid-cols-3 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
+            {tabs.map((tab) => (
+              <TabsTrigger
+                key={tab.id}
+                value={tab.id}
+                className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+                style={{ 
+                  color: activeTab === tab.id ? 'white' : undefined,
+                  zIndex: 10
+                }}
+              >
+                <span className="relative z-20">{tab.label}</span>
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                    style={{ zIndex: -1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30
+                    }}
+                  />
+                )}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           <TabsContent value="units" className="space-y-6">
@@ -127,17 +169,19 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                 variant={selectedFloor === null ? "default" : "outline"}
                 onClick={() => setSelectedFloor(null)}
                 size="sm"
+                className="cursor-pointer"
               >
                 All Floors
               </Button>
-              {[1, 2, 3, 4, 5, 6].map((floor) => (
+              {uniqueFloors.map((floor) => (
                 <Button
                   key={floor}
                   variant={selectedFloor === floor ? "default" : "outline"}
                   onClick={() => setSelectedFloor(floor)}
                   size="sm"
+                  className="cursor-pointer"
                 >
-                  Floor {floor}
+                  {getFloorDisplayName(floor)}
                 </Button>
               ))}
             </div>
@@ -161,7 +205,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
-                      <span className="text-sm text-gray-500">Floor {unit.floor}</span>
+                      <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
                     </div>
                     
                     <div className="mb-4 text-sm text-gray-600">
@@ -279,7 +323,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                 <Card key={floor.floor} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                      Floor {floor.floor}
+                      {getFloorDisplayName(floor.floor)}
                       <Badge variant="outline">{floor.available} Available</Badge>
                     </CardTitle>
                   </CardHeader>
@@ -315,7 +359,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                       variant="outline"
                       onClick={() => setSelectedFloor(floor.floor)}
                     >
-                      View Floor {floor.floor} Units
+                      View {getFloorDisplayName(floor.floor)} Units
                     </Button>
                   </CardContent>
                 </Card>
