@@ -24,6 +24,14 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
   // Get all floors from building floor plans (shows all floors, not just those with available units)
   const allFloors = building?.floorPlans.map(fp => fp.floor).sort((a, b) => a - b) || [];
   
+  // Calculate dynamic statistics
+  const totalFloors = building?.floorPlans.length || 0;
+  const totalUnits = building?.floorPlans.reduce((sum, fp) => sum + fp.units, 0) || 0;
+  const totalAvailableUnits = building?.floorPlans.reduce((sum, fp) => sum + fp.available, 0) || 0;
+  const totalLeasableArea = building?.floorPlans.reduce((sum, fp) => sum + fp.totalSqm, 0) || 0;
+  const totalOccupiedUnits = totalUnits - totalAvailableUnits;
+  const occupancyRate = totalUnits > 0 ? Math.round((totalOccupiedUnits / totalUnits) * 100) : 0;
+  
   // Helper function to get floor display name
   const getFloorDisplayName = (floor: number): string => {
     if (floor === 0) return "Ground Floor";
@@ -110,19 +118,19 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
             </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.totalFloors}</div>
+                <div className="text-2xl font-bold text-primary">{totalFloors}</div>
                 <div className="text-sm text-gray-600">Total Floors</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.totalUnits}</div>
+                <div className="text-2xl font-bold text-primary">{totalUnits}</div>
                 <div className="text-sm text-gray-600">Office Units</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.occupancyRate}%</div>
+                <div className="text-2xl font-bold text-primary">{occupancyRate}%</div>
                 <div className="text-sm text-gray-600">Occupancy Rate</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.availableUnits}</div>
+                <div className="text-2xl font-bold text-primary">{totalAvailableUnits}</div>
                 <div className="text-sm text-gray-600">Available Units</div>
               </div>
             </div>
