@@ -141,8 +141,8 @@ export const ctpBFBuildingInfo: BuildingInfo = {
   id: "ctp-bf-building",
   name: "CTP BF Building",
   displayName: "CTP BF Building",
-  location: "Bonifacio Global City",
-  shortLocation: "Bonifacio Global City",
+  location: "11 President's Ave, Parañaque, Metro Manila",
+  shortLocation: "11 President's Ave, Parañaque, Metro Manila",
   description: [
     "CTP BF Building offers modern office solutions in the heart of Bonifacio Global City, one of Metro Manila's most dynamic business districts. This contemporary building provides flexible workspace options for businesses of all sizes.",
     "Located within walking distance of major shopping centers, restaurants, and transportation hubs, the building offers unparalleled convenience and connectivity for your business operations and employee satisfaction.",
@@ -163,7 +163,7 @@ export const ctpBFBuildingInfo: BuildingInfo = {
   contact: {
     phone: "(555) 345-BUILDING",
     email: "bgc@ctpredcorp.com",
-    address: "Bonifacio Global City"
+    address: "11 President's Ave, Parañaque, Metro Manila"
   },
   buildingFeatures: [
     { title: "Reliable Internet", description: "High-speed fiber connectivity" },
@@ -187,7 +187,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     id: "CBF-001",
     title: "1st Floor (Unit 001)",
     building: "CTP BF Building",
-    location: "Bonifacio Global City",
+    location: "11 President's Ave, Parañaque, Metro Manila",
     floor: 1,
     size: 120.80,
     capacity: 9,
