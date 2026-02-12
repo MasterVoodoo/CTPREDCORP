@@ -75,21 +75,23 @@ export default function FeaturedListings({
                       {office.location}
                     </span>
                   </div>
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Square className="h-4 w-4 mr-2" />
-                  <span className="text-sm">
-                    {office.size}
-                  </span>
+                  <div className="flex items-center text-gray-600">
+                    <Square className="h-4 w-4 mr-2" />
+                    <span className="text-sm">
+                      {office.size}
+                    </span>
+                  </div>
                 </div>
               </CardHeader>
 
               <CardContent className="space-y-4"> 
                 <div className="flex items-center justify-between pt-4 border-t">
                   <div>
-                    <p className="text-2xl font-bold text-primary">
+                    <p className="text-sm text-gray-600 mb-1">{office.capacity}</p>
+                    {/* <p className="text-2xl font-bold text-primary">
                       {office.price}
-                    </p>
+                    </p> */}
+                    {/* <p className="text-xs text-gray-500">Average per unit</p> */}
                   </div>
                   <Button
                     className="bg-primary hover:bg-accent text-white cursor-pointer"
