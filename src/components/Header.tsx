@@ -258,8 +258,8 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-10 p-[0px] mx-[0px] my-[10px]">
+            {/* Desktop Navigation - Show on md and above */}
+            <nav className="hidden md:flex items-center space-x-10 p-[0px] mx-[0px] my-[10px]">
               <a
                 href="#"
                 onClick={(e) => {
@@ -310,9 +310,9 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
               />
             </nav>
 
-            {/* Desktop CTA Button */}
+            {/* Desktop CTA Button - Show on md and above */}
             <Button
-              className="hidden lg:block bg-primary hover:bg-accent text-white ml-8 cursor-pointer"
+              className="hidden md:block bg-primary hover:bg-accent text-white ml-8 cursor-pointer"
               onClick={() => {
                 window.location.hash = "#schedule-appointment";
               }}
@@ -320,9 +320,9 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
               <span className="px-4">Schedule Appointment</span>
             </Button>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Show only on mobile and tablet */}
             <button
-              className="lg:hidden p-2 text-gray-700 hover:text-primary"
+              className="md:hidden p-2 text-gray-700 hover:text-primary"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -336,9 +336,9 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Show only on mobile and tablet */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white shadow-lg overflow-y-auto z-40">
+        <div className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white shadow-lg overflow-y-auto z-40">
           <div className="py-4">
             <a
               href="#"
