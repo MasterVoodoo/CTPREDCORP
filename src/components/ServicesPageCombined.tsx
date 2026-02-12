@@ -268,11 +268,11 @@ export default function ServicesPageCombined() {
             <h3 className="text-2xl font-bold text-black text-center mb-8">
               Additional Features Included
             </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {additionalFeatures.map((feature, index) => (
                 <div
                   key={index}
-                  className="flex items-center space-x-3 bg-gray-50 p-4 rounded-lg"
+                  className="flex items-center justify-center space-x-3 bg-gray-50 p-4 rounded-lg"
                 >
                   <div className="text-primary">
                     {feature.icon}
