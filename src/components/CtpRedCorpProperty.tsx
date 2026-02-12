@@ -6,7 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CtpRedCorpPropertyProps {
   onBack: () => void;
@@ -169,139 +169,159 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
             />
           </TabsList>
 
-          <TabsContent value="units" className="space-y-6">
-            {/* Units Grid - showing all floors */}
-            {filteredUnits.length > 0 && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredUnits.map((unit) => (
-                <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="relative">
-                    <ImageWithFallback
-                      src={unit.image}
-                      alt={`Unit ${unit.id}`}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <Badge className={getStatusColor(unit.status)}>
-                        {unit.status}
-                      </Badge>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
-                      <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
-                    </div>
-                    
-                    <div className="mb-4 text-sm text-gray-600">
-                      <div className="flex items-center">
-                        <Square className="h-4 w-4 mr-1" />
-                        {unit.size} sq m
-                      </div>
-                    </div>
-
-                    {unit.condition && (
-                      <div className="mb-4">
-                        <span className="text-xs text-gray-500">Condition: </span>
-                        <Badge 
-                          className={`text-xs ${
-                            unit.condition === 'Fitted' 
-                              ? 'bg-green-100 text-green-800 border-green-300' 
-                              : unit.condition === 'Warm Shell'
-                              ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                              : 'bg-blue-100 text-blue-800 border-blue-300'
-                          }`}
-                        >
-                          {unit.condition}
-                        </Badge>
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <div className="text-2xl font-bold text-primary">
-                          ₱900
+          <AnimatePresence mode="wait">
+            <TabsContent value="units" className="space-y-6" key="units">
+              {activeTab === "units" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  {/* Units Grid - showing all floors */}
+                  {filteredUnits.length > 0 && (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredUnits.map((unit) => (
+                      <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                        <div className="relative">
+                          <ImageWithFallback
+                            src={unit.image}
+                            alt={`Unit ${unit.id}`}
+                            className="w-full h-48 object-cover"
+                          />
+                          <div className="absolute top-3 right-3">
+                            <Badge className={getStatusColor(unit.status)}>
+                              {unit.status}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-500">per sq m</div>
-                      </div>
-                      <Button 
-                        size="sm" 
-                        className="bg-primary hover:bg-accent text-white cursor-pointer"
-                        onClick={() => onViewDetails?.(unit.id)}
-                      >
-                        View Details
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-              </div>
-            )}
-          </TabsContent>
+                        <CardContent className="p-6">
+                          <div className="flex justify-between items-start mb-3">
+                            <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
+                            <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
+                          </div>
+                          
+                          <div className="mb-4 text-sm text-gray-600">
+                            <div className="flex items-center">
+                              <Square className="h-4 w-4 mr-1" />
+                              {unit.size} sq m
+                            </div>
+                          </div>
 
-          <TabsContent value="building" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Building Features</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {building.buildingFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">{feature.title}</h4>
-                          <p className="text-sm text-gray-600">{feature.description}</p>
-                        </div>
-                      </div>
+                          {unit.condition && (
+                            <div className="mb-4">
+                              <span className="text-xs text-gray-500">Condition: </span>
+                              <Badge 
+                                className={`text-xs ${
+                                  unit.condition === 'Fitted' 
+                                    ? 'bg-green-100 text-green-800 border-green-300' 
+                                    : unit.condition === 'Warm Shell'
+                                    ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                                    : 'bg-blue-100 text-blue-800 border-blue-300'
+                                }`}
+                              >
+                                {unit.condition}
+                              </Badge>
+                            </div>
+                          )}
+
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <div className="text-2xl font-bold text-primary">
+                                ₱900
+                              </div>
+                              <div className="text-sm text-gray-500">per sq m</div>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              className="bg-primary hover:bg-accent text-white cursor-pointer"
+                              onClick={() => onViewDetails?.(unit.id)}
+                            >
+                              View Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
                     ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </TabsContent>
 
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Building Hours</h4>
-                  <div className="space-y-2 text-gray-600">
-                    <div className="flex justify-between">
-                      <span>Monday - Friday</span>
-                      <span>{building.buildingHours.weekdays}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Saturday</span>
-                      <span>{building.buildingHours.saturday}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Sunday</span>
-                      <span>{building.buildingHours.sunday}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Security</span>
-                      <span>{building.buildingHours.security}</span>
+            <TabsContent value="building" className="space-y-6" key="building">
+              {activeTab === "building" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Building Features</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {building.buildingFeatures.map((feature, index) => (
+                            <div key={index} className="flex items-start space-x-3">
+                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900">{feature.title}</h4>
+                                <p className="text-sm text-gray-600">{feature.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Building Hours</h4>
+                        <div className="space-y-2 text-gray-600">
+                          <div className="flex justify-between">
+                            <span>Monday - Friday</span>
+                            <span>{building.buildingHours.weekdays}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Saturday</span>
+                            <span>{building.buildingHours.saturday}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Sunday</span>
+                            <span>{building.buildingHours.sunday}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Security</span>
+                            <span>{building.buildingHours.security}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center text-gray-600">
+                            <Phone className="h-4 w-4 mr-2" />
+                            <span>{building.contact.phone}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <Mail className="h-4 w-4 mr-2" />
+                            <span>{building.contact.email}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <MapPin className="h-4 w-4 mr-2" />
+                            <span>{building.contact.address}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center text-gray-600">
-                      <Phone className="h-4 w-4 mr-2" />
-                      <span>{building.contact.phone}</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Mail className="h-4 w-4 mr-2" />
-                      <span>{building.contact.email}</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      <span>{building.contact.address}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
+                </motion.div>
+              )}
+            </TabsContent>
+          </AnimatePresence>
         </Tabs>
       </div>
     </div>
