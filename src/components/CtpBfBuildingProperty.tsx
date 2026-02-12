@@ -403,7 +403,10 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                     <Button 
                       className="w-full mt-4 cursor-pointer" 
                       variant="outline"
-                      onClick={() => setSelectedFloor(floor.floor)}
+                      onClick={() => {
+                        setSelectedFloor(floor.floor);
+                        setActiveTab("units");
+                      }}
                     >
                       View {floor.floor === 0 ? "Ground Floor" : `Floor ${floor.floor}`} Units
                     </Button>

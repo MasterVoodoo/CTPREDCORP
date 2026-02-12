@@ -410,7 +410,10 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                     <Button 
                       className="w-full mt-4 cursor-pointer" 
                       variant="outline"
-                      onClick={() => setSelectedFloor(floor.floor)}
+                      onClick={() => {
+                        setSelectedFloor(floor.floor);
+                        setActiveTab("units");
+                      }}
                     >
                       View {getFloorDisplayName(floor.floor)} Units
                     </Button>
