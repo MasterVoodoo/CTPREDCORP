@@ -134,7 +134,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1.5 shadow-sm h-14">
+          <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1.5 shadow-sm h-14 mb-4">
             <motion.div
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
