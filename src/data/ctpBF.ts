@@ -191,7 +191,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     floor: 1,
     size: 120.80,
     capacity: 9,
-    price: 3600,
+    price: 108720,
     status: "Available",
     condition: "Bare",
     image: ImageUnavailable,
