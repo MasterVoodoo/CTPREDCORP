@@ -1,4 +1,4 @@
-import { React } from "react";
+// import { React } from "react";
 import { Leaf } from "lucide-react";
 import {
   Card,
@@ -128,7 +128,7 @@ export default function About() {
       <ValuesSection />
 
       {/* Leadership Team */}
-      <TeamSection />
+      {/* <TeamSection /> */}
 
       {/* Awards & Recognition */}
       <AwardsSection />

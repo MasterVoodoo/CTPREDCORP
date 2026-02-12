@@ -216,9 +216,6 @@ export default function UnitDetailsPage({
                   <div className="text-4xl font-bold text-primary mb-2">
                     ₱{unit.price.toLocaleString()}
                   </div>
-                  <div className="text-gray-600 mb-4">
-                    per month
-                  </div>
                   <div className="text-sm text-gray-500">
                     Base rent • Additional costs may apply
                   </div>

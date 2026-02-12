@@ -53,12 +53,12 @@ const navigationItems = {
   ],
   about: [
     { label: "Company History", href: "#about-history" },
-    { label: "Our Team", href: "#about-team" },
+    // { label: "Our Team", href: "#about-team" },
     { label: "Mission & Vision", href: "#about-mission" },
     { label: "Core Values", href: "#about-values" },
     { label: "Awards & Recognition", href: "#about-awards" },
     { label: "Sustainability", href: "#about-sustainability" },
-    { label: "Careers", href: "#about-careers" },
+    // { label: "Careers", href: "#about-careers" },
   ],
   contact: [
     {
@@ -223,11 +223,11 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
                 Tenants
               </a>
 
-              <HoverDropdown
+              {/* <HoverDropdown
                 title="Sustainability"
                 items={navigationItems.sustainability}
                 dropdownTitle="Governance & Leadership"
-              />
+              /> */}
 
               <HoverDropdown
                 title="Contact"

@@ -4,7 +4,7 @@ import { awards } from "./AboutConstants";
 
 export default function AwardsSection() {
   return (
-    <section id="awards" className="py-20 bg-white">
+    <section id="awards" className="py-5 bg-white">
       <div className="container mx-auto px-4">
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Awards & Recognition</h2>
