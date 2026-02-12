@@ -4,13 +4,15 @@
 // IMPORTS
 import ImageUnavailable from "../assets/CTP_Red/CTP_ImageUnavailable.jpg";
 
+import Image1001 from "../assets/CTP_Red/CTP_ASEAN/1001/1001.jpg";
+
 // For 1008
 import Image1008_1 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_1.jpg";
 import Image1008_2 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_2.jpg";
 import Image1008_3 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_3.jpg";
 import Image1008_4 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_4.jpg";
 import Image1008_5 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_5.jpg";
-
+import Image1008_6 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_6.jpg";
 // For GF12
 import ImageGF12_1 from "../assets/CTP_Red/CTP_ASEAN/GF12/GF12_1.jpg";
 import ImageGF12_2 from "../assets/CTP_Red/CTP_ASEAN/GF12/GF12_2.jpg";
@@ -316,9 +318,15 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: 2504,
     status: "Available",
     condition: "Warm Shell",
-    image: ImageUnavailable,
+    image: Image1001,
     images: [
-      ImageUnavailable
+      Image1001,
+      Image1008_1,
+      Image1008_2,
+      Image1008_3,
+      Image1008_4,
+      Image1008_5,
+      Image1008_6
     ],
     description: "High floor executive office with city views and warm shell condition ready for tenant improvements.",
     floorPlan: {
@@ -348,13 +356,14 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: 2505,
     status: "Available",
     condition: "Fitted",
-    image: Image1008_1,
+    image: Image1008_6,
     images: [
       Image1008_1,
       Image1008_2,
       Image1008_3,
       Image1008_4,
-      Image1008_5
+      Image1008_5,
+      Image1008_6
     ],
     description: "Premium fitted office suite on the 10th floor with modern finishes and move-in ready amenities.",
     floorPlan: {
