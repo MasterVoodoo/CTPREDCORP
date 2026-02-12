@@ -17,6 +17,13 @@ export default function ContactPage() {
   // State for controlling which map is displayed
   const [selectedMap, setSelectedMap] = useState("ctp-asean"); // Default to CTP Asean
 
+  // External map URLs for each building (kept in sync with Footer.tsx)
+  const mapLinks: Record<string, string> = {
+    "ctp-alpha": "https://maps.app.goo.gl/rzPgQHFY49L4UYpRA",
+    "ctp-asean": "https://maps.app.goo.gl/3Qw6E7DdYSKUzcsj9",
+    "ctp-bf": "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
+  };
+
   // Map embeds for each building
   const mapEmbeds = {
     "ctp-asean": {
@@ -71,6 +78,12 @@ export default function ContactPage() {
   const handleGetDirections = (buildingKey: string) => {
     // Update the displayed map
     setSelectedMap(buildingKey);
+
+    // Open external maps link in a new tab if available
+    const url = mapLinks[buildingKey];
+    if (url && typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
   };
 
   const contactMethods = [
