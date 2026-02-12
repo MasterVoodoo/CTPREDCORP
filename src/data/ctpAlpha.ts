@@ -111,6 +111,20 @@ export interface FloorInfo {
 // ===== FLOOR PLANS DATA =====
 export const ctpAlphaFloorPlans: BuildingFloorPlan[] = [
   { 
+    floor: 0, // Ground Floor
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 2,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
     floor: 3, // Floor 3 for units 304 and 307
     units: 2, 
     totalSqm: 14.00, // 7.23 + 6.77
@@ -118,10 +132,66 @@ export const ctpAlphaFloorPlans: BuildingFloorPlan[] = [
     condition: "Warm Shell" 
   },
   { 
+    floor: 4,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 5,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 6,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 7,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
     floor: 8, // Floor 8 for units 801 and 802
     units: 2, 
     totalSqm: 22.79, // 10.43 + 12.36
     available: 2, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 9,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 10,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 11,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 12, // Penthouse
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
     condition: "Bare" 
   }
 ];

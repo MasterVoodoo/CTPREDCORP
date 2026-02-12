@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
+import { motion } from "framer-motion";
 
 interface CtpBfBuildingPropertyProps {
   onBack: () => void;
@@ -14,10 +15,14 @@ interface CtpBfBuildingPropertyProps {
 
 export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBuildingPropertyProps) {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("units");
 
   // Get building and units data from centralized sources
   const building = getBuildingById("ctp-bf-building");
   const availableUnits = getUnitsByBuilding("ctp-bf-building");
+  
+  // Get all floors from building floor plans (shows all floors, not just those with available units)
+  const allFloors = building?.floorPlans.map(fp => fp.floor).sort((a, b) => a - b) || [];
 
   // Function to get status color styling
   const getStatusColor = (status: string) => {
@@ -113,11 +118,74 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
           </div>
         </div>
 
-        <Tabs defaultValue="units" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white border border-gray-200">
-            <TabsTrigger value="units">Available Units</TabsTrigger>
-            <TabsTrigger value="building">Building Info</TabsTrigger>
-            <TabsTrigger value="floor-plans">Floor Plans</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="relative grid w-full grid-cols-3 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
+            <TabsTrigger
+              value="units"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "units" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Available Units</span>
+              {activeTab === "units" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
+            <TabsTrigger
+              value="building"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "building" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Building Info</span>
+              {activeTab === "building" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
+            <TabsTrigger
+              value="floor-plans"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "floor-plans" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Floor Plans</span>
+              {activeTab === "floor-plans" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="units" className="space-y-6">
@@ -127,23 +195,44 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                 variant={selectedFloor === null ? "default" : "outline"}
                 onClick={() => setSelectedFloor(null)}
                 size="sm"
+                className="cursor-pointer"
               >
                 All Floors
               </Button>
-              {[1, 2, 3, 4, 5, 6].map((floor) => (
+              {allFloors.map((floor) => (
                 <Button
                   key={floor}
                   variant={selectedFloor === floor ? "default" : "outline"}
                   onClick={() => setSelectedFloor(floor)}
                   size="sm"
+                  className="cursor-pointer"
                 >
                   {floor === 0 ? "Ground Floor" : `Floor ${floor}`}
                 </Button>
               ))}
             </div>
 
+            {/* No Units Message */}
+            {filteredUnits.length === 0 && selectedFloor !== null && (
+              <Card className="text-center py-12 mb-6">
+                <CardContent>
+                  <div className="text-yellow-500 mb-4">
+                    <svg className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-medium text-gray-700 mb-2">No Available Units</h3>
+                  <p className="text-gray-500">
+                    There are currently no available units on {selectedFloor === 0 ? "Ground Floor" : `Floor ${selectedFloor}`}. 
+                    Please check other floors or contact us for upcoming availability.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Units Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredUnits.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredUnits.map((unit) => (
                 <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative">
@@ -206,7 +295,8 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                   </CardContent>
                 </Card>
               ))}
-            </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="building" className="space-y-6">

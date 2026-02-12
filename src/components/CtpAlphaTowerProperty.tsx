@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
+import { motion } from "framer-motion";
 
 interface CtpAlphaTowerPropertyProps {
   onBack: () => void;
@@ -14,10 +15,21 @@ interface CtpAlphaTowerPropertyProps {
 
 export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlphaTowerPropertyProps) {
   const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("units");
 
   // Get building and units data from centralized sources
   const building = getBuildingById("ctp-alpha-tower");
   const availableUnits = getUnitsByBuilding("ctp-alpha-tower");
+  
+  // Get all floors from building floor plans (shows all floors, not just those with available units)
+  const allFloors = building?.floorPlans.map(fp => fp.floor).sort((a, b) => a - b) || [];
+
+  // Helper function to get floor display name
+  const getFloorDisplayName = (floor: number): string => {
+    if (floor === 0) return "Ground Floor";
+    if (floor === 12) return "Penthouse";
+    return `Floor ${floor}`;
+  };
 
   // Function to get status color styling
   const getStatusColor = (status: string) => {
@@ -113,11 +125,74 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
           </div>
         </div>
 
-        <Tabs defaultValue="units" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white border border-gray-200">
-            <TabsTrigger value="units">Available Units</TabsTrigger>
-            <TabsTrigger value="building">Building Info</TabsTrigger>
-            <TabsTrigger value="floor-plans">Floor Plans</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="relative grid w-full grid-cols-3 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
+            <TabsTrigger
+              value="units"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "units" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Available Units</span>
+              {activeTab === "units" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
+            <TabsTrigger
+              value="building"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "building" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Building Info</span>
+              {activeTab === "building" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
+            <TabsTrigger
+              value="floor-plans"
+              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              style={{ 
+                color: activeTab === "floor-plans" ? 'white' : undefined,
+                zIndex: 10
+              }}
+            >
+              <span className="relative z-20">Floor Plans</span>
+              {activeTab === "floor-plans" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }}
+                />
+              )}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="units" className="space-y-6">
@@ -127,23 +202,44 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                 variant={selectedFloor === null ? "default" : "outline"}
                 onClick={() => setSelectedFloor(null)}
                 size="sm"
+                className="cursor-pointer"
               >
                 All Floors
               </Button>
-              {[1, 2, 3, 4, 5, 6].map((floor) => (
+              {allFloors.map((floor) => (
                 <Button
                   key={floor}
                   variant={selectedFloor === floor ? "default" : "outline"}
                   onClick={() => setSelectedFloor(floor)}
                   size="sm"
+                  className="cursor-pointer"
                 >
-                  {floor === 0 ? "Ground Floor" : `Floor ${floor}`}
+                  {getFloorDisplayName(floor)}
                 </Button>
               ))}
             </div>
 
+            {/* No Units Message */}
+            {filteredUnits.length === 0 && selectedFloor !== null && (
+              <Card className="text-center py-12 mb-6">
+                <CardContent>
+                  <div className="text-yellow-500 mb-4">
+                    <svg className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-medium text-gray-700 mb-2">No Available Units</h3>
+                  <p className="text-gray-500">
+                    There are currently no available units on {getFloorDisplayName(selectedFloor!)}. 
+                    Please check other floors or contact us for upcoming availability.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Units Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredUnits.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredUnits.map((unit) => (
                 <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative">
@@ -161,7 +257,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
-                      <span className="text-sm text-gray-500">{unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}</span>
+                      <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
                     </div>
                     
                     <div className="mb-4 text-sm text-gray-600">
@@ -206,7 +302,8 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                   </CardContent>
                 </Card>
               ))}
-            </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="building" className="space-y-6">
@@ -279,7 +376,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                 <Card key={floor.floor} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="flex justify-between items-center">
-                      {floor.floor === 0 ? "Ground Floor" : `Floor ${floor.floor}`}
+                      {getFloorDisplayName(floor.floor)}
                       <Badge variant="outline">{floor.available} Available</Badge>
                     </CardTitle>
                   </CardHeader>
@@ -315,7 +412,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                       variant="outline"
                       onClick={() => setSelectedFloor(floor.floor)}
                     >
-                      View {floor.floor === 0 ? "Ground Floor" : `Floor ${floor.floor}`} Units
+                      View {getFloorDisplayName(floor.floor)} Units
                     </Button>
                   </CardContent>
                 </Card>

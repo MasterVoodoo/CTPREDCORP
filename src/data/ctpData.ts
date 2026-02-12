@@ -3,6 +3,8 @@
 
 // ===== IMPORT BUILDING-SPECIFIC DATA =====
 import CTPAlphaTowerImg from "../assets/CTP_Alpha_Tower.jpg";
+import CTPAseanTowerImg from "../assets/CTP_Asean.PNG";
+import CTPBFImg from "../assets/CTP_BF.jpg";
 import {
   ctpAseanBuildingInfo,
   ctpAseanUnits,
@@ -127,7 +129,7 @@ export const featuredListings: FeaturedListing[] = [
     unitId: "ctp-alpha-tower",
     title: "CTP Alpha Tower",
     building: "1709 Investment Dr, Muntinlupa",
-    location: "1 floor",
+    location: "Ground Floor, 2-11, Penthouse",
     size: "130.13 sq m",
     capacity: "10 people",
     price: "₱3,800/month",
@@ -140,11 +142,11 @@ export const featuredListings: FeaturedListing[] = [
     unitId: "ctp-red-corp",
     title: "CTP Asean Tower",
     building: "Asean Drive, Alabang, Muntinlupa",
-    location: "1 floor",
+    location: "Ground Floor, 4-12, Lower & Upper Penthouse",
     size: "111.48 sq m",
     capacity: "8 people",
     price: "₱3,500/month",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: CTPAseanTowerImg,
     status: "Available"
   },
   {
@@ -152,11 +154,12 @@ export const featuredListings: FeaturedListing[] = [
     unitId: "ctp-bf-building",
     title: "CTP BF Building",
     building: "Bonifacio Global City",
-    location: "1 floor",
+    location: "Multiple floors available",
     size: "120.80 sq m",
     capacity: "9 people",
     price: "₱3,600/month",
-    image: "https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: CTPBFImg,
+    heroImage: CTPBFImg,
     status: "Available"
   }
 ];

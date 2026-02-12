@@ -62,7 +62,7 @@ export default function SearchResults({
               variant="ghost"
               size="sm"
               onClick={onBack}
-              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary"
+              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Search</span>
@@ -97,12 +97,12 @@ export default function SearchResults({
               Try searching for a different floor or building.
             </p>
             <div className="space-x-4">
-              <Button onClick={onBack} variant="outline">
+              <Button onClick={onBack} variant="outline" className="cursor-pointer">
                 Try Different Search
               </Button>
               <Button 
                 onClick={() => window.location.hash = `#${buildingId}`}
-                className="bg-primary hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 cursor-pointer"
               >
                 View All {building?.displayName} Units
               </Button>
@@ -175,7 +175,7 @@ export default function SearchResults({
                       
                       <Button
                         onClick={() => onViewDetails(unit.id)}
-                        className="bg-primary hover:bg-primary/90"
+                        className="bg-primary hover:bg-primary/90 cursor-pointer"
                         disabled={unit.status === "Taken"}
                       >
                         View Details

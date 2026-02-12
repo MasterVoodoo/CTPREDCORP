@@ -161,14 +161,14 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Building</label>
                 <Select value={filterBuilding} onValueChange={setFilterBuilding}>
-                  <SelectTrigger>
+                  <SelectTrigger className="cursor-pointer">
                     <SelectValue placeholder="All Buildings" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Buildings</SelectItem>
-                    <SelectItem value="ctp-red-corp">CTP Asean Tower</SelectItem>
-                    <SelectItem value="ctp-alpha-tower">CTP Alpha Tower</SelectItem>
-                    <SelectItem value="ctp-bf-building">CTP BF Building</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">All Buildings</SelectItem>
+                    <SelectItem value="ctp-red-corp" className="cursor-pointer">CTP Asean Tower</SelectItem>
+                    <SelectItem value="ctp-alpha-tower" className="cursor-pointer">CTP Alpha Tower</SelectItem>
+                    <SelectItem value="ctp-bf-building" className="cursor-pointer">CTP BF Building</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -176,14 +176,14 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Condition</label>
                 <Select value={filterCondition} onValueChange={setFilterCondition}>
-                  <SelectTrigger>
+                  <SelectTrigger className="cursor-pointer">
                     <SelectValue placeholder="All Conditions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Conditions</SelectItem>
-                    <SelectItem value="Fitted">Fitted</SelectItem>
-                    <SelectItem value="Warm Shell">Warm Shell</SelectItem>
-                    <SelectItem value="Bare">Bare</SelectItem>
+                    <SelectItem value="all" className="cursor-pointer">All Conditions</SelectItem>
+                    <SelectItem value="Fitted" className="cursor-pointer">Fitted</SelectItem>
+                    <SelectItem value="Warm Shell" className="cursor-pointer">Warm Shell</SelectItem>
+                    <SelectItem value="Bare" className="cursor-pointer">Bare</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -191,16 +191,16 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Sort By</label>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger>
+                  <SelectTrigger className="cursor-pointer">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                    <SelectItem value="price-desc">Price: High to Low</SelectItem>
-                    <SelectItem value="size-asc">Size: Small to Large</SelectItem>
-                    <SelectItem value="size-desc">Size: Large to Small</SelectItem>
-                    <SelectItem value="floor-asc">Floor: Low to High</SelectItem>
-                    <SelectItem value="floor-desc">Floor: High to Low</SelectItem>
+                    <SelectItem value="price-asc" className="cursor-pointer">Price: Low to High</SelectItem>
+                    <SelectItem value="price-desc" className="cursor-pointer">Price: High to Low</SelectItem>
+                    <SelectItem value="size-asc" className="cursor-pointer">Size: Small to Large</SelectItem>
+                    <SelectItem value="size-desc" className="cursor-pointer">Size: Large to Small</SelectItem>
+                    <SelectItem value="floor-asc" className="cursor-pointer">Floor: Low to High</SelectItem>
+                    <SelectItem value="floor-desc" className="cursor-pointer">Floor: High to Low</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

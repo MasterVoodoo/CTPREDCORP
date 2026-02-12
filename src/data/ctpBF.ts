@@ -3,6 +3,7 @@
 
 // IMPORTS
 import ImageUnavailable from "../assets/CTP_Red/CTP_ImageUnavailable.jpg";
+import CTPBFImg from "../assets/CTP_BF.jpg";
 
 // ===== TYPES =====
 export interface FloorPlan {
@@ -173,8 +174,8 @@ export const ctpBFBuildingInfo: BuildingInfo = {
     { title: "Meeting Spaces", description: "Shared conference and meeting rooms" }
   ],
   floorPlans: ctpBFFloorPlans,
-  heroImage: "https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  heroImage: CTPBFImg,
+  image: CTPBFImg,
   badge: "BGC Prime Location",
   ctaTitle: "Ready to Join BGC's Business Community?",
   ctaDescription: "Experience the convenience and connectivity of working in Bonifacio Global City. Contact us today to schedule a tour of CTP BF Building and explore your options."

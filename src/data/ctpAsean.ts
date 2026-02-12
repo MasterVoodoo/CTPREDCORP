@@ -3,6 +3,7 @@
 
 // IMPORTS
 import ImageUnavailable from "../assets/CTP_Red/CTP_ImageUnavailable.jpg";
+import CTPAseanTowerImg from "../assets/CTP_Asean.PNG";
 
 // For 1008
 import Image1008_1 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_1.jpg";
@@ -104,8 +105,8 @@ export interface BuildingInfo {
   buildingFeatures: BuildingFeature[];
   floorPlans: BuildingFloorPlan[];
   heroImage: string;
-  image: string;
-  badge: string;
+  image: string | any;
+  badge: string | any;
   ctaTitle: string;
   ctaDescription: string;
 }
@@ -131,11 +132,67 @@ export const ctpAseanFloorPlans: BuildingFloorPlan[] = [
     condition: "Bare" 
   },
   { 
+    floor: 4,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 5,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 6,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 7,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 8,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 9,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
     floor: 10, // Floor 10 for units 1001 and 1008
     units: 2, 
     totalSqm: 71.37, // 34.61 + 36.76
     available: 2, 
     condition: "Warm Shell" // Using the first unit's condition as representative
+  },
+  { 
+    floor: 11,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 12,
+    units: 0, 
+    totalSqm: 0, 
+    available: 0, 
+    condition: "Bare" 
   },
   { 
     floor: 13, // Lower Penthouse for LP03 and LP04
@@ -263,8 +320,8 @@ export const ctpAseanBuildingInfo: BuildingInfo = {
     { title: "Meeting Rooms", description: "State-of-the-art conference facilities" }
   ],
   floorPlans: ctpAseanFloorPlans,
-  heroImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  image: "https://images.unsplash.com/photo-1595197658178-79247d3a7941?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBvZmZpY2UlMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwZ2xhc3N8ZW58MXx8fHwxNzU5Mjk4NjQyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  heroImage: CTPAseanTowerImg,
+  image: CTPAseanTowerImg,
   badge: "Premium Location",
   ctaTitle: "Explore Premium Office Solutions",
   ctaDescription: "Discover the perfect workspace for your business in our modern facility with state-of-the-art amenities and prime location."
