@@ -115,36 +115,35 @@ function HoverDropdown({
         <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
-      {/* Dropdown Content - Only render when open */}
+      {/* Dropdown Content with padding bridge */}
       {isOpen && (
-        <div 
-          className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border transition-all duration-300 ease-in-out transform origin-top z-50 animate-dropdownIn"
-        >
-          <div className="p-6">
-            <div className="mb-6">
-              <h3 className="text-xl font-bold text-primary mb-1">
-                {dropdownTitle}
-              </h3>
-              <div className="w-12 h-0.5 bg-primary"></div>
-            </div>
-            <div className="grid gap-2">
-              {items.map((item, index) => (
-                <div
-                  key={index}
-                  className="py-3 px-4 text-base hover:bg-gray-100 hover:shadow-sm transition-all duration-200 rounded-md animate-slideIn"
-                  style={{
-                    animationDelay: `${index * 0.05}s`
-                  }}
-                >
-                  <a
-                    href={item.href}
+        <div className="absolute top-full left-0 pt-2">
+          <div 
+            className="w-80 bg-white rounded-lg shadow-xl border transition-all duration-300 ease-in-out transform origin-top z-50 animate-dropdownIn"
+          >
+            <div className="p-6">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-primary mb-1">
+                  {dropdownTitle}
+                </h3>
+                <div className="w-12 h-0.5 bg-primary"></div>
+              </div>
+              <div className="grid gap-2">
+                {items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="py-3 px-4 text-base hover:bg-gray-100 hover:shadow-sm transition-all duration-200 rounded-md cursor-pointer animate-slideIn"
+                    style={{
+                      animationDelay: `${index * 0.05}s`
+                    }}
                     onClick={(e) => handleItemClick(item.href, e)}
-                    className="w-full text-gray-700 hover:text-primary text-[16px] block"
                   >
-                    {item.label}
-                  </a>
-                </div>
-              ))}
+                    <span className="w-full text-gray-700 hover:text-primary text-[16px] block">
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

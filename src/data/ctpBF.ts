@@ -155,7 +155,7 @@ export const ctpBFBuildingInfo: BuildingInfo = {
     availableUnits: 1
   },
   buildingHours: {
-    weekdays: "6:00 AM - 10:00 PM",
+    weekdays: "9:00 AM - 5:00 PM",
     saturday: "8:00 AM - 8:00 PM",
     sunday: "10:00 AM - 6:00 PM",
     security: "24/7"

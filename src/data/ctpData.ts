@@ -153,7 +153,7 @@ export const featuredListings: FeaturedListing[] = [
     id: 3,
     unitId: "ctp-bf-building",
     title: "CTP BF Building",
-    building: "Bonifacio Global City",
+    building: "11 President's Ave, Parañaque, Metro Manila",
     location: "Multiple floors available",
     size: "120.80 sq m",
     capacity: "9 Units",

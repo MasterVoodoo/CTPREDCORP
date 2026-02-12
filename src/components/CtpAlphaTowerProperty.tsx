@@ -127,7 +127,12 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                 <div className="text-sm text-gray-600">Available Units</div>
               </div>
             </div>
-            <Button className="bg-primary hover:bg-accent text-white w-full cursor-pointer">
+            <Button 
+              className="bg-primary hover:bg-accent text-white w-full cursor-pointer"
+              onClick={() => {
+                window.location.hash = "#schedule-appointment";
+              }}
+            >
               Schedule Building Tour
             </Button>
           </div>
