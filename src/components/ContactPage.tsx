@@ -9,7 +9,7 @@ import {
   Shield,
   HeadphonesIcon,
 } from "lucide-react";
-import { useState, React } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 
@@ -91,8 +91,8 @@ export default function ContactPage() {
       icon: Phone,
       title: "Phone Support",
       description: "Speak with our team",
-      contact: "(555) 123-CORP",
-      hours: "Mon-Fri: 8AM-8PM",
+      contact: "+63 2 8334 2091",
+      hours: "Mon-Fri: 9AM-5PM",
       type: "primary"
     },
     {
@@ -109,23 +109,23 @@ export default function ContactPage() {
     {
       name: "CTP Asean Tower",
       address: "Asean Drive, Filinvest City, Alabang, Muntinlupa City",
-      phone: "(555) 123-CORP",
+      phone: "+63 2 8334 2091",
       email: "asean@ctpredcorp.com",
       manager: "Maria Santos",
       features: ["Main Office", "Leasing Center", "24/7 Security"]
     },
     {
       name: "CTP Alpha Tower",
-      address: "Makati Central Business District, Metro Manila",
-      phone: "(555) 234-ALPHA",
+      address: "1709 Investment Dr, Muntinlupa",
+      phone: "+63 2 8856 7758",
       email: "alpha@ctpredcorp.com", 
       manager: "Carlos Rodriguez",
       features: ["Premium Leasing", "Executive Services", "Concierge"]
     },
     {
       name: "CTP BF Building",
-      address: "Bonifacio Global City, Taguig City",
-      phone: "(555) 345-BUILDING",
+      address: "11 President's Ave, Parañaque, Metro Manila",
+      phone: "+63 2 8856 7758",
       email: "bgc@ctpredcorp.com",
       manager: "Jennifer Lee",
       features: ["BGC Operations", "Tenant Services", "Parking Management"]
@@ -167,7 +167,7 @@ export default function ContactPage() {
     {
       location: "CTP Asean Tower",
       schedule: [
-        { days: "Monday - Friday", hours: "6:00 AM - 10:00 PM" },
+        { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
         { days: "Saturday", hours: "8:00 AM - 8:00 PM" },
         { days: "Sunday", hours: "10:00 AM - 6:00 PM" },
         { days: "Security", hours: "24/7 Available" }
@@ -176,7 +176,7 @@ export default function ContactPage() {
     {
       location: "CTP Alpha Tower", 
       schedule: [
-        { days: "Monday - Friday", hours: "5:30 AM - 11:00 PM" },
+        { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
         { days: "Saturday", hours: "7:00 AM - 9:00 PM" },
         { days: "Sunday", hours: "9:00 AM - 7:00 PM" },
         { days: "Security", hours: "24/7 Available" }
@@ -185,7 +185,7 @@ export default function ContactPage() {
     {
       location: "CTP BF Building",
       schedule: [
-        { days: "Monday - Friday", hours: "6:00 AM - 10:00 PM" },
+        { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
         { days: "Saturday", hours: "8:00 AM - 8:00 PM" },
         { days: "Sunday", hours: "10:00 AM - 6:00 PM" },
         { days: "Security", hours: "24/7 Available" }
