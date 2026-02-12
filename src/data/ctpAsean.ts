@@ -5,25 +5,30 @@
 import ImageUnavailable from "../assets/CTP_Red/CTP_ImageUnavailable.jpg";
 import CTPAseanTowerImg from "../assets/CTP_Asean.PNG";
 
-import Image1001 from "../assets/CTP_Red/CTP_ASEAN/1001/1001.jpg";
-
+import Image1001_1 from "../assets/CTP_Red/CTP_ASEAN/1001/1001_1.jpg";
+import Image1001_2 from "../assets/CTP_Red/CTP_ASEAN/1001/1001_2.png";
+import Image1001_3 from "../assets/CTP_Red/CTP_ASEAN/1001/1001_3.png";
 // For 1008
 import Image1008_1 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_1.jpg";
-import Image1008_2 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_2.jpg";
-import Image1008_3 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_3.jpg";
-import Image1008_4 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_4.jpg";
-import Image1008_5 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_5.jpg";
-import Image1008_6 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_6.jpg";
+import Image1008_2 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_2.png";
+import Image1008_3 from "../assets/CTP_Red/CTP_ASEAN/1008/1008_3.png";
+
 // For GF12
 import ImageGF12_1 from "../assets/CTP_Red/CTP_ASEAN/GF12/GF12_1.jpg";
 import ImageGF12_2 from "../assets/CTP_Red/CTP_ASEAN/GF12/GF12_2.jpg";
-
+import ImageGF12_3 from "../assets/CTP_Red/CTP_ASEAN/GF12/GF12_3.jpg";
 
 // For LP03 and LP04
-import ImageLP03_1 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_1.jpg";
-import ImageLP03_2 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_2.jpg";
-import ImageLP03_3 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_3.jpg";
+import ImageLP03_1 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_1.png";
+import ImageLP03_2 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_2.png";
+import ImageLP03_3 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP03_3.png";
+import ImageLP04_1 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP04_1.png";
+import ImageLP04_2 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP04_2.png";
+import ImageLP04_3 from "../assets/CTP_Red/CTP_ASEAN/LP03_LP04/LP04_3.png";
 
+import ImageUP02_1 from "../assets/CTP_Red/CTP_ASEAN/UP02/UP02_1.png";
+import ImageUP02_2 from "../assets/CTP_Red/CTP_ASEAN/UP02/UP02_2.png";
+import ImageUP02_3 from "../assets/CTP_Red/CTP_ASEAN/UP02/UP02_3.png";
 
 // ===== TYPES =====
 export interface FloorPlan {
@@ -345,7 +350,8 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     image: ImageGF12_1,
     images: [
       ImageGF12_1, 
-      ImageGF12_2
+      ImageGF12_2,
+      ImageGF12_3
     ],
     description: "Spacious ground floor commercial suite with direct street access and excellent visibility for businesses.",
     floorPlan: {
@@ -375,15 +381,11 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Warm Shell",
-    image: Image1001,
+    image: Image1001_1,
     images: [
-      Image1001,
-      Image1008_1,
-      Image1008_2,
-      Image1008_3,
-      Image1008_4,
-      Image1008_5,
-      Image1008_6
+      Image1001_1,
+      Image1001_2,
+      Image1001_3
     ],
     description: "Large high floor executive office with city views and warm shell condition ready for tenant improvements.",
     floorPlan: {
@@ -413,14 +415,11 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Fitted",
-    image: Image1008_6,
+    image: Image1008_1,
     images: [
       Image1008_1,
       Image1008_2,
-      Image1008_3,
-      Image1008_4,
-      Image1008_5,
-      Image1008_6
+      Image1008_3
     ],
     description: "Large premium fitted office suite on the 10th floor with modern finishes and move-in ready amenities.",
     floorPlan: {
@@ -484,11 +483,11 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Bare",
-    image: ImageLP03_1,
+    image: ImageLP04_1,
     images: [
-      ImageLP03_1, 
-      ImageLP03_2,
-      ImageLP03_3
+      ImageLP04_1, 
+      ImageLP04_2,
+      ImageLP04_3
     ],
     description: "Premium expansive lower penthouse office with excellent customization potential.",
     floorPlan: {
@@ -518,11 +517,11 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Bare",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: ImageUP02_1,
     images: [
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1549037328-5d1b75eaa704?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      ImageUP02_1,
+      ImageUP02_2,
+      ImageUP02_3
     ],
     description: "Exclusive expansive upper penthouse with top floor privacy and 360-degree city views.",
     floorPlan: {
