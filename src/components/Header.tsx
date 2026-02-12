@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import CTPRED_LOGO from "../assets/CTPRED_LOGO.png";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 
 const navigationItems = {
@@ -152,22 +152,100 @@ function HoverDropdown({
   );
 }
 
+interface MobileAccordionProps {
+  title: string;
+  items: Array<{ label: string; href: string }>;
+  isAbout?: boolean;
+  isServices?: boolean;
+  isContact?: boolean;
+  onItemClick: () => void;
+}
+
+function MobileAccordion({
+  title,
+  items,
+  isAbout = false,
+  isServices = false,
+  isContact = false,
+  onItemClick,
+}: MobileAccordionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleTitleClick = () => {
+    if (isAbout) {
+      window.location.hash = "#about";
+      onItemClick();
+    } else if (isServices) {
+      window.location.hash = "#services";
+      onItemClick();
+    } else if (isContact) {
+      window.location.hash = "#contact";
+      onItemClick();
+    } else {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  const handleItemClick = (href: string) => {
+    window.location.hash = href;
+    onItemClick();
+  };
+
+  return (
+    <div className="border-b border-gray-200">
+      <button
+        className="flex items-center justify-between w-full py-4 px-4 text-left text-gray-700 hover:bg-gray-50"
+        onClick={handleTitleClick}
+      >
+        <span className="font-medium text-lg">{title}</span>
+        <ChevronDown
+          className={`h-5 w-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+      {isOpen && (
+        <div className="bg-gray-50 pb-2">
+          {items.map((item, index) => (
+            <a
+              key={index}
+              href={item.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleItemClick(item.href);
+              }}
+              className="block py-3 px-8 text-gray-600 hover:text-primary hover:bg-gray-100"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface HeaderProps {
   currentPage?: string;
 }
 
 export default function Header({ currentPage = "home" }: HeaderProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Main navigation */}
       <div className="bg-white shadow-sm border-b h-16">
-        <div className="mx-auto px-20 h-full max-w-[1126px] lg:max-w-[1126px] xl:max-w-[1408px] 2xl:max-w-[1689px]">
+        <div className="mx-auto px-4 md:px-20 h-full max-w-[1126px] lg:max-w-[1126px] xl:max-w-[1408px] 2xl:max-w-[1689px]">
           <div className="flex items-center justify-between h-full">
             <div className="flex items-center space-x-6 h-full">
-              <div className="h-full flex items-center mr-8">
+              <div className="h-full flex items-center">
                 <button
                   onClick={() => {
                     window.location.hash = "";
+                    closeMobileMenu();
                   }}
                   className="h-full flex items-center"
                 >
@@ -180,7 +258,8 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
               </div>
             </div>
 
-            <nav className="hidden md:flex items-center space-x-10 p-[0px] mx-[0px] my-[10px]">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-10 p-[0px] mx-[0px] my-[10px]">
               <a
                 href="#"
                 onClick={(e) => {
@@ -223,12 +302,6 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
                 Tenants
               </a>
 
-              {/* <HoverDropdown
-                title="Sustainability"
-                items={navigationItems.sustainability}
-                dropdownTitle="Governance & Leadership"
-              /> */}
-
               <HoverDropdown
                 title="Contact"
                 items={navigationItems.contact}
@@ -237,17 +310,101 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
               />
             </nav>
 
+            {/* Desktop CTA Button */}
             <Button
-              className="bg-primary hover:bg-accent text-white ml-8 cursor-pointer"
+              className="hidden lg:block bg-primary hover:bg-accent text-white ml-8 cursor-pointer"
               onClick={() => {
                 window.location.hash = "#schedule-appointment";
               }}
             >
               <span className="px-4">Schedule Appointment</span>
             </Button>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden p-2 text-gray-700 hover:text-primary"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white shadow-lg overflow-y-auto z-40">
+          <div className="py-4">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = "";
+                closeMobileMenu();
+              }}
+              className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200"
+            >
+              Home
+            </a>
+
+            <MobileAccordion
+              title="About"
+              items={navigationItems.about}
+              isAbout={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <MobileAccordion
+              title="Properties"
+              items={navigationItems.properties}
+              onItemClick={closeMobileMenu}
+            />
+
+            <MobileAccordion
+              title="Services"
+              items={navigationItems.services}
+              isServices={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <a
+              href="#tenant-portal"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = "#tenant-portal";
+                closeMobileMenu();
+              }}
+              className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200"
+            >
+              Tenants
+            </a>
+
+            <MobileAccordion
+              title="Contact"
+              items={navigationItems.contact}
+              isContact={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <div className="p-4 mt-4">
+              <Button
+                className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
+                onClick={() => {
+                  window.location.hash = "#schedule-appointment";
+                  closeMobileMenu();
+                }}
+              >
+                <span className="px-4">Schedule Appointment</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
