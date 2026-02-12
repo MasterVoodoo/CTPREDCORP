@@ -96,19 +96,6 @@ function HoverDropdown({
 }: HoverDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleTitleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isAbout) {
-      window.location.hash = "#about";
-    } else if (isServices) {
-      window.location.hash = "#services";
-    } else if (isContact) {
-      window.location.hash = "#contact";
-    } else if (isTenants) {
-      window.location.hash = "#tenant-portal";
-    }
-  };
-
   const handleItemClick = (href: string, e: React.MouseEvent) => {
     e.preventDefault();
     window.location.hash = href;
@@ -123,50 +110,57 @@ function HoverDropdown({
     >
       <div
         className={`flex items-center space-x-1 text-gray-700 hover:text-primary transition-colors cursor-pointer ${fontSize} px-2 py-1`}
-        onClick={handleTitleClick}
       >
         <span>{title}</span>
         <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </div>
 
-      {/* Dropdown Content */}
-      <div 
-        className={`absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border transition-all duration-300 ease-in-out transform origin-top z-50 ${
-          isOpen 
-            ? 'opacity-100 visible scale-100 translate-y-0' 
-            : 'opacity-0 invisible scale-95 -translate-y-2'
-        }`}
-      >
-        <div className="p-6">
-          <div className="mb-6">
-            <h3 className="text-xl font-bold text-primary mb-1">
-              {dropdownTitle}
-            </h3>
-            <div className="w-12 h-0.5 bg-primary"></div>
-          </div>
-          <div className="grid gap-2">
-            {items.map((item, index) => (
-              <div
-                key={index}
-                className="py-3 px-4 text-base hover:bg-gray-100 hover:shadow-sm transition-all duration-200 rounded-md"
-                style={{
-                  animation: isOpen ? `slideIn 0.3s ease-out ${index * 0.05}s both` : 'none'
-                }}
-              >
-                <a
-                  href={item.href}
-                  onClick={(e) => handleItemClick(item.href, e)}
-                  className="w-full text-gray-700 hover:text-primary text-[16px] block"
+      {/* Dropdown Content - Only render when open */}
+      {isOpen && (
+        <div 
+          className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border transition-all duration-300 ease-in-out transform origin-top z-50 animate-dropdownIn"
+        >
+          <div className="p-6">
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-primary mb-1">
+                {dropdownTitle}
+              </h3>
+              <div className="w-12 h-0.5 bg-primary"></div>
+            </div>
+            <div className="grid gap-2">
+              {items.map((item, index) => (
+                <div
+                  key={index}
+                  className="py-3 px-4 text-base hover:bg-gray-100 hover:shadow-sm transition-all duration-200 rounded-md animate-slideIn"
+                  style={{
+                    animationDelay: `${index * 0.05}s`
+                  }}
                 >
-                  {item.label}
-                </a>
-              </div>
-            ))}
+                  <a
+                    href={item.href}
+                    onClick={(e) => handleItemClick(item.href, e)}
+                    className="w-full text-gray-700 hover:text-primary text-[16px] block"
+                  >
+                    {item.label}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <style>{`
+        @keyframes dropdownIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
         @keyframes slideIn {
           from {
             opacity: 0;
@@ -176,6 +170,12 @@ function HoverDropdown({
             opacity: 1;
             transform: translateX(0);
           }
+        }
+        .animate-dropdownIn {
+          animation: dropdownIn 0.2s ease-out;
+        }
+        .animate-slideIn {
+          animation: slideIn 0.3s ease-out both;
         }
       `}</style>
     </div>
@@ -202,18 +202,8 @@ function MobileAccordion({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTitleClick = () => {
-    if (isAbout) {
-      window.location.hash = "#about";
-      onItemClick();
-    } else if (isServices) {
-      window.location.hash = "#services";
-      onItemClick();
-    } else if (isContact) {
-      window.location.hash = "#contact";
-      onItemClick();
-    } else {
-      setIsOpen(!isOpen);
-    }
+    // Only toggle accordion, don't navigate
+    setIsOpen(!isOpen);
   };
 
   const handleItemClick = (href: string) => {
@@ -232,12 +222,8 @@ function MobileAccordion({
           className={`h-5 w-5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
-      <div 
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="bg-gray-50 pb-2">
+      {isOpen && (
+        <div className="bg-gray-50 animate-accordionOpen">
           {items.map((item, index) => (
             <a
               key={index}
@@ -246,17 +232,27 @@ function MobileAccordion({
                 e.preventDefault();
                 handleItemClick(item.href);
               }}
-              className="block py-3 px-8 text-gray-600 hover:text-primary hover:bg-gray-100 transition-all duration-200"
+              className="block py-3 px-8 text-gray-600 hover:text-primary hover:bg-gray-100 transition-all duration-200 animate-fadeInUp"
               style={{
-                animation: isOpen ? `fadeInUp 0.3s ease-out ${index * 0.05}s both` : 'none'
+                animationDelay: `${index * 0.05}s`
               }}
             >
               {item.label}
             </a>
           ))}
         </div>
-      </div>
+      )}
       <style>{`
+        @keyframes accordionOpen {
+          from {
+            opacity: 0;
+            max-height: 0;
+          }
+          to {
+            opacity: 1;
+            max-height: 500px;
+          }
+        }
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -266,6 +262,12 @@ function MobileAccordion({
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        .animate-accordionOpen {
+          animation: accordionOpen 0.3s ease-out;
+        }
+        .animate-fadeInUp {
+          animation: fadeInUp 0.3s ease-out both;
         }
       `}</style>
     </div>
@@ -386,78 +388,90 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
       </div>
 
       {/* Mobile Menu - Show only on mobile and tablet */}
-      <div 
-        className={`md:hidden fixed top-16 left-0 w-full bg-white shadow-lg overflow-y-auto z-40 transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen 
-            ? 'max-h-[calc(100vh-4rem)] opacity-100' 
-            : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="py-4">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.hash = "";
-              closeMobileMenu();
-            }}
-            className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200 transition-colors duration-200"
-          >
-            Home
-          </a>
-
-          <MobileAccordion
-            title="About"
-            items={navigationItems.about}
-            isAbout={true}
-            onItemClick={closeMobileMenu}
-          />
-
-          <MobileAccordion
-            title="Properties"
-            items={navigationItems.properties}
-            onItemClick={closeMobileMenu}
-          />
-
-          <MobileAccordion
-            title="Services"
-            items={navigationItems.services}
-            isServices={true}
-            onItemClick={closeMobileMenu}
-          />
-
-          <a
-            href="#tenant-portal"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.hash = "#tenant-portal";
-              closeMobileMenu();
-            }}
-            className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200 transition-colors duration-200"
-          >
-            Tenants
-          </a>
-
-          <MobileAccordion
-            title="Contact"
-            items={navigationItems.contact}
-            isContact={true}
-            onItemClick={closeMobileMenu}
-          />
-
-          <div className="p-4 mt-4">
-            <Button
-              className="w-full bg-primary hover:bg-accent text-white cursor-pointer transition-all duration-200"
-              onClick={() => {
-                window.location.hash = "#schedule-appointment";
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-white shadow-lg overflow-y-auto z-40 animate-mobileMenuSlide">
+          <div className="py-4">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = "";
                 closeMobileMenu();
               }}
+              className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200 transition-colors duration-200"
             >
-              <span className="px-4">Schedule Appointment</span>
-            </Button>
+              Home
+            </a>
+
+            <MobileAccordion
+              title="About"
+              items={navigationItems.about}
+              isAbout={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <MobileAccordion
+              title="Properties"
+              items={navigationItems.properties}
+              onItemClick={closeMobileMenu}
+            />
+
+            <MobileAccordion
+              title="Services"
+              items={navigationItems.services}
+              isServices={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <a
+              href="#tenant-portal"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = "#tenant-portal";
+                closeMobileMenu();
+              }}
+              className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200 transition-colors duration-200"
+            >
+              Tenants
+            </a>
+
+            <MobileAccordion
+              title="Contact"
+              items={navigationItems.contact}
+              isContact={true}
+              onItemClick={closeMobileMenu}
+            />
+
+            <div className="p-4 mt-4">
+              <Button
+                className="w-full bg-primary hover:bg-accent text-white cursor-pointer transition-all duration-200"
+                onClick={() => {
+                  window.location.hash = "#schedule-appointment";
+                  closeMobileMenu();
+                }}
+              >
+                <span className="px-4">Schedule Appointment</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      <style>{`
+        @keyframes mobileMenuSlide {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-mobileMenuSlide {
+          animation: mobileMenuSlide 0.3s ease-out;
+        }
+      `}</style>
     </header>
   );
 }
