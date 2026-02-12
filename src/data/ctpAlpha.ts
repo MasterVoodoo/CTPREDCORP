@@ -239,8 +239,8 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
   id: "ctp-alpha-tower",
   name: "CTP Alpha Tower",
   displayName: "CTP Alpha Tower",
-  location: "Makati Central Business District",
-  shortLocation: "Makati Central Business District",
+  location: "1709 Investment Dr, Muntinlupa",
+  shortLocation: "1709 Investment Dr, Muntinlupa",
   description: [
     "Located on Investment Drive within Madrigal Business Park, Alabang, Muntinlupa City, CTP Alpha benefits from its position in one of Metro Manila's premier business hubs. Madrigal Business Park is recognized for its accessibility, modern infrastructure, and a balanced integration of commercial and lifestyle spaces.",
     "The estate also provides essential business support services and boasts a diverse tenant mix, fostering a vibrant and dynamic environment for local enterprises and international corporations alike.",
@@ -261,7 +261,7 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
   contact: {
     phone: "(555) 234-ALPHA",
     email: "alpha@ctpredcorp.com",
-    address: "Makati Central Business District"
+    address: "1709 Investment Dr, Muntinlupa"
   },
   buildingFeatures: [
     { title: "Ultra-Fast Internet", description: "1Gbps+ fiber optic connectivity" },
@@ -285,7 +285,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     id: "CAT-304",
     title: "3rd Floor (Unit 304)",
     building: "CTP Alpha Tower",
-    location: "Makati Central Business District",
+    location: "1709 Investment Dr, Muntinlupa",
     floor: 3,
     size: 77.79,
     capacity: 12,
@@ -317,7 +317,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     id: "CAT-307",
     title: "3rd Floor (Unit 307)",
     building: "CTP Alpha Tower",
-    location: "Makati Central Business District",
+    location: "1709 Investment Dr, Muntinlupa",
     floor: 3,
     size: 6.77,
     capacity: 3,
@@ -349,7 +349,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     id: "CAT-801",
     title: "8th Floor (Unit 801)",
     building: "CTP Alpha Tower",
-    location: "Makati Central Business District",
+    location: "1709 Investment Dr, Muntinlupa",
     floor: 8,
     size: 112.23,
     capacity: 18,
@@ -384,7 +384,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     id: "CAT-802",
     title: "8th Floor (Unit 802)",
     building: "CTP Alpha Tower",
-    location: "Makati Central Business District",
+    location: "1709 Investment Dr, Muntinlupa",
     floor: 8,
     size: 12.36,
     capacity: 5,
