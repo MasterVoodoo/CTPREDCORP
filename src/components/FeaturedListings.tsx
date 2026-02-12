@@ -2,6 +2,7 @@ import { React } from "react";
 import {
   MapPin,
   Square,
+  Building2,
 } from "lucide-react";
 import {
   Card,
@@ -68,28 +69,29 @@ export default function FeaturedListings({
                       {office.building}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500">
-                    {office.location}
-                  </p>
+                  <div className="flex items-center text-gray-600">
+                    <Building2 className="h-4 w-4 mr-2" />
+                    <span className="text-sm text-gray-500">
+                      {office.location}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <Square className="h-4 w-4 mr-2" />
+                    <span className="text-sm">
+                      {office.size}
+                    </span>
+                  </div>
                 </div>
               </CardHeader>
 
-              <CardContent className="space-y-4">
-                <div className="flex items-center text-gray-600">
-                  <Square className="h-4 w-4 mr-2" />
-                  <span className="text-sm">
-                    {office.size}
-                  </span>
-                </div>
-
+              <CardContent className="space-y-4"> 
                 <div className="flex items-center justify-between pt-4 border-t">
                   <div>
-                    <p className="text-2xl font-bold text-primary">
+                    <p className="text-sm text-gray-600 mb-1">{office.capacity}</p>
+                    {/* <p className="text-2xl font-bold text-primary">
                       {office.price}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      per month
-                    </p>
+                    </p> */}
+                    {/* <p className="text-xs text-gray-500">Average per unit</p> */}
                   </div>
                   <Button
                     className="bg-primary hover:bg-accent text-white cursor-pointer"

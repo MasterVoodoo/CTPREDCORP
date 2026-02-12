@@ -238,7 +238,7 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
             </nav>
 
             <Button
-              className="bg-primary hover:bg-accent text-white ml-8"
+              className="bg-primary hover:bg-accent text-white ml-8 cursor-pointer"
               onClick={() => {
                 window.location.hash = "#schedule-appointment";
               }}

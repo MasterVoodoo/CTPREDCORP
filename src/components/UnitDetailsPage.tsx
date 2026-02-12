@@ -86,7 +86,7 @@ export default function UnitDetailsPage({
             <Button
               variant="ghost"
               onClick={onBack}
-              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary"
+              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>{getBackButtonText(unitId)}</span>
@@ -228,7 +228,7 @@ export default function UnitDetailsPage({
               {/* CTA Buttons */}
               <div className="space-y-3">
                 <Button
-                  className="w-full bg-primary hover:bg-accent text-white"
+                  className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
                   size="lg"
                   onClick={onScheduleAppointment}
                 >

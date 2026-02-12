@@ -111,17 +111,87 @@ export interface FloorInfo {
 // ===== FLOOR PLANS DATA =====
 export const ctpAlphaFloorPlans: BuildingFloorPlan[] = [
   { 
-    floor: 3, // Floor 3 for units 304 and 307
+    floor: 0, // Ground Floor - 100% occupied
     units: 2, 
-    totalSqm: 14.00, // 7.23 + 6.77
-    available: 2, 
+    totalSqm: 527.53, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 2, // 100% occupied
+    units: 3,
+    totalSqm: 437.78, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 3, // 68% occupied - 1 vacant unit (304 - 77.79m²)
+    units: 3, 
+    totalSqm: 467.65,
+    available: 1, 
     condition: "Warm Shell" 
   },
   { 
-    floor: 8, // Floor 8 for units 801 and 802
+    floor: 4, // 100% occupied
+    units: 3,
+    totalSqm: 467.65, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 5, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 6, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 7, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 8, // 64% occupied - 1 vacant unit (801 - 112.23m²)
     units: 2, 
-    totalSqm: 22.79, // 10.43 + 12.36
-    available: 2, 
+    totalSqm: 454.58,
+    available: 1, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 9, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 10, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 11, // 100% occupied
+    units: 2,
+    totalSqm: 454.58, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 12, // Penthouse - 100% occupied
+    units: 1, 
+    totalSqm: 454.58, 
+    available: 0, 
     condition: "Bare" 
   }
 ];
@@ -177,10 +247,10 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
     "CTP Alpha is classified as a Class B building, completed in 2014 by CTP R.E.D. 1 Corp. This 12-storey structure offers a typical floor area of 454.59 square meters, providing a range of office units for lease. A notable feature is the inclusion of retail spaces on the ground floor, offering convenient amenities for tenants and visitors."
   ],
   stats: {
-    totalFloors: 2, // Floor 3 and Floor 8
-    totalUnits: 4, // 304, 307, 801, 802
-    occupancyRate: 0,
-    availableUnits: 4
+    totalFloors: 12, // 12 floors in floor plans (0, 2-12)
+    totalUnits: 21, // Total units across all floors (calculated from floor plans)
+    occupancyRate: 90, // Will be dynamically calculated
+    availableUnits: 2 // Only 304 on Floor 3 and 801 on Floor 8 are available
   },
   buildingHours: {
     weekdays: "5:30 AM - 11:00 PM",
@@ -217,28 +287,28 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 3,
-    size: 7.23,
-    capacity: 3,
-    price: 3003,
+    size: 77.79,
+    capacity: 12,
+    price: 23337,
     status: "Available",
     condition: "Warm Shell",
     image: ImageUnavailable,
     images: [
       ImageUnavailable,
     ],
-    description: "Compact office space perfect for small teams in the heart of Makati CBD.",
+    description: "Spacious office space perfect for growing teams in the heart of Makati CBD.",
     floorPlan: {
-      totalArea: 7.23,
-      privateOffices: 1,
-      openWorkspace: 1,
-      meetingRooms: 0,
+      totalArea: 77.79,
+      privateOffices: 2,
+      openWorkspace: 2,
+      meetingRooms: 1,
       bathrooms: 1,
-      kitchenette: false,
-      storage: false
+      kitchenette: true,
+      storage: true
     },
     availability: {
       availableFrom: "Available Now",
-      leaseTerms: ["1 year", "2 years"],
+      leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Internet", "Security", "HVAC"],
       additionalCosts: ["Parking: ₱250/month"]
     }
@@ -252,7 +322,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     size: 6.77,
     capacity: 3,
     price: 3004,
-    status: "Available",
+    status: "Taken",
     condition: "Warm Shell",
     image: ImageUnavailable,
     images: [
@@ -281,9 +351,9 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     building: "CTP Alpha Tower",
     location: "Makati Central Business District",
     floor: 8,
-    size: 10.43,
-    capacity: 4,
-    price: 3001,
+    size: 112.23,
+    capacity: 18,
+    price: 33669,
     status: "Available",
     condition: "Bare",
     image: Image801_1,
@@ -293,13 +363,13 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       Image801_3,
       Image801_4
     ],
-    description: "High floor executive office with excellent views and customizable bare shell condition.",
+    description: "Spacious high floor executive office with excellent views and customizable bare shell condition.",
     floorPlan: {
-      totalArea: 10.43,
-      privateOffices: 1,
-      openWorkspace: 1,
-      meetingRooms: 1,
-      bathrooms: 1,
+      totalArea: 112.23,
+      privateOffices: 3,
+      openWorkspace: 2,
+      meetingRooms: 2,
+      bathrooms: 2,
       kitchenette: true,
       storage: true
     },
@@ -319,7 +389,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     size: 12.36,
     capacity: 5,
     price: 3002,
-    status: "Available",
+    status: "Taken",
     condition: "Bare",
     image: Image801_1,
     images: [

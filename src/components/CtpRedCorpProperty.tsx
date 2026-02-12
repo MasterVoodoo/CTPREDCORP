@@ -21,8 +21,16 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
   const building = getBuildingById("ctp-red-corp");
   const availableUnits = getUnitsByBuilding("ctp-red-corp");
   
-  // Get unique floors from available units
-  const uniqueFloors = [...new Set(availableUnits.map(unit => unit.floor))].sort((a, b) => a - b);
+  // Get all floors from building floor plans (shows all floors, not just those with available units)
+  const allFloors = building?.floorPlans.map(fp => fp.floor).sort((a, b) => a - b) || [];
+  
+  // Calculate dynamic statistics
+  const totalFloors = building?.floorPlans.length || 0;
+  const totalUnits = building?.floorPlans.reduce((sum, fp) => sum + fp.units, 0) || 0;
+  const totalAvailableUnits = building?.floorPlans.reduce((sum, fp) => sum + fp.available, 0) || 0;
+  const totalLeasableArea = building?.floorPlans.reduce((sum, fp) => sum + fp.totalSqm, 0) || 0;
+  const totalOccupiedUnits = totalUnits - totalAvailableUnits;
+  const occupancyRate = totalUnits > 0 ? Math.round((totalOccupiedUnits / totalUnits) * 100) : 0;
   
   // Helper function to get floor display name
   const getFloorDisplayName = (floor: number): string => {
@@ -110,19 +118,19 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
             </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.totalFloors}</div>
+                <div className="text-2xl font-bold text-primary">{totalFloors}</div>
                 <div className="text-sm text-gray-600">Total Floors</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.totalUnits}</div>
+                <div className="text-2xl font-bold text-primary">{totalUnits}</div>
                 <div className="text-sm text-gray-600">Office Units</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.occupancyRate}%</div>
+                <div className="text-2xl font-bold text-primary">{occupancyRate}%</div>
                 <div className="text-sm text-gray-600">Occupancy Rate</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{building.stats.availableUnits}</div>
+                <div className="text-2xl font-bold text-primary">{totalAvailableUnits}</div>
                 <div className="text-sm text-gray-600">Available Units</div>
               </div>
             </div>
@@ -172,7 +180,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
               >
                 All Floors
               </Button>
-              {uniqueFloors.map((floor) => (
+              {allFloors.map((floor) => (
                 <Button
                   key={floor}
                   variant={selectedFloor === floor ? "default" : "outline"}
@@ -185,8 +193,27 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
               ))}
             </div>
 
+            {/* No Units Message */}
+            {filteredUnits.length === 0 && selectedFloor !== null && (
+              <Card className="text-center py-12 mb-6">
+                <CardContent>
+                  <div className="text-yellow-500 mb-4">
+                    <svg className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-medium text-gray-700 mb-2">No Available Units</h3>
+                  <p className="text-gray-500">
+                    There are currently no available units on {getFloorDisplayName(selectedFloor)}. 
+                    Please check other floors or contact us for upcoming availability.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Units Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredUnits.length > 0 && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredUnits.map((unit) => (
                 <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative">
@@ -249,7 +276,8 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                   </CardContent>
                 </Card>
               ))}
-            </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="building" className="space-y-6">
@@ -356,7 +384,10 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                     <Button 
                       className="w-full mt-4 cursor-pointer" 
                       variant="outline"
-                      onClick={() => setSelectedFloor(floor.floor)}
+                      onClick={() => {
+                        setSelectedFloor(floor.floor);
+                        setActiveTab("units");
+                      }}
                     >
                       View {getFloorDisplayName(floor.floor)} Units
                     </Button>

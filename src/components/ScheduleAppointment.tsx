@@ -438,7 +438,7 @@ Additional Notes: ${additionalNotes || 'N/A'}
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full bg-primary hover:bg-accent text-white"
+                    className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Sending..." : "Schedule My Appointment"}

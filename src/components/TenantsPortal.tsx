@@ -57,7 +57,7 @@ export default function TenantsPortal() {
                     Access our comprehensive maintenance management system for faster response times and better service quality.
                   </p>
                   <Button 
-                    className="bg-primary hover:bg-accent text-white"
+                    className="bg-primary hover:bg-accent text-white cursor-pointer"
                     onClick={() => window.open("https://www.getmaintainx.com/?fbclid=IwY2xjawMl9chleHRuA2FlbQIxMABicmlkETFka25WZGdJVkZQTHd3bnF1AR5QWUuotv-FbCc-n1KZGrg9GES1W0-4FB3NWNgbjroztI99HelKO601NTctWQ_aem_etKcJu1-OkV1SLq1f8LyxA", "_blank")}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
@@ -96,7 +96,7 @@ export default function TenantsPortal() {
                     Manage visitor registration, desk booking, and workplace logistics with our comprehensive Envoy platform.
                   </p>
                   <Button 
-                    className="bg-primary hover:bg-accent text-white"
+                    className="bg-primary hover:bg-accent text-white cursor-pointer"
                     onClick={() => window.open("https://envoy.com/?fbclid=IwY2xjawM84vNleHRuA2FlbQIxMQABHuOtWp3K_odhtCEnSoe1V1tTBHgsPOnQf8KCdLybcNpzG_lGWLBv978uxywj_aem_QbG3SGEsvTL_EcaIQPsFew", "_blank")}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
