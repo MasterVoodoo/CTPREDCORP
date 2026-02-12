@@ -169,48 +169,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
           </TabsList>
 
           <TabsContent value="units" className="space-y-6">
-            {/* Floor Filter */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              <Button
-                variant={selectedFloor === null ? "default" : "outline"}
-                onClick={() => setSelectedFloor(null)}
-                size="sm"
-                className="cursor-pointer"
-              >
-                All Floors
-              </Button>
-              {allFloors.map((floor) => (
-                <Button
-                  key={floor}
-                  variant={selectedFloor === floor ? "default" : "outline"}
-                  onClick={() => setSelectedFloor(floor)}
-                  size="sm"
-                  className="cursor-pointer"
-                >
-                  {getFloorDisplayName(floor)}
-                </Button>
-              ))}
-            </div>
-
-            {/* No Units Message */}
-            {filteredUnits.length === 0 && selectedFloor !== null && (
-              <Card className="text-center py-12 mb-6">
-                <CardContent>
-                  <div className="text-yellow-500 mb-4">
-                    <svg className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-medium text-gray-700 mb-2">No Available Units</h3>
-                  <p className="text-gray-500">
-                    There are currently no available units on {getFloorDisplayName(selectedFloor)}. 
-                    Please check other floors or contact us for upcoming availability.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Units Grid */}
+            {/* Units Grid - showing all floors */}
             {filteredUnits.length > 0 && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredUnits.map((unit) => (
