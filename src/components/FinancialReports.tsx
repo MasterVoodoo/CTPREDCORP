@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { useState, useEffect, React } from 'react';
+import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, LineChart, Line, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { DollarSign, TrendingUp, Target, Download, Eye, Calendar, Clock, FileText, Search, Filter, RefreshCw, ExternalLink, AlertCircle, BarChart3, PieChart as PieChartIcon, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { 
   getKeyMetrics, 
   quarterlyRevenueData, 
   financialReports, 
   searchReports, 
-  getReportsByType, 
   getReportTypeCounts,
   downloadReport,
   getLastUpdated,
   type FinancialReport 
 } from '../data/financialData';
-import { toast } from "sonner@2.0.3";
+import { toast } from "sonner";
 
 interface FinancialReportsProps {
   onBack?: () => void;

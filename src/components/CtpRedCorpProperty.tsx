@@ -1,6 +1,5 @@
-import React from "react";
-import { useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Square, Phone, Mail } from "lucide-react";
+import { useState, React } from "react";
+import { ArrowLeft, MapPin, Square, Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, React } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Badge } from "./ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
-import { toast, Toaster } from "sonner@2.0.3";
+import { toast, Toaster } from "sonner";
 import { Save, RefreshCw, Building2, ArrowLeft } from "lucide-react";
 import { 
   getUnitsByBuilding,
@@ -238,9 +238,9 @@ export default function AdminPage({ onBack }: AdminPageProps) {
             <TabsContent value={activeTab} className="p-6">
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                  {currentBuilding.displayName}
+                  {currentBuilding?.displayName}
                 </h2>
-                <p className="text-gray-600">{currentBuilding.location}</p>
+                <p className="text-gray-600">{currentBuilding?.location}</p>
                 <div className="flex gap-4 mt-2 text-sm text-gray-500">
                   <span>Total Units: {currentUnits.length}</span>
                   <span>Available: {currentUnits.filter(u => u.status === "Available").length}</span>

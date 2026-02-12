@@ -3,23 +3,15 @@ import {
   Mail, 
   MapPin, 
   Clock, 
-  Building, 
   Wrench, 
   AlertTriangle, 
-  MessageSquare, 
-  User, 
   Calendar,
   Shield,
   HeadphonesIcon,
-  Car
 } from "lucide-react";
-import { useState } from "react";
+import { useState, React } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Badge } from "./ui/badge";
-import { Separator } from "./ui/separator";
 
 export default function ContactPage() {
   // State for controlling which map is displayed

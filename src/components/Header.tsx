@@ -1,10 +1,6 @@
 import React from "react";
-import CTPRED_LOGO from "@/assets/CTPRED_LOGO.png";
 import { useState } from "react";
-// import image_2ffb19ebd610519b6d2b69d0bad5de7aa17c50fe from "figma:asset/2ffb19ebd610519b6d2b69d0bad5de7aa17c50fe.png";
-// import image_2bf6111cf1afd76bbf63cec5a45a88d01d7c8a30 from "figma:asset/2bf6111cf1afd76bbf63cec5a45a88d01d7c8a30.png";
-// import image_26179b6c989de8d57d7d5a10e2c67b6cc2878d71 from "figma:asset/26179b6c989de8d57d7d5a10e2c67b6cc2878d71.png";
-// import image_8ed115b5c30a60d213ba162e5cfc8f35f079d16b from "figma:asset/8ed115b5c30a60d213ba162e5cfc8f35f079d16b.png";
+import CTPRED_LOGO from "../assets/CTPRED_LOGO.png";
 import { ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 

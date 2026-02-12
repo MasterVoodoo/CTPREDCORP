@@ -1,11 +1,11 @@
-import { Leaf, Briefcase } from "lucide-react";
+import { React } from "react";
+import { Leaf } from "lucide-react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Button } from "./ui/button";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import TeamSection from "./about/TeamSection";
 import AwardsSection from "./about/AwardsSection";

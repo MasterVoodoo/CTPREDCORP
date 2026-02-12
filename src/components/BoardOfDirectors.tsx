@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, React } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 

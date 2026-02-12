@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, React } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { 
   Search, 
