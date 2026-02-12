@@ -1,4 +1,4 @@
-import { Building2, Users, Award, Leaf, Briefcase, Target } from "lucide-react";
+import { Award, UserCheck, Lightbulb, Leaf, Briefcase, Target } from "lucide-react";
 
 export const teamMembers = [
   {
@@ -52,17 +52,17 @@ export const awards = [
 
 export const values = [
   {
-    icon: Building2,
+    icon: Award,
     title: "Excellence",
     description: "We maintain the highest standards in every aspect of our business operations."
   },
   {
-    icon: Users,
+    icon: UserCheck,
     title: "Client-Focused",
     description: "Our tenants' success is our priority, driving everything we do."
   },
   {
-    icon: Target,
+    icon: Lightbulb,
     title: "Innovation",
     description: "We continuously evolve to meet the changing needs of modern businesses."
   },
