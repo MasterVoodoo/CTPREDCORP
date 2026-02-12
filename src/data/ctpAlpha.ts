@@ -253,7 +253,7 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
     availableUnits: 2 // Only 304 on Floor 3 and 801 on Floor 8 are available
   },
   buildingHours: {
-    weekdays: "5:30 AM - 11:00 PM",
+    weekdays: "9:00 AM - 5:00 PM",
     saturday: "7:00 AM - 9:00 PM",
     sunday: "9:00 AM - 7:00 PM",
     security: "24/7"
