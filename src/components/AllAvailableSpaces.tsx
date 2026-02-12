@@ -132,7 +132,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
               variant="ghost"
               size="sm"
               onClick={onBack}
-              className="text-primary hover:bg-primary hover:text-white"
+              className="text-primary hover:bg-primary hover:text-white cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
@@ -213,7 +213,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                     setFilterCondition("all");
                     setSortBy("price-asc");
                   }}
-                  className="w-full"
+                  className="w-full cursor-pointer"
                 >
                   Clear Filters
                 </Button>
@@ -282,7 +282,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                       <p className="text-sm text-gray-500">per month</p>
                     </div>
                     <Button
-                      className="bg-primary hover:bg-accent text-white"
+                      className="bg-primary hover:bg-accent text-white cursor-pointer"
                       onClick={() => onViewDetails(unit.id)}
                     >
                       View Details

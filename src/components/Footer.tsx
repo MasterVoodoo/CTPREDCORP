@@ -16,19 +16,19 @@ const buildings = [
   {
     name: "CTP Alpha Tower",
     address: "1709 Investment Dr, Muntinlupa",
-    phone: "+1 (555) 123-4567",
+    phone: "+63 2 8856 7758",
     map: "https://maps.app.goo.gl/rzPgQHFY49L4UYpRA",
   },
   {
-    name: "CTP Corporate Center",
-    address: "Asean Drive, Alabang, Muntinlupa",
-    phone: "+1 (555) 234-5678",
+    name: "CTP Asean Tower",
+    address: "Asean Drive, Filinvest City, Alabang, Muntinlupa",
+    phone: "+63 2 8334 2091",
     map: "https://maps.app.goo.gl/3Qw6E7DdYSKUzcsj9",
   },
   {
     name: "CTP BF Building",
     address: "11 President's Ave, Parañaque, Metro Manila",
-    phone: "+1 (555) 345-6789",
+    phone: "+63 2 8856 7758",
     map: "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
   },
 ];

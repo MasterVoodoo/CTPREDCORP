@@ -52,7 +52,7 @@ export default function UnitDetailsPage({
           </p>
           <Button
             onClick={onBack}
-            className="bg-primary hover:bg-accent text-white"
+              className="bg-primary hover:bg-accent text-white cursor-pointer"
           >
             Go Back
           </Button>

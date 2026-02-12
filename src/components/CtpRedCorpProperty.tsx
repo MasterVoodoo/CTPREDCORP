@@ -70,7 +70,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
             <Button
               variant="ghost"
               onClick={onBack}
-              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary"
+              className="flex items-center space-x-2 text-gray-600 hover:text-white hover:bg-primary cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Home</span>
@@ -127,7 +127,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                 <div className="text-sm text-gray-600">Available Units</div>
               </div>
             </div>
-            <Button className="bg-primary hover:bg-accent text-white w-full">
+            <Button className="bg-primary hover:bg-accent text-white w-full cursor-pointer">
               Schedule Building Tour
             </Button>
           </div>
@@ -355,7 +355,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                       )}
                     </div>
                     <Button 
-                      className="w-full mt-4" 
+                      className="w-full mt-4 cursor-pointer" 
                       variant="outline"
                       onClick={() => setSelectedFloor(floor.floor)}
                     >
