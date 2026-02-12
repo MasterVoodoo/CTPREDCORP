@@ -2,6 +2,7 @@ import { Building, Wrench, Shield, Monitor, Users, Car, Clock, Phone, CheckCircl
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import ParkingImg from "../assets/parking.jpg";
 
 export default function ServicesPage() {
   const services = [
@@ -86,7 +87,7 @@ export default function ServicesPage() {
         "Security monitoring",
         "Monthly parking passes"
       ],
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      image: ParkingImg
     }
   ];
 
