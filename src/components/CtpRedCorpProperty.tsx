@@ -262,7 +262,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                         <div className="text-2xl font-bold text-primary">
                           ₱900
                         </div>
-                        <div className="text-xs text-gray-500">per sq m</div>
+                        <div className="text-sm text-gray-500">per sq m</div>
                       </div>
                       <Button 
                         size="sm" 
