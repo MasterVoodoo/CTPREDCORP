@@ -5,6 +5,7 @@ import FeaturedListings from "./components/FeaturedListings";
 import About from "./components/About";
 import Statistics from "./components/Statistics";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import CtpRedCorpProperty from "./components/CtpRedCorpProperty";
 import CtpAlphaTowerProperty from "./components/CtpAlphaTowerProperty";
 import CtpBfBuildingProperty from "./components/CtpBfBuildingProperty";
@@ -436,6 +437,7 @@ export default function App() {
         <div className="pt-16">
           <AdminPage onBack={goBackFromAdmin} />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -448,6 +450,7 @@ export default function App() {
           <CtpRedCorpProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -460,6 +463,7 @@ export default function App() {
           <CtpAlphaTowerProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -472,6 +476,7 @@ export default function App() {
           <CtpBfBuildingProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -484,6 +489,7 @@ export default function App() {
           <About />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -496,6 +502,7 @@ export default function App() {
           <ScheduleAppointment />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -508,6 +515,7 @@ export default function App() {
           <ServicesPageCombined />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -520,6 +528,7 @@ export default function App() {
           <ContactPage />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -536,6 +545,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -553,6 +563,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -569,6 +580,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -584,6 +596,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -596,6 +609,7 @@ export default function App() {
           <TenantsPortal />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -608,6 +622,7 @@ export default function App() {
           <ModernManagementTeam />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -620,6 +635,7 @@ export default function App() {
         <div className="pt-16">
           <BoardOfDirectors onBack={goToHome} />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -632,6 +648,7 @@ export default function App() {
           <ManagementTeam onBack={goToHome} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -644,6 +661,7 @@ export default function App() {
           <PoliciesProcedures onBack={goToHome} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -663,6 +681,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -675,6 +694,7 @@ export default function App() {
           <Compliance onBack={goToHome} />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -694,6 +714,7 @@ export default function App() {
           />
           <Footer />
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -707,6 +728,7 @@ export default function App() {
         <Statistics />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
