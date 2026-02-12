@@ -111,86 +111,86 @@ export interface FloorInfo {
 // ===== FLOOR PLANS DATA =====
 export const ctpAlphaFloorPlans: BuildingFloorPlan[] = [
   { 
-    floor: 0, // Ground Floor
-    units: 0, 
-    totalSqm: 0, 
-    available: 0, 
-    condition: "Bare" 
-  },
-  { 
-    floor: 2,
-    units: 0, 
-    totalSqm: 0, 
-    available: 0, 
-    condition: "Bare" 
-  },
-  { 
-    floor: 3, // Floor 3 for units 304 and 307
+    floor: 0, // Ground Floor - 100% occupied
     units: 2, 
-    totalSqm: 14.00, // 7.23 + 6.77
-    available: 2, 
+    totalSqm: 527.53, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 2, // 100% occupied
+    units: 3,
+    totalSqm: 437.78, 
+    available: 0, 
+    condition: "Bare" 
+  },
+  { 
+    floor: 3, // 68% occupied - 1 vacant unit (304 - 77.79m²)
+    units: 3, 
+    totalSqm: 467.65,
+    available: 1, 
     condition: "Warm Shell" 
   },
   { 
-    floor: 4,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 4, // 100% occupied
+    units: 3,
+    totalSqm: 467.65, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 5,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 5, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 6,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 6, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 7,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 7, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 8, // Floor 8 for units 801 and 802
+    floor: 8, // 64% occupied - 1 vacant unit (801 - 112.23m²)
     units: 2, 
-    totalSqm: 22.79, // 10.43 + 12.36
-    available: 2, 
+    totalSqm: 454.58,
+    available: 1, 
     condition: "Bare" 
   },
   { 
-    floor: 9,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 9, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 10,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 10, // 100% occupied
+    units: 1,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 11,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 11, // 100% occupied
+    units: 2,
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 12, // Penthouse
-    units: 0, 
-    totalSqm: 0, 
+    floor: 12, // Penthouse - 100% occupied
+    units: 1, 
+    totalSqm: 454.58, 
     available: 0, 
     condition: "Bare" 
   }

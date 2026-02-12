@@ -125,86 +125,86 @@ export interface FloorInfo {
 // ===== FLOOR PLANS DATA =====
 export const ctpAseanFloorPlans: BuildingFloorPlan[] = [
   { 
-    floor: 0, // Ground floor for GF12
-    units: 1, 
-    totalSqm: 27.87, 
-    available: 1, 
+    floor: 0, // Ground Floor - 93.72% occupied
+    units: 10, 
+    totalSqm: 1741.98, 
+    available: 1, // GF12 - 109.40m²
     condition: "Bare" 
   },
   { 
-    floor: 4,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 4, // 100% occupied
+    units: 1,
+    totalSqm: 35.96, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 5,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 5, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 6,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 6, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 7,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 7, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 8,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 8, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 9,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 9, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 10, // Floor 10 for units 1001 and 1008
-    units: 2, 
-    totalSqm: 71.37, // 34.61 + 36.76
+    floor: 10, // 70% occupied - 2 vacant units (1001 - 372.63m², 1008 - 395.57m²)
+    units: 6, 
+    totalSqm: 2568.62,
     available: 2, 
-    condition: "Warm Shell" // Using the first unit's condition as representative
+    condition: "Warm Shell"
   },
   { 
-    floor: 11,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 11, // 100% occupied
+    units: 6,
+    totalSqm: 2527.96, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 12,
-    units: 0, 
-    totalSqm: 0, 
+    floor: 12, // 100% occupied
+    units: 6,
+    totalSqm: 2573.52, 
     available: 0, 
     condition: "Bare" 
   },
   { 
-    floor: 13, // Lower Penthouse for LP03 and LP04
-    units: 2, 
-    totalSqm: 86.22, // 42.84 + 43.38
+    floor: 13, // Lower Penthouse - 55.96% occupied - 2 vacant units (LP03 - 461.20m², LP04 - 466.87m²)
+    units: 4, 
+    totalSqm: 2107.48,
     available: 2, 
     condition: "Bare" 
   },
   { 
-    floor: 14, // Upper Penthouse for UP02
-    units: 1, 
-    totalSqm: 28.81, 
+    floor: 14, // Upper Penthouse - 68% occupied - 1 vacant unit (UP02 - 310.12m²)
+    units: 3, 
+    totalSqm: 960.27, 
     available: 1, 
     condition: "Bare" 
   }
