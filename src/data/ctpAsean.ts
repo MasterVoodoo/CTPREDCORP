@@ -361,7 +361,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["6 months", "1 year", "2 years"],
       includedUtilities: ["Security", "Cleaning"],
-      additionalCosts: ["HVAC: ₱100/month", "Parking: ₱150/month"]
+      additionalCosts: ["HVAC: ₱100", "Parking: ₱150"]
     }
   },
   "CRC-1001": {
@@ -399,7 +399,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Internet", "Security", "Cleaning", "HVAC"],
-      additionalCosts: ["Parking: ₱150/month"]
+      additionalCosts: ["Parking: ₱150"]
     }
   },
   "CRC-1008": {
@@ -436,7 +436,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["1 year", "2 years", "3 years"],
       includedUtilities: ["Internet", "Security", "Cleaning", "HVAC"],
-      additionalCosts: ["Parking: ₱150/month"]
+      additionalCosts: ["Parking: ₱150"]
     }
   },
   "CRC-LP03": {
@@ -470,7 +470,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["2 years", "3 years", "5 years"],
       includedUtilities: ["Security", "Cleaning"],
-      additionalCosts: ["HVAC: ₱200/month", "Parking: ₱200/month"]
+      additionalCosts: ["HVAC: ₱200", "Parking: ₱200"]
     }
   },
   "CRC-LP04": {
@@ -504,7 +504,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["2 years", "3 years", "5 years"],
       includedUtilities: ["Security", "Cleaning"],
-      additionalCosts: ["HVAC: ₱200/month", "Parking: ₱200/month"]
+      additionalCosts: ["HVAC: ₱200", "Parking: ₱200"]
     }
   },
   "CRC-UP02": {
@@ -538,7 +538,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
       availableFrom: "Immediate",
       leaseTerms: ["3 years", "5 years"],
       includedUtilities: ["Security", "Cleaning"],
-      additionalCosts: ["HVAC: ₱250/month", "Parking: ₱300/month"]
+      additionalCosts: ["HVAC: ₱250", "Parking: ₱300"]
     }
   }
 };
