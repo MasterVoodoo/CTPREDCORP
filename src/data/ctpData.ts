@@ -2,6 +2,7 @@
 // This file serves as the main entry point and imports data from individual building files
 
 // ===== IMPORT BUILDING-SPECIFIC DATA =====
+import CTPAlphaTowerImg from "../assets/CTP_Alpha_Tower.jpg";
 import {
   ctpAseanBuildingInfo,
   ctpAseanUnits,
@@ -73,7 +74,8 @@ export interface FeaturedListing {
   size: string;
   capacity: string;
   price: string;
-  image: string;
+  image: string | any;      // fallback or external image
+  heroImage?: string | any; // optional local asset override
   status: string;
 }
 
@@ -129,7 +131,8 @@ export const featuredListings: FeaturedListing[] = [
     size: "130.13 sq m",
     capacity: "10 people",
     price: "₱3,800/month",
-    image: "https://images.unsplash.com/photo-1573852858648-0290e8b1f3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "fallback-image.jpg", // could still exist as fallback
+    heroImage: CTPAlphaTowerImg, // ✅ local asset
     status: "Available"
   },
   {

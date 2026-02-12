@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { featuredListings } from "../data/ctpData";
+import CTPAlphaTowerImg from "../assets/CTP_Alpha_Tower.jpg";
 
 interface FeaturedListingsProps {
   onViewDetails?: (unitId: string) => void;
@@ -47,7 +48,7 @@ export default function FeaturedListings({
             >
               <div className="relative">
                 <ImageWithFallback
-                  src={office.image}
+                  src={office.heroImage ?? office.image}
                   alt={office.title}
                   className="w-full h-48 object-cover"
                 />

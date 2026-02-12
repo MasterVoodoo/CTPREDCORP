@@ -3,10 +3,11 @@
 
 // IMPORTS
 import ImageUnavailable from "../assets/CTP_Red/CTP_ImageUnavailable.jpg";
-import Image801_1 from "../assets/CTP_Red/CTP_ALPHA//801_802/801_1.jpg";
-import Image801_2 from "../assets/CTP_Red/CTP_ALPHA//801_802/801_2.jpg";
-import Image801_3 from "../assets/CTP_Red/CTP_ALPHA//801_802/801_3.jpg";
-import Image801_4 from "../assets/CTP_Red/CTP_ALPHA//801_802/801_4.jpg";
+import CTPAlphaTowerImg from "../assets/CTP_Alpha_Tower.jpg";
+import Image801_1 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_1.jpg";
+import Image801_2 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_2.jpg";
+import Image801_3 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_3.jpg";
+import Image801_4 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_4.jpg";
 
 // ===== TYPES =====
 export interface FloorPlan {
@@ -89,8 +90,8 @@ export interface BuildingInfo {
   contact: BuildingContact;
   buildingFeatures: BuildingFeature[];
   floorPlans: BuildingFloorPlan[];
-  heroImage: string;
-  image: string;
+  heroImage: string | any;
+  image: string | any;
   badge: string;
   ctaTitle: string;
   ctaDescription: string;
@@ -201,8 +202,8 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
     { title: "Conference Suites", description: "Professional meeting and event spaces" }
   ],
   floorPlans: ctpAlphaFloorPlans,
-  heroImage: "https://images.unsplash.com/photo-1573852858648-0290e8b1f3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  heroImage: CTPAlphaTowerImg,
+  image: CTPAlphaTowerImg,
   badge: "Alpha Class Building",
   ctaTitle: "Experience Alpha-Class Excellence",
   ctaDescription: "Join the elite companies that have chosen CTP Alpha Tower as their headquarters. Contact us today to schedule a private tour and discover premium office solutions."
