@@ -134,7 +134,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="relative grid w-full grid-cols-3 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
+          <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
             <TabsTrigger
               value="units"
               className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
@@ -167,28 +167,6 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
             >
               <span className="relative z-20">Building Info</span>
               {activeTab === "building" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
-                  style={{ zIndex: -1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30
-                  }}
-                />
-              )}
-            </TabsTrigger>
-            <TabsTrigger
-              value="floor-plans"
-              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
-              style={{ 
-                color: activeTab === "floor-plans" ? 'white' : undefined,
-                zIndex: 10
-              }}
-            >
-              <span className="relative z-20">Floor Plans</span>
-              {activeTab === "floor-plans" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute inset-0 bg-primary rounded-md shadow-lg"
@@ -295,9 +273,9 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="text-2xl font-bold text-primary">
-                          ₱{unit.price.toLocaleString()}
+                          ₱900
                         </div>
-                        <div className="text-xs text-gray-500">per month</div>
+                        <div className="text-xs text-gray-500">per sq m</div>
                       </div>
                       <Button 
                         size="sm" 
@@ -375,59 +353,6 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                   </div>
                 </div>
               </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="floor-plans" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {building.floorPlans.map((floor) => (
-                <Card key={floor.floor} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      {getFloorDisplayName(floor.floor)}
-                      <Badge variant="outline">{floor.available} Available</Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Total Units:</span>
-                        <span className="font-semibold">{floor.units}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Total Area:</span>
-                        <span className="font-semibold">{floor.totalSqm.toLocaleString()} sq m</span>
-                      </div>
-                      {floor.condition && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600">Condition:</span>
-                          <Badge 
-                            className={`text-xs ${
-                              floor.condition === 'Fitted' 
-                                ? 'bg-green-100 text-green-800 border-green-300' 
-                                : floor.condition === 'Warm Shell'
-                                ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                                : 'bg-blue-100 text-blue-800 border-blue-300'
-                            }`}
-                          >
-                            {floor.condition}
-                          </Badge>
-                        </div>
-                      )}
-                    </div>
-                    <Button 
-                      className="w-full mt-4 cursor-pointer" 
-                      variant="outline"
-                      onClick={() => {
-                        setSelectedFloor(floor.floor);
-                        setActiveTab("units");
-                      }}
-                    >
-                      View {getFloorDisplayName(floor.floor)} Units
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
             </div>
           </TabsContent>
         </Tabs>
