@@ -35,7 +35,7 @@ export interface Unit {
   floor: number;
   size: number;
   capacity: number;
-  price: number;
+  price: number | string;
   status: "Available" | "Coming Soon" | "Taken" | "Unavailable";
   condition: "Bare" | "Warm Shell" | "Fitted";
   image: string;
@@ -289,7 +289,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     floor: 3,
     size: 77.79,
     capacity: 12,
-    price: 70011,
+    price: "900 per sq m",
     status: "Available",
     condition: "Warm Shell",
     image: ImageUnavailable,
@@ -321,7 +321,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     floor: 3,
     size: 6.77,
     capacity: 3,
-    price: 6093,
+    price: "900 per sq m",
     status: "Taken",
     condition: "Warm Shell",
     image: ImageUnavailable,
@@ -353,7 +353,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     floor: 8,
     size: 112.23,
     capacity: 18,
-    price: 101007,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: Image801_1,
@@ -388,7 +388,7 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     floor: 8,
     size: 12.36,
     capacity: 5,
-    price: 11124,
+    price: "900 per sq m",
     status: "Taken",
     condition: "Bare",
     image: Image801_1,

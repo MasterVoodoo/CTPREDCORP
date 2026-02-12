@@ -31,7 +31,7 @@ export interface Unit {
   floor: number;
   size: number;
   capacity: number;
-  price: number;
+  price: number | string;
   status: "Available" | "Coming Soon" | "Taken" | "Unavailable";
   condition: "Bare" | "Warm Shell" | "Fitted";
   image: string;
@@ -191,7 +191,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     floor: 1,
     size: 120.80,
     capacity: 9,
-    price: 108720,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: ImageUnavailable,

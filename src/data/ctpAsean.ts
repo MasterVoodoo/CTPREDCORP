@@ -51,7 +51,7 @@ export interface Unit {
   floor: number;
   size: number;
   capacity: number;
-  price: number;
+  price: number | string;
   status: "Available" | "Coming Soon" | "Taken" | "Unavailable";
   condition: "Bare" | "Warm Shell" | "Fitted";
   image: string;
@@ -339,7 +339,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 0,
     size: 109.40,
     capacity: 16,
-    price: 98460,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: ImageGF12_1,
@@ -372,7 +372,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 10,
     size: 372.63,
     capacity: 56,
-    price: 335367,
+    price: "900 per sq m",
     status: "Available",
     condition: "Warm Shell",
     image: Image1001,
@@ -410,7 +410,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 10,
     size: 395.57,
     capacity: 59,
-    price: 356013,
+    price: "900 per sq m",
     status: "Available",
     condition: "Fitted",
     image: Image1008_6,
@@ -447,7 +447,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 13,
     size: 461.20,
     capacity: 69,
-    price: 415080,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: ImageLP03_1,
@@ -481,7 +481,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 13,
     size: 466.87,
     capacity: 70,
-    price: 420183,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: ImageLP03_1,
@@ -515,7 +515,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     floor: 14,
     size: 310.12,
     capacity: 47,
-    price: 279108,
+    price: "900 per sq m",
     status: "Available",
     condition: "Bare",
     image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
