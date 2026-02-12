@@ -71,15 +71,15 @@ export default function Hero({ onSearch }: HeroProps) {
         </div>
 
         {/* Title Over Video */}
-        <div className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-4 sm:left-6 md:left-8 text-left px-2">
-          <h1 className="font-bold text-white leading-tight">
-            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[80px] mb-1">
+        <div className="absolute bottom-12 left-8 text-left">
+          <h1 className="text-6xl md:text-8xl font-bold text-white leading-tight">
+            <span className="mb-1 block text-[80px]">
               {companyOverview.mission.split(".")[0]}.
             </span>
-            <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[80px] pb-2">
+            <span className="block p-[0px] pt-[0px] pr-[0px] pb-[8px] pl-[0px] text-[80px]">
               {companyOverview.mission.split(".")[1]}.
             </span>
-            <span className="block text-primary text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mt-1 md:mt-2">
+            <span className="block text-primary text-base md:text-2xl mt-[3px] mr-[1px] mb-[7px] ml-[0px] text-[24px] pt-[0px] pr-[1px] pb-[0px] pl-[0px]">
               {companyOverview.tagline}
             </span>
           </h1>
