@@ -142,16 +142,31 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1.5 shadow-sm h-14">
             {tabs.map((tab) => (
-              <TabsTrigger
+              <motion.div
                 key={tab.id}
-                value={tab.id}
-                className="relative text-base font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900 data-[state=active]:bg-transparent"
-                style={{ 
-                  color: activeTab === tab.id ? 'white' : undefined
-                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative"
               >
-                <span className="relative z-10">{tab.label}</span>
-              </TabsTrigger>
+                <TabsTrigger
+                  value={tab.id}
+                  className="relative text-base font-medium cursor-pointer transition-all duration-200 data-[state=active]:bg-transparent w-full h-full"
+                  style={{ 
+                    color: activeTab === tab.id ? 'white' : undefined
+                  }}
+                >
+                  <motion.span 
+                    className="relative z-10"
+                    animate={{ 
+                      scale: activeTab === tab.id ? 1.05 : 1,
+                      fontWeight: activeTab === tab.id ? 600 : 500
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {tab.label}
+                  </motion.span>
+                </TabsTrigger>
+              </motion.div>
             ))}
             <motion.div
               className="absolute bg-primary rounded-md shadow-lg"
