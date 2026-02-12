@@ -127,51 +127,39 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1 shadow-sm">
+          <TabsList className="relative grid w-full grid-cols-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg p-1.5 shadow-sm h-14">
             <TabsTrigger
               value="units"
-              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              className="relative text-base font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900 data-[state=active]:bg-transparent"
               style={{ 
-                color: activeTab === "units" ? 'white' : undefined,
-                zIndex: 10
+                color: activeTab === "units" ? 'white' : undefined
               }}
             >
-              <span className="relative z-20">Available Units</span>
-              {activeTab === "units" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
-                  style={{ zIndex: -1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30
-                  }}
-                />
-              )}
+              <span className="relative z-10">Available Units</span>
             </TabsTrigger>
             <TabsTrigger
               value="building"
-              className="relative text-sm font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900"
+              className="relative text-base font-medium cursor-pointer transition-colors duration-200 hover:text-gray-900 data-[state=active]:bg-transparent"
               style={{ 
-                color: activeTab === "building" ? 'white' : undefined,
-                zIndex: 10
+                color: activeTab === "building" ? 'white' : undefined
               }}
             >
-              <span className="relative z-20">Building Info</span>
-              {activeTab === "building" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 bg-primary rounded-md shadow-lg"
-                  style={{ zIndex: -1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30
-                  }}
-                />
-              )}
+              <span className="relative z-10">Building Info</span>
             </TabsTrigger>
+            <motion.div
+              className="absolute bg-primary rounded-md shadow-lg"
+              style={{
+                top: '6px',
+                bottom: '6px',
+                left: activeTab === "units" ? '6px' : '50%',
+                right: activeTab === "units" ? '50%' : '6px'
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 30
+              }}
+            />
           </TabsList>
 
           <TabsContent value="units" className="space-y-6">
