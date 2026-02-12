@@ -256,7 +256,7 @@ export default function AdminPage({ onBack }: AdminPageProps) {
                       <TableHead className="font-semibold">Unit ID</TableHead>
                       <TableHead className="font-semibold">Title</TableHead>
                       <TableHead className="font-semibold">Floor</TableHead>
-                      <TableHead className="font-semibold">Size (sq ft)</TableHead>
+                      <TableHead className="font-semibold">Size (sq m)</TableHead>
                       <TableHead className="font-semibold">Capacity</TableHead>
                       <TableHead className="font-semibold">Price ($)</TableHead>
                       <TableHead className="font-semibold">Status</TableHead>

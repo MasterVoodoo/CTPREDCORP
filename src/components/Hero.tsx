@@ -10,7 +10,7 @@ import {
 } from "./ui/select";
 import { Card } from "./ui/card";
 import { getBuildingsList, companyOverview } from "../data/ctpData";
-import PanningVideo from "../assets/ctp_pan.mov";
+import PanningVideo from "@/assets/ctp_pan.mov";
 
 interface HeroProps {
   onSearch?: (building: string, condition: string) => void;
@@ -97,7 +97,7 @@ export default function Hero({ onSearch }: HeroProps) {
               value={selectedBuilding}
               onValueChange={setSelectedBuilding}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full cursor-pointer">
                 <SelectValue placeholder="Any building" />
               </SelectTrigger>
               <SelectContent>
@@ -105,7 +105,7 @@ export default function Hero({ onSearch }: HeroProps) {
                   <SelectItem
                     key={building.id}
                     value={building.id}
-                    className="py-3 px-4 text-base"
+                    className="py-3 px-4 text-base cursor-pointer"
                   >
                     <div className="flex items-center space-x-2">
                       <Building className="h-8 w-8" />
@@ -113,7 +113,7 @@ export default function Hero({ onSearch }: HeroProps) {
                         <div className="font-medium">
                           {building.displayName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-500 cursor-pointer">
                           {building.location}
                         </div>
                       </div>
@@ -130,7 +130,7 @@ export default function Hero({ onSearch }: HeroProps) {
               value={selectedCondition}
               onValueChange={setSelectedCondition}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full cursor-pointer">
                 <SelectValue placeholder="Any condition" />
               </SelectTrigger>
               <SelectContent>
@@ -138,7 +138,7 @@ export default function Hero({ onSearch }: HeroProps) {
                   <SelectItem
                     key={condition.value}
                     value={condition.value}
-                    className="py-3 px-4 text-base"
+                    className="py-3 px-4 text-base cursor-pointer"
                   >
                     {condition.label}
                   </SelectItem>
@@ -149,7 +149,7 @@ export default function Hero({ onSearch }: HeroProps) {
 
           <Button
             onClick={handleSearch}
-            className="bg-primary hover:bg-accent text-white h-10"
+            className="bg-primary hover:bg-accent text-white h-10 cursor-pointer"
           >
             <Search className="h-4 w-4 mr-2" />
             Search Offices

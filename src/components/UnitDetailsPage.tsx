@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import { useState } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -175,7 +175,7 @@ export default function UnitDetailsPage({
                     {unit.size.toLocaleString()}
                   </div>
                   <div className="text-sm text-gray-600">
-                    Square Feet
+                    Square Meters
                   </div>
                 </div>
                 {unit.condition && (

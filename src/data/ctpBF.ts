@@ -68,7 +68,7 @@ export interface BuildingContact {
 export interface BuildingFloorPlan {
   floor: number;
   units: number;
-  totalSqft: number;
+  totalSqm: number;
   available: number;
   condition: "Bare" | "Warm Shell" | "Fitted";
 }
@@ -86,6 +86,7 @@ export interface BuildingInfo {
   buildingFeatures: BuildingFeature[];
   floorPlans: BuildingFloorPlan[];
   heroImage: string;
+  image: string;
   badge: string;
   ctaTitle: string;
   ctaDescription: string;
@@ -107,7 +108,7 @@ export const ctpBFFloorPlans: BuildingFloorPlan[] = [
   { 
     floor: 1, 
     units: 1, 
-    totalSqft: 1300, 
+    totalSqm: 120.80, 
     available: 1, 
     condition: "Bare" 
   }
@@ -173,6 +174,7 @@ export const ctpBFBuildingInfo: BuildingInfo = {
   ],
   floorPlans: ctpBFFloorPlans,
   heroImage: "https://images.unsplash.com/photo-1544725121-be3bf52e2dc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
   badge: "BGC Prime Location",
   ctaTitle: "Ready to Join BGC's Business Community?",
   ctaDescription: "Experience the convenience and connectivity of working in Bonifacio Global City. Contact us today to schedule a tour of CTP BF Building and explore your options."
@@ -186,7 +188,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     building: "CTP BF Building",
     location: "Bonifacio Global City",
     floor: 1,
-    size: 1300,
+    size: 120.80,
     capacity: 9,
     price: 3600,
     status: "Available",
@@ -197,7 +199,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     ],
     description: "Spacious bare shell office space in BGC offering complete customization flexibility for your business needs.",
     floorPlan: {
-      totalArea: 1300,
+      totalArea: 120.80,
       privateOffices: 0,
       openWorkspace: 1,
       meetingRooms: 0,
@@ -234,7 +236,7 @@ export const getCtpBFFloorDetail = (floor: number): FloorInfo | null => {
 
 // Get total area for CTP BF Building
 export const getCtpBFTotalArea = (): number => {
-  return ctpBFFloorPlans.reduce((total, plan) => total + plan.totalSqft, 0);
+  return ctpBFFloorPlans.reduce((total, plan) => total + plan.totalSqm, 0);
 };
 
 // Get available floors for CTP BF Building

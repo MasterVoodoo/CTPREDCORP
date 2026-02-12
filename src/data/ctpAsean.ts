@@ -86,7 +86,7 @@ export interface BuildingContact {
 export interface BuildingFloorPlan {
   floor: number;
   units: number;
-  totalSqft: number;
+  totalSqm: number;
   available: number;
   condition: "Bare" | "Warm Shell" | "Fitted";
 }
@@ -126,28 +126,28 @@ export const ctpAseanFloorPlans: BuildingFloorPlan[] = [
   { 
     floor: 0, // Ground floor for GF12
     units: 1, 
-    totalSqft: 300, 
+    totalSqm: 27.87, 
     available: 1, 
     condition: "Bare" 
   },
   { 
     floor: 10, // Floor 10 for units 1001 and 1008
     units: 2, 
-    totalSqft: 768.20, // 372.63 + 395.57
+    totalSqm: 71.37, // 34.61 + 36.76
     available: 2, 
     condition: "Warm Shell" // Using the first unit's condition as representative
   },
   { 
     floor: 13, // Lower Penthouse for LP03 and LP04
     units: 2, 
-    totalSqft: 928.07, // 461.2 + 466.87
+    totalSqm: 86.22, // 42.84 + 43.38
     available: 2, 
     condition: "Bare" 
   },
   { 
     floor: 14, // Upper Penthouse for UP02
     units: 1, 
-    totalSqft: 310.12, 
+    totalSqm: 28.81, 
     available: 1, 
     condition: "Bare" 
   }
@@ -278,7 +278,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 0,
-    size: 300,
+    size: 27.87,
     capacity: 4,
     price: 2506,
     status: "Available",
@@ -290,7 +290,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "Ground floor commercial suite with direct street access and excellent visibility for businesses.",
     floorPlan: {
-      totalArea: 300,
+      totalArea: 27.87,
       privateOffices: 1,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -311,7 +311,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 10,
-    size: 372.63,
+    size: 34.61,
     capacity: 6,
     price: 2504,
     status: "Available",
@@ -322,7 +322,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "High floor executive office with city views and warm shell condition ready for tenant improvements.",
     floorPlan: {
-      totalArea: 372.63,
+      totalArea: 34.61,
       privateOffices: 2,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -343,7 +343,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 10,
-    size: 395.57,
+    size: 36.76,
     capacity: 7,
     price: 2505,
     status: "Available",
@@ -358,7 +358,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "Premium fitted office suite on the 10th floor with modern finishes and move-in ready amenities.",
     floorPlan: {
-      totalArea: 395.57,
+      totalArea: 36.76,
       privateOffices: 3,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -379,7 +379,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 13,
-    size: 461.2,
+    size: 42.84,
     capacity: 8,
     price: 2502,
     status: "Available",
@@ -392,7 +392,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "Spacious lower penthouse suite with panoramic city views and customizable bare shell condition.",
     floorPlan: {
-      totalArea: 461.2,
+      totalArea: 42.84,
       privateOffices: 3,
       openWorkspace: 2,
       meetingRooms: 2,
@@ -413,7 +413,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 13,
-    size: 466.87,
+    size: 43.38,
     capacity: 8,
     price: 2503,
     status: "Available",
@@ -426,7 +426,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "Premium lower penthouse office with expansive space and excellent customization potential.",
     floorPlan: {
-      totalArea: 466.87,
+      totalArea: 43.38,
       privateOffices: 3,
       openWorkspace: 2,
       meetingRooms: 2,
@@ -447,7 +447,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     building: "CTP Asean Tower",
     location: "Filinvest City, Alabang, Muntinlupa",
     floor: 14,
-    size: 310.12,
+    size: 28.81,
     capacity: 5,
     price: 2501,
     status: "Available",
@@ -460,7 +460,7 @@ export const ctpAseanUnits: { [key: string]: Unit } = {
     ],
     description: "Exclusive upper penthouse with top floor privacy and 360-degree city views.",
     floorPlan: {
-      totalArea: 310.12,
+      totalArea: 28.81,
       privateOffices: 2,
       openWorkspace: 1,
       meetingRooms: 1,
@@ -497,7 +497,7 @@ export const getCtpAseanFloorDetail = (floor: number): FloorInfo | null => {
 
 // Get total area for CTP Asean Tower
 export const getCtpAseanTotalArea = (): number => {
-  return ctpAseanFloorPlans.reduce((total, plan) => total + plan.totalSqft, 0);
+  return ctpAseanFloorPlans.reduce((total, plan) => total + plan.totalSqm, 0);
 };
 
 // Get available floors for CTP Asean Tower

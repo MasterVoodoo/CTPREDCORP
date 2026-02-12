@@ -1,5 +1,5 @@
 import React from "react";
-import image_bc2d109c143b2415e05f0624937f9d76239dd73c from "figma:asset/bc2d109c143b2415e05f0624937f9d76239dd73c.png";
+import CTPRED_LOGO from "@/assets/CTPRED_LOGO.png";
 import { useState } from "react";
 // import image_2ffb19ebd610519b6d2b69d0bad5de7aa17c50fe from "figma:asset/2ffb19ebd610519b6d2b69d0bad5de7aa17c50fe.png";
 // import image_2bf6111cf1afd76bbf63cec5a45a88d01d7c8a30 from "figma:asset/2bf6111cf1afd76bbf63cec5a45a88d01d7c8a30.png";
@@ -176,7 +176,7 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
                   className="h-full flex items-center"
                 >
                   <img
-                    src={image_bc2d109c143b2415e05f0624937f9d76239dd73c}
+                    src={CTPRED_LOGO}
                     alt="CTP RED CORP"
                     className="h-[44px] w-auto object-contain"
                   />
