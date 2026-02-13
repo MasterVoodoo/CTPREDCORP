@@ -395,7 +395,7 @@ export const searchUnits = (criteria: {
   floor?: number;
   minSize?: number;
   maxSize?: number;
-  maxPrice?: number;
+  maxPrice?: number | string;
   status?: "Available" | "Coming Soon" | "Taken";
 }): Unit[] => {
   let filteredUnits = getPublicUnits();
