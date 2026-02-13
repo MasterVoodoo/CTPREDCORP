@@ -313,7 +313,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                     </Card>
 
                     <div className="space-y-6">
-                      <div>
+                      {/* <div>
                         <h4 className="text-lg font-semibold text-gray-900 mb-4">Building Hours</h4>
                         <div className="space-y-2 text-gray-600">
                           <div className="flex justify-between">
@@ -333,7 +333,7 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
                             <span>{building.buildingHours.security}</span>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div>
                         <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management</h4>
                         <div className="space-y-3">

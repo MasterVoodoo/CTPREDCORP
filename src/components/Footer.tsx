@@ -14,20 +14,20 @@ import { Separator } from "./ui/separator";
 
 const buildings = [
   {
-    name: "CTP RED I Corp. CTP Alpha Tower",
-    address: "Lot 7 Block 2 Investment Drive, Madrigal Business Park, Alabang, Muntinlupa 1780",
+    name: "CTP Alpha Tower",
+    address: "Investment Drive Madrigal Business Park Alabang, Muntinlupa 1780",
     phone: "(02) 8856-7758",
     map: "https://maps.app.goo.gl/rzPgQHFY49L4UYpRA",
   },
   {
-    name: "CTP RED II Corp. CTP BF Building",
-    address: "No. 11 Presidents Avenue, BF Homes Paranaque",
+    name: "CTP BF Building",
+    address: "Presidents Avenue BF Homes Paranaque",
     phone: "(02) 8856-7758 / 0939 927 8239",
     map: "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
   },
   {
-    name: "CTP RED III Corp. CTP Asean Tower",
-    address: "Block 3 Lot 3 Spectrum Filinvest, Alabang, Muntinlupa 1780",
+    name: "CTP Asean Tower",
+    address: "Asean Drive Filinvest City Alabang, Muntinlupa 1780",
     phone: "(02) 8334-2091",
     map: "https://maps.app.goo.gl/3Qw6E7DdYSKUzcsj9",
   }

@@ -334,12 +334,12 @@ export default function Header({ currentPage = "home" }: HeaderProps) {
                 dropdownTitle="Our Properties"
               />
 
-              <HoverDropdown
+              {/* <HoverDropdown
                 title="Services"
                 items={navigationItems.services}
                 dropdownTitle="Professional Services"
                 isServices={true}
-              />
+              /> */}
 
               <a
                 href="#tenant-portal"

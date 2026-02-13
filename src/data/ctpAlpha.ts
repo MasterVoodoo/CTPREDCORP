@@ -262,17 +262,16 @@ export const ctpAlphaBuildingInfo: BuildingInfo = {
     security: "24/7"
   },
   contact: {
-    phone: "(555) 234-ALPHA",
-    email: "alpha@ctpredcorp.com",
-    address: "1709 Investment Dr, Muntinlupa"
+    phone: "(02) 8856-7758",
+    email: "alphatower@ctpred.com.ph",
+    address: "Investment Drive, Madrigal Business Park, Alabang, Muntinlupa 1780"
   },
   buildingFeatures: [
-    { title: "Ultra-Fast Internet", description: "1Gbps+ fiber optic connectivity" },
-    { title: "Advanced Security", description: "Biometric access and 24/7 monitoring" },
-    { title: "Premium Parking", description: "Underground parking with EV charging" },
-    { title: "Executive Lounge", description: "Premium café and networking spaces" },
-    { title: "Wellness Center", description: "State-of-the-art fitness facilities" },
-    { title: "Conference Suites", description: "Professional meeting and event spaces" }
+    { title: "High-Speed Internet", description: "Fiber optic ready" },
+    { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
+    { title: "Parking", description: "Reserved and visitor parking available" },
+    { title: "Passenger Lifts", description: "2 high-speed elevators" },
+    { title: "Backup Power", description: "100% emergency power supply" },
   ],
   floorPlans: ctpAlphaFloorPlans,
   heroImage: CTPAlphaTowerImg,

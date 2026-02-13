@@ -133,6 +133,7 @@ export const buildings: { [key: string]: BuildingInfo } = {
       { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
       { title: "Parking", description: "Reserved and visitor parking available" },
       { title: "Passenger Lifts", description: "12 high-speed elevators" },
+      { title: "Backup Power", description: "100% emergency power supply" },
     ],
     floorPlans: [
       { floor: 1, units: 1, totalSqft: 1200, available: 1, condition: "Fitted" }

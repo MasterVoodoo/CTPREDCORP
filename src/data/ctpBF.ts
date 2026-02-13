@@ -109,7 +109,7 @@ export const ctpBFFloorPlans: BuildingFloorPlan[] = [
   { 
     floor: 1, 
     units: 1, 
-    totalSqm: 120.80, 
+    totalSqm: 265, 
     available: 1, 
     condition: "Bare" 
   }
@@ -144,9 +144,8 @@ export const ctpBFBuildingInfo: BuildingInfo = {
   location: "11 President's Ave, Parañaque, Metro Manila",
   shortLocation: "11 President's Ave, Parañaque, Metro Manila",
   description: [
-    "CTP BF Building offers modern office solutions in the heart of Bonifacio Global City, one of Metro Manila's most dynamic business districts. This contemporary building provides flexible workspace options for businesses of all sizes.",
-    "Located within walking distance of major shopping centers, restaurants, and transportation hubs, the building offers unparalleled convenience and connectivity for your business operations and employee satisfaction.",
-    "With its sustainable design features and modern amenities, CTP BF Building represents an ideal choice for companies seeking quality office space in BGC's vibrant business ecosystem."
+    "CTP BF is a 3-storey commercial building located at President’s Avenue within the prime community of BF Homes, Paranaque. This was built under CTP RED II, Inc.",
+    "Located within walking distance of residential areas, major shopping establishments, restaurants, and community centers, the building offers unparalleled convenience and connectivity for your business operations and employee satisfaction.",
   ],
   stats: {
     totalFloors: 1,
@@ -161,17 +160,15 @@ export const ctpBFBuildingInfo: BuildingInfo = {
     security: "24/7"
   },
   contact: {
-    phone: "(555) 345-BUILDING",
-    email: "bgc@ctpredcorp.com",
-    address: "11 President's Ave, Parañaque, Metro Manila"
+    phone: "(02) 8856-7758",
+    email: "alphatower@ctpred.com",
+    address: "Presidents Avenue BF Homes Paranaque"
   },
   buildingFeatures: [
     { title: "Reliable Internet", description: "High-speed fiber connectivity" },
     { title: "Complete Security", description: "Round-the-clock security services" },
     { title: "Parking Available", description: "Ample parking spaces for tenants" },
-    { title: "Business Lounge", description: "Comfortable common areas and café" },
-    { title: "Fitness Facilities", description: "On-site gym and wellness center" },
-    { title: "Meeting Spaces", description: "Shared conference and meeting rooms" }
+    { title: "Strategic Location", description: "Along major streets of Elizalde Ave and President's Ave" },
   ],
   floorPlans: ctpBFFloorPlans,
   heroImage: CTPBFImg,
@@ -188,8 +185,8 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     title: "1st Floor (Unit 001)",
     building: "CTP BF Building",
     location: "11 President's Ave, Parañaque, Metro Manila",
-    floor: 1,
-    size: 120.80,
+    floor: 2,
+    size: 265,
     capacity: 9,
     price: "900 per sq m",
     status: "Available",
@@ -200,7 +197,7 @@ export const ctpBFUnits: { [key: string]: Unit } = {
     ],
     description: "Spacious bare shell office space in BGC offering complete customization flexibility for your business needs.",
     floorPlan: {
-      totalArea: 120.80,
+      totalArea: 265,
       privateOffices: 0,
       openWorkspace: 1,
       meetingRooms: 0,

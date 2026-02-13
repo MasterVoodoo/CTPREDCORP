@@ -90,12 +90,12 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
               className="w-full h-96 object-cover rounded-lg shadow-lg"
             />
             <div className="absolute top-4 right-4">
-              <Badge className="bg-primary text-white">{building.badge}</Badge>
+              {/* <Badge className="bg-primary text-white">{building.badge}</Badge> */}
             </div>
           </div>
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Modern Business Hub in BGC
+              
             </h2>
             <div className="text-lg space-y-4 text-gray-600 mb-6">
               {building.description.map((paragraph, index) => (
@@ -104,15 +104,15 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
             </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{totalFloors}</div>
+                <div className="text-2xl font-bold text-primary">3</div>
                 <div className="text-sm text-gray-600">Total Floors</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{totalUnits}</div>
+                <div className="text-2xl font-bold text-primary">10</div>
                 <div className="text-sm text-gray-600">Office Units</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
-                <div className="text-2xl font-bold text-primary">{occupancyRate}%</div>
+                <div className="text-2xl font-bold text-primary">73%</div>
                 <div className="text-sm text-gray-600">Occupancy Rate</div>
               </div>
               <div className="text-center p-4 bg-white rounded-lg shadow-sm">
@@ -256,7 +256,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                           <div className="flex justify-between items-center">
                             <div>
                               <div className="text-2xl font-bold text-primary">
-                                ₱900
+                                ₱500
                               </div>
                               <div className="text-sm text-gray-500">per sq m</div>
                             </div>
@@ -306,7 +306,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                     </Card>
 
                     <div className="space-y-6">
-                      <div>
+                      {/* <div>
                         <h4 className="text-lg font-semibold text-gray-900 mb-4">Building Hours</h4>
                         <div className="space-y-2 text-gray-600">
                           <div className="flex justify-between">
@@ -326,7 +326,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                             <span>{building.buildingHours.security}</span>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div>
                         <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management</h4>
                         <div className="space-y-3">

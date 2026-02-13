@@ -89,7 +89,7 @@ export default function ContactPage() {
   const contactMethods = [
     {
       icon: Phone,
-      title: "Phone Support",
+      title: "Contact Number",
       description: "Speak with our team",
       contact: "+63 2 8334 2091",
       hours: "Mon-Fri: 9AM-5PM",
@@ -97,9 +97,9 @@ export default function ContactPage() {
     },
     {
       icon: Mail,
-      title: "Email Support", 
+      title: "Email Address", 
       description: "Send us a message",
-      contact: "info@ctpredcorp.com",
+      contact: "leasing@ctpred.com.ph",
       hours: "Response within 24hrs",
       type: "primary"
     }
@@ -107,26 +107,26 @@ export default function ContactPage() {
 
   const officeLocations = [
     {
-      name: "CTP RED I Corp. CTP Alpha Tower",
-      address: "Lot 7 Block 2 Investment Drive, Madrigal Business Park, Alabang, Muntinlupa 1780",
+      name: "CTP Alpha Tower",
+      address: "Investment Drive Madrigal Business Park Alabang, Muntinlupa 1780",
       phone: "(02) 8856-7758",
-      email: "alpha@ctpredcorp.com", 
+      email: "alphatower@ctpred.com.ph", 
       //manager: "",
       features: ["Premium Leasing", "Executive Services", "Concierge"]
     },
     {
-      name: "CTP RED II Corp. CTP BF Building",
-      address: "No. 11 Presidents Avenue, BF Homes Paranaque",
+      name: "CTP BF Building",
+      address: "Presidents Avenue BF Homes Paranaque",
       phone: "(02) 8856-7758 / 0939 927 8239",
-      email: "bgc@ctpredcorp.com",
+      email: "aseantower@ctpred.com.ph",
       //manager: "Jennifer Lee",
-      features: ["BGC Operations", "Tenant Services", "Parking Management"]
+      features: ["Tenant Services", "Parking Management"]
     },
     {
-      name: "CTP RED III Corp. CTP Asean Tower",
-      address: "Block 3 Lot 3 Spectrum Filinvest, Alabang, Muntinlupa 1780",
+      name: "CTP Asean Tower",
+      address: "Asean Drive Filinvest City Alabang, Muntinlupa 1780",
       phone: "(02) 8334-2091",
-      email: "asean@ctpredcorp.com",
+      email: "aseantower@ctpred.com.ph",
       //manager: "Maria Santos",
       features: ["Main Office", "Leasing Center", "24/7 Security"]
     }
@@ -168,8 +168,6 @@ export default function ContactPage() {
       location: "CTP Asean Tower",
       schedule: [
         { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
-        { days: "Saturday", hours: "8:00 AM - 8:00 PM" },
-        { days: "Sunday", hours: "10:00 AM - 6:00 PM" },
         { days: "Security", hours: "24/7 Available" }
       ]
     },
@@ -177,8 +175,6 @@ export default function ContactPage() {
       location: "CTP Alpha Tower", 
       schedule: [
         { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
-        { days: "Saturday", hours: "7:00 AM - 9:00 PM" },
-        { days: "Sunday", hours: "9:00 AM - 7:00 PM" },
         { days: "Security", hours: "24/7 Available" }
       ]
     },
@@ -186,8 +182,6 @@ export default function ContactPage() {
       location: "CTP BF Building",
       schedule: [
         { days: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
-        { days: "Saturday", hours: "8:00 AM - 8:00 PM" },
-        { days: "Sunday", hours: "10:00 AM - 6:00 PM" },
         { days: "Security", hours: "24/7 Available" }
       ]
     }
@@ -306,23 +300,25 @@ export default function ContactPage() {
           <div className="space-y-1 text-sm text-gray-600">
             {index === 0 && (
               <>
-                <p>• MRT/LRT: Alabang Station (5 min drive)</p>
+                <p>• E-Jeep: Several routes to Madrigal Business Park</p>
                 <p>• Bus: Several routes to Alabang</p>
+                <p>• Taxi/Grab: Easy pickup zone</p>
                 <p>• Parking: On-site parking available</p>
               </>
             )}
             {index === 1 && (
               <>
-                <p>• MRT: Makati Station (2 min walk)</p>
-                <p>• Bus: Multiple CBD routes</p>
+                <p>• E-Jeep: Several routes to BF Homes</p>
                 <p>• Taxi/Grab: Easy pickup zone</p>
+                <p>• Parking: On-site parking available</p>
               </>
             )}
             {index === 2 && (
               <>
-                <p>• BGC Bus: Multiple stops nearby</p>
-                <p>• Taxi/Grab: Convenient access</p>
-                <p>• Walking: Connected to BGC walkways</p>
+                <p>• E-Jeep: Several routes to Filinvest City</p>
+                <p>• Bus: Several routes to Alabang</p>
+                <p>• Taxi/Grab: Easy pickup zone</p>
+                <p>• Parking: On-site parking available</p>
               </>
             )}
           </div>

@@ -103,7 +103,7 @@ Additional Notes: ${additionalNotes || 'N/A'}
     `.trim();
 
     // Create mailto link
-    const mailtoLink = `mailto:aseantower@ctpcmc.com.ph?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoLink = `mailto:aseantower@ctpred.com.ph?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -455,11 +455,11 @@ Additional Notes: ${additionalNotes || 'N/A'}
                   <div className="grid md:grid-cols-2 gap-4 max-w-md mx-auto">
                     <div className="flex items-center justify-center gap-2 text-gray-600">
                       <Phone className="h-4 w-4 text-primary" />
-                      <span>(555) 123-4567</span>
+                      <span>(02) 8334-2091</span>
                     </div>
                     <div className="flex items-center justify-center gap-2 text-gray-600">
                       <Mail className="h-4 w-4 text-primary" />
-                      <span>aseantower@ctpcmc.com.ph</span>
+                      <span>aseantower@ctpred.com.ph</span>
                     </div>
                   </div>
                 </div>

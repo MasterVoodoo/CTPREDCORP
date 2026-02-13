@@ -248,7 +248,7 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                           <div className="flex justify-between items-center">
                             <div>
                               <div className="text-2xl font-bold text-primary">
-                                ₱900
+                                ₱1,100
                               </div>
                               <div className="text-sm text-gray-500">per sq m</div>
                             </div>
@@ -298,29 +298,21 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
                     </Card>
 
                     <div className="space-y-6">
-                      <div>
-                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Building Hours</h4>
+                      {/* <div>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management Office Hours</h4>
                         <div className="space-y-2 text-gray-600">
                           <div className="flex justify-between">
                             <span>Monday - Friday</span>
                             <span>{building.buildingHours.weekdays}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Saturday</span>
-                            <span>{building.buildingHours.saturday}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Sunday</span>
-                            <span>{building.buildingHours.sunday}</span>
-                          </div>
-                          <div className="flex justify-between">
                             <span>Security</span>
                             <span>{building.buildingHours.security}</span>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div>
-                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">Property Management Office</h4>
                         <div className="space-y-3">
                           <div className="flex items-center text-gray-600">
                             <Phone className="h-4 w-4 mr-2" />
