@@ -319,12 +319,10 @@ export const ctpAseanBuildingInfo: BuildingInfo = {
     address: "Asean Drive, Filinvest City, Alabang, Muntinlupa"
   },
   buildingFeatures: [
-    { title: "High-Speed Internet", description: "Fiber optic connectivity up to 1Gbps" },
+    { title: "High-Speed Internet", description: "Fiber optic ready" },
     { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
     { title: "Parking", description: "Reserved and visitor parking available" },
-    { title: "Café & Lounge", description: "On-site café and collaborative spaces" },
-    { title: "Fitness Center", description: "Fully equipped gym for tenants" },
-    { title: "Meeting Rooms", description: "State-of-the-art conference facilities" }
+    { title: "Café & Lounge", description: "On-site café and collaborative spaces" }
   ],
   floorPlans: ctpAseanFloorPlans,
   heroImage: CTPAseanTowerImg,

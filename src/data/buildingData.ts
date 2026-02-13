@@ -124,17 +124,15 @@ export const buildings: { [key: string]: BuildingInfo } = {
       security: "24/7"
     },
     contact: {
-      phone: "(555) 123-CORP",
-      email: "leasing@ctpredcorp.com",
-      address: "Downtown Business District"
+      phone: "(02) 8334-2091",
+      email: "aseantower@ctpred.com.ph",
+      address: "Block 3 Lot 3 Spectrum Filinvest, Alabang, Muntinlupa 1780"
     },
     buildingFeatures: [
-      { title: "High-Speed Internet", description: "Fiber optic connectivity up to 1Gbps" },
+      { title: "High-Speed Internet", description: "Fiber optic ready" },
       { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
       { title: "Parking", description: "Reserved and visitor parking available" },
       { title: "Café & Lounge", description: "On-site café and collaborative spaces" },
-      { title: "Fitness Center", description: "Fully equipped gym for tenants" },
-      { title: "Meeting Rooms", description: "State-of-the-art conference facilities" }
     ],
     floorPlans: [
       { floor: 1, units: 1, totalSqft: 1200, available: 1, condition: "Fitted" }
