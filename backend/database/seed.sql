@@ -5,12 +5,18 @@
 
 USE ctpredcorp_db;
 
--- Clear existing data
+-- Disable foreign key checks temporarily
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Clear existing data (order doesn't matter now)
 TRUNCATE TABLE financial_data;
 TRUNCATE TABLE units;
 TRUNCATE TABLE building_floor_plans;
 TRUNCATE TABLE building_features;
 TRUNCATE TABLE buildings;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- =============================================
 -- INSERT BUILDINGS
