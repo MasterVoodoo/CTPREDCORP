@@ -56,7 +56,7 @@ const navigationItems = {
     // { label: "Our Team", href: "#about-team" },
     { label: "Mission & Vision", href: "#about-mission" },
     { label: "Core Values", href: "#about-values" },
-    { label: "Awards & Recognition", href: "#about-awards" },
+    // { label: "Awards & Recognition", href: "#about-awards" },
     { label: "Sustainability", href: "#about-sustainability" },
     // { label: "Careers", href: "#about-careers" },
   ],
