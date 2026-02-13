@@ -10,6 +10,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import TeamSection from "./about/TeamSection";
 import AwardsSection from "./about/AwardsSection";
 import ValuesSection from "./about/ValuesSection";
+import CTP_BLDG from "@/assets/CTP_BLDG.png";
 
 export default function About() {
   return (
@@ -44,33 +45,25 @@ export default function About() {
                 </h2>
                 <div className="space-y-4 text-gray-600">
                   <p>
-                    Founded in 2001, CTP RED CORP began as a
-                    vision to transform the commercial real
-                    estate landscape. What started as a small
-                    property management company has evolved into
-                    a premier destination for businesses seeking
-                    exceptional office spaces.
+                  The CTP Red Group was founded in the early 1990s by the late Clarence T. Pimentel, a visionary Filipino entrepreneur with a passion for real estate development and leasing. Driven by his commitment to quality, integrity, and community growth, Mr. Pimentel established the company’s foundation in BF Homes, Parañaque, where operations began with the construction of a low-rise commercial building along Presidents Avenue under the company CTP Red II Inc.
                   </p>
                   <p>
-                    Over the years, we've expanded our portfolio
-                    to include three flagship buildings: CTP
-                    Asean Tower, CTP Alpha Tower, and CTP BF
-                    Building. Each property represents our
-                    commitment to modern design, cutting-edge
-                    technology, and sustainable practices.
+                  Building upon the success of its initial ventures, the Group embarked on its first major development project in 2014—the CTP Alpha Tower, located at Madrigal Business Park, Alabang, Muntinlupa City. This high-rise development, under CTP Red I Corp. marked a significant milestone in the company’s transition toward large-scale commercial real estate projects.
                   </p>
                   <p>
-                    Today, we proudly serve over 200 businesses
-                    across our properties, providing not just
-                    office space, but comprehensive business
-                    solutions that help our tenants thrive in an
-                    ever-evolving marketplace.
+                  Following four years of sustained growth and strong occupancy performance, the Group expanded further with the construction of its second major development, the CTP ASEAN Tower, under CTP Red III Corp. Strategically situated in the Spectrum District, Filinvest Alabang, Muntinlupa City, this modern commercial tower reinforces the group’s position as a key player in the southern Metro Manila real estate market.
+                  </p>
+                  <p>
+                  Through the years, the CTP Red Group has earned a solid reputation for delivering high-quality developments in prime locations, designed to foster lasting partnerships with its tenants and communities. Many of the group’s tenants have grown alongside its properties—testament to the company’s enduring commitment to service excellence and sustainable development.
+                  </p>
+                  <p>
+                  From its humble beginnings in Parañaque to its growing footprint across Alabang’s business districts, the CTP Red Group under its next generation leadership continues to uphold the legacy of its founder—building spaces that inspire productivity, progress, and pride in Filipino enterprise.
                   </p>
                 </div>
               </div>
               <div className="relative">
                 <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  src={CTP_BLDG}
                   alt="CTP RED CORP Building"
                   className="rounded-lg shadow-lg"
                 />
