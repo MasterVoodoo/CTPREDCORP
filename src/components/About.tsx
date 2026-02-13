@@ -16,7 +16,7 @@ export default function About() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section id="about-hero" className="py-20 bg-gray-50">
+      <section id="about-hero" className="py-10 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
