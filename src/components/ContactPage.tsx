@@ -107,28 +107,28 @@ export default function ContactPage() {
 
   const officeLocations = [
     {
-      name: "CTP Asean Tower",
-      address: "Asean Drive, Filinvest City, Alabang, Muntinlupa City",
-      phone: "+63 2 8334 2091",
-      email: "asean@ctpredcorp.com",
-      manager: "Maria Santos",
-      features: ["Main Office", "Leasing Center", "24/7 Security"]
-    },
-    {
-      name: "CTP Alpha Tower",
-      address: "1709 Investment Dr, Muntinlupa",
-      phone: "+63 2 8856 7758",
+      name: "CTP RED I Corp. CTP Alpha Tower",
+      address: "Lot 7 Block 2 Investment Drive, Madrigal Business Park, Alabang, Muntinlupa 1780",
+      phone: "(02) 8856-7758",
       email: "alpha@ctpredcorp.com", 
-      manager: "Carlos Rodriguez",
+      //manager: "",
       features: ["Premium Leasing", "Executive Services", "Concierge"]
     },
     {
-      name: "CTP BF Building",
-      address: "11 President's Ave, Parañaque, Metro Manila",
-      phone: "+63 2 8856 7758",
+      name: "CTP RED II Corp. CTP BF Building",
+      address: "No. 11 Presidents Avenue, BF Homes Paranaque",
+      phone: "(02) 8856-7758 / 0939 927 8239",
       email: "bgc@ctpredcorp.com",
-      manager: "Jennifer Lee",
+      //manager: "Jennifer Lee",
       features: ["BGC Operations", "Tenant Services", "Parking Management"]
+    },
+    {
+      name: "CTP RED III Corp. CTP Asean Tower",
+      address: "Block 3 Lot 3 Spectrum Filinvest, Alabang, Muntinlupa 1780",
+      phone: "(02) 8334-2091",
+      email: "asean@ctpredcorp.com",
+      //manager: "Maria Santos",
+      features: ["Main Office", "Leasing Center", "24/7 Security"]
     }
   ];
 

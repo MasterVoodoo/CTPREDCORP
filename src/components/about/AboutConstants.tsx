@@ -70,5 +70,15 @@ export const values = [
     icon: Leaf,
     title: "Sustainability",
     description: "We're committed to environmentally responsible business practices."
+  },
+  {
+    icon: Lightbulb,
+    title: "Innovation",
+    description: "We continuously evolve to meet the changing needs of modern businesses."
+  },
+  {
+    icon: Leaf,
+    title: "Sustainability",
+    description: "We're committed to environmentally responsible business practices."
   }
 ];
