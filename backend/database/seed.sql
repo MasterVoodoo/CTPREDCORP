@@ -9,11 +9,16 @@ USE ctpredcorp_db;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Clear existing data (order doesn't matter now)
-TRUNCATE TABLE financial_data;
-TRUNCATE TABLE units;
-TRUNCATE TABLE building_floor_plans;
-TRUNCATE TABLE building_features;
-TRUNCATE TABLE buildings;
+DELETE FROM financial_data;
+DELETE FROM units;
+DELETE FROM building_floor_plans;
+DELETE FROM building_features;
+DELETE FROM buildings;
+
+-- Reset auto-increment counters
+ALTER TABLE building_features AUTO_INCREMENT = 1;
+ALTER TABLE building_floor_plans AUTO_INCREMENT = 1;
+ALTER TABLE financial_data AUTO_INCREMENT = 1;
 
 -- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
@@ -154,7 +159,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   0,
   109.40,
   16,
-  '900 per sq m',
+  900,
   'Available',
   'Bare',
   '/images/units/CTP_ASEAN/GF12/GF12_1.jpg',
@@ -171,7 +176,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   10,
   372.63,
   56,
-  '900 per sq m',
+  900,
   'Available',
   'Warm Shell',
   '/images/units/CTP_ASEAN/1001/1001_1.jpg',
@@ -188,7 +193,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   10,
   395.57,
   59,
-  '900 per sq m',
+  900,
   'Available',
   'Fitted',
   '/images/units/CTP_ASEAN/1008/1008_1.jpg',
@@ -205,7 +210,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   13,
   461.20,
   69,
-  '900 per sq m',
+  900,
   'Available',
   'Bare',
   '/images/units/CTP_ASEAN/LP03_LP04/LP03_1.png',
@@ -222,7 +227,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   13,
   466.87,
   70,
-  '900 per sq m',
+  900,
   'Available',
   'Bare',
   '/images/units/CTP_ASEAN/LP03_LP04/LP04_1.png',
@@ -239,7 +244,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   14,
   310.12,
   47,
-  '900 per sq m',
+  900,
   'Available',
   'Bare',
   '/images/units/CTP_ASEAN/UP02/UP02_1.png',
@@ -252,16 +257,17 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 -- =============================================
 -- INSERT FINANCIAL DATA
 -- =============================================
+-- Schema columns: year, quarter, revenue, expenses, net_income, occupancy_rate, total_units, leased_units
 
-INSERT INTO financial_data (year, quarter, revenue, profit, occupancy, expenses) VALUES
-(2023, 'Q1', 11.2, 3.1, 92.5, 8.1),
-(2023, 'Q2', 12.1, 3.4, 94.2, 8.7),
-(2023, 'Q3', 11.8, 3.2, 93.8, 8.6),
-(2023, 'Q4', 12.2, 3.5, 95.1, 8.7),
-(2024, 'Q1', 12.8, 3.7, 94.8, 9.1),
-(2024, 'Q2', 13.4, 3.9, 95.6, 9.5),
-(2024, 'Q3', 13.1, 3.8, 96.2, 9.3),
-(2024, 'Q4', 13.4, 4.0, 96.4, 9.4);
+INSERT INTO financial_data (year, quarter, revenue, expenses, net_income, occupancy_rate, total_units, leased_units) VALUES
+(2023, 1, 11.2, 8.1, 3.1, 92.5, 92, 85),
+(2023, 2, 12.1, 8.7, 3.4, 94.2, 92, 87),
+(2023, 3, 11.8, 8.6, 3.2, 93.8, 92, 86),
+(2023, 4, 12.2, 8.7, 3.5, 95.1, 92, 87),
+(2024, 1, 12.8, 9.1, 3.7, 94.8, 92, 87),
+(2024, 2, 13.4, 9.5, 3.9, 95.6, 92, 88),
+(2024, 3, 13.1, 9.3, 3.8, 96.2, 92, 88),
+(2024, 4, 13.4, 9.4, 4.0, 96.4, 92, 89);
 
 -- =============================================
 -- SEED DATA COMPLETE
