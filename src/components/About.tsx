@@ -87,11 +87,7 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    To provide exceptional commercial real
-                    estate solutions that empower businesses to
-                    achieve their goals through innovative
-                    spaces, outstanding service, and strategic
-                    partnerships that foster growth and success.
+                  To provide modern, high-quality, and cost-effective workspaces supported by tenant-focused care and sustainable operations thereby providing businesses strategic value and exponential growth.
                   </p>
                 </CardContent>
               </Card>
@@ -103,12 +99,7 @@ export default function About() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600">
-                    To be the premier choice for businesses
-                    seeking world-class office environments,
-                    setting the standard for excellence in
-                    commercial real estate through innovation,
-                    sustainability, and unwavering commitment to
-                    client success.
+                    To be a pioneer and leading real estate developer in the Philippines through multiple innovative and green projects, fostering harmonious environments and positive communities for our clients, employees and shareholders.
                   </p>
                 </CardContent>
               </Card>
@@ -124,7 +115,7 @@ export default function About() {
       {/* <TeamSection /> */}
 
       {/* Awards & Recognition */}
-      <AwardsSection />
+      {/* <AwardsSection /> */}
 
       {/* Sustainability */}
       <section id="sustainability" className="py-20 bg-gray-50">
@@ -149,7 +140,7 @@ export default function About() {
                   <ul className="space-y-3 text-gray-600">
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
-                      LEED Gold certified buildings
+                      LEED Gold certified
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>

@@ -1,4 +1,4 @@
-import { Award, UserCheck, Lightbulb, Leaf, Briefcase, Target } from "lucide-react";
+import { Award, UserCheck, Lightbulb, Leaf, Briefcase, Target, SearchCheck, Flame, ShieldCheck, FolderCog, HandHeart } from "lucide-react";
 
 export const teamMembers = [
   {
@@ -52,33 +52,33 @@ export const awards = [
 
 export const values = [
   {
-    icon: Award,
-    title: "Excellence",
-    description: "We maintain the highest standards in every aspect of our business operations."
-  },
-  {
     icon: UserCheck,
-    title: "Client-Focused",
-    description: "Our tenants' success is our priority, driving everything we do."
+    title: "Customer Focus",
+    description: "We place our clients and communities at the heart of every development, ensuring satisfaction, trust, and long-term relationships."
   },
   {
-    icon: Lightbulb,
-    title: "Innovation",
-    description: "We continuously evolve to meet the changing needs of modern businesses."
+    icon: SearchCheck,
+    title: "Transparency",
+    description: "We operate with honesty and openness, fostering accountability and confidence among partners and stakeholders."
   },
   {
-    icon: Leaf,
-    title: "Sustainability",
-    description: "We're committed to environmentally responsible business practices."
+    icon: Flame,
+    title: "Passion",
+    description: "We bring energy, creativity, and enthusiasm to every project, transforming spaces into inspiring environments."
   },
   {
-    icon: Lightbulb,
-    title: "Innovation",
-    description: "We continuously evolve to meet the changing needs of modern businesses."
+    icon: ShieldCheck,
+    title: "Reliability",
+    description: "We deliver consistent results—projects that stand the test of time through quality, safety, and performance."
   },
   {
-    icon: Leaf,
-    title: "Sustainability",
-    description: "We're committed to environmentally responsible business practices."
+    icon: HandHeart,
+    title: "Empowerment",
+    description: "We nurture our people, enabling them to lead, innovate, and contribute to the company’s collective success."
+  },
+  {
+    icon: FolderCog,
+    title: "Discipline",
+    description: "We uphold precision, efficiency, and adherence to standards in every stage of development and operation."
   }
 ];
