@@ -178,10 +178,7 @@ router.post('/', async (req, res) => {
     } = req.body;
     
     await promisePool.query(
-      `INSERT INTO units 
-       (id, title, building, location, floor, size, capacity, price, 
-        status, `condition`, image, images, description, floor_plan, availability)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      'INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         id, title, building, location, floor, size, capacity, price,
         status, condition, image, JSON.stringify(images || []),
@@ -206,12 +203,7 @@ router.put('/:id', async (req, res) => {
     } = req.body;
     
     await promisePool.query(
-      `UPDATE units SET 
-       title = ?, building = ?, location = ?, floor = ?, size = ?,
-       capacity = ?, price = ?, status = ?, `condition` = ?, image = ?,
-       images = ?, description = ?, floor_plan = ?, availability = ?,
-       updated_at = CURRENT_TIMESTAMP
-       WHERE id = ?`,
+      'UPDATE units SET title = ?, building = ?, location = ?, floor = ?, size = ?, capacity = ?, price = ?, status = ?, `condition` = ?, image = ?, images = ?, description = ?, floor_plan = ?, availability = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
       [
         title, building, location, floor, size, capacity, price,
         status, condition, image, JSON.stringify(images || []),

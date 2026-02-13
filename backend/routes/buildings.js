@@ -117,9 +117,7 @@ router.post('/', async (req, res) => {
     if (floorPlans && floorPlans.length > 0) {
       for (const plan of floorPlans) {
         await connection.query(
-          `INSERT INTO building_floor_plans 
-           (building_id, floor, units, total_sqft, available, `condition`) 
-           VALUES (?, ?, ?, ?, ?, ?)`,
+          'INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES (?, ?, ?, ?, ?, ?)',
           [id, plan.floor, plan.units, plan.totalSqft, plan.available, plan.condition]
         );
       }
@@ -183,9 +181,7 @@ router.put('/:id', async (req, res) => {
     if (floorPlans && floorPlans.length > 0) {
       for (const plan of floorPlans) {
         await connection.query(
-          `INSERT INTO building_floor_plans 
-           (building_id, floor, units, total_sqft, available, `condition`) 
-           VALUES (?, ?, ?, ?, ?, ?)`,
+          'INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES (?, ?, ?, ?, ?, ?)',
           [req.params.id, plan.floor, plan.units, plan.totalSqft, plan.available, plan.condition]
         );
       }
