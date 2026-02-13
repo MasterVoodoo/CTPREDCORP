@@ -11,6 +11,7 @@ import TeamSection from "./about/TeamSection";
 import AwardsSection from "./about/AwardsSection";
 import ValuesSection from "./about/ValuesSection";
 import CTP_BLDG from "@/assets/CTP_BLDG.png";
+import SUSTAINABILITY_IMAGE from "@/assets/SUSTAINABILITY_IMAGE.jpg";
 
 export default function About() {
   return (
@@ -158,7 +159,7 @@ export default function About() {
                 </div>
                 <div className="relative">
                   <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    src={SUSTAINABILITY_IMAGE}
                     alt="Sustainable Building"
                     className="rounded-lg shadow-lg"
                   />
