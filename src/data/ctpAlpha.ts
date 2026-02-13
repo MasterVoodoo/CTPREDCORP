@@ -9,6 +9,8 @@ import Image801_2 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_2.jpg";
 import Image801_3 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_3.jpg";
 import Image801_4 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_4.jpg";
 import CTPAlphaU304 from "../assets/CTP_Alpha_U304.jpg";
+import CTPAlphaU305 from "../assets/CTP_Alpha_U305.jpg";
+import CTPAlphaU801 from "../assets/CTP_Alpha_U801.jpg";
 
 // ===== TYPES =====
 export interface FloorPlan {
@@ -314,20 +316,20 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
       additionalCosts: ["Parking: ₱250"]
     }
   },
-  "CAT-307": {
-    id: "CAT-307",
-    title: "3rd Floor (Unit 307)",
+  "CAT-305": {
+    id: "CAT-305",
+    title: "3rd Floor (Unit 305)",
     building: "CTP Alpha Tower",
     location: "1709 Investment Dr, Muntinlupa",
     floor: 3,
     size: 6.77,
     capacity: 3,
     price: "900 per sq m",
-    status: "Taken",
+    status: "Available",
     condition: "Warm Shell",
-    image: ImageUnavailable,
+    image: CTPAlphaU305,
     images: [
-      ImageUnavailable
+      CTPAlphaU305,
     ],
     description: "Efficient business suite ideal for startups and small enterprises in Makati.",
     floorPlan: {
@@ -357,12 +359,9 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Bare",
-    image: Image801_1,
+    image: CTPAlphaU801,
     images: [
-      Image801_1,
-      Image801_2,
-      Image801_3,
-      Image801_4
+      CTPAlphaU801,
     ],
     description: "Spacious high floor executive office with excellent views and customizable bare shell condition.",
     floorPlan: {
