@@ -4,7 +4,7 @@
 // ===== IMPORT BUILDING-SPECIFIC DATA =====
 import CTPAlphaTowerImg from "../assets/CTP_Alpha_Tower.jpg";
 import CTPAseanTowerImg from "../assets/CTP_Asean.PNG";
-import CTPBFImg from "../assets/CTP_BF.jpg";
+import CTPBFImg from "../assets/CTP_BF_Feature.jpg";
 import {
   ctpAseanBuildingInfo,
   ctpAseanUnits,

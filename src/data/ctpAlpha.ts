@@ -8,6 +8,7 @@ import Image801_1 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_1.jpg";
 import Image801_2 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_2.jpg";
 import Image801_3 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_3.jpg";
 import Image801_4 from "../assets/CTP_Red/CTP_ALPHA/801_802/801_4.jpg";
+import CTPAlphaU304 from "../assets/CTP_Alpha_U304.jpg";
 
 // ===== TYPES =====
 export interface FloorPlan {
@@ -292,9 +293,9 @@ export const ctpAlphaUnits: { [key: string]: Unit } = {
     price: "900 per sq m",
     status: "Available",
     condition: "Warm Shell",
-    image: ImageUnavailable,
+    image: CTPAlphaU304,
     images: [
-      ImageUnavailable,
+      CTPAlphaU304,
     ],
     description: "Spacious office space perfect for growing teams in the heart of Makati CBD.",
     floorPlan: {
