@@ -132,7 +132,7 @@ export const buildings: { [key: string]: BuildingInfo } = {
       { title: "High-Speed Internet", description: "Fiber optic ready" },
       { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
       { title: "Parking", description: "Reserved and visitor parking available" },
-      { title: "Café & Lounge", description: "On-site café and collaborative spaces" },
+      { title: "Passenger Lifts", description: "12 high-speed elevators" },
     ],
     floorPlans: [
       { floor: 1, units: 1, totalSqft: 1200, available: 1, condition: "Fitted" }
