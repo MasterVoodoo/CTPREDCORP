@@ -18,7 +18,7 @@ export default function AdminApp() {
       const hash = window.location.hash.replace('#', '');
       if (hash === 'admin-content') {
         setCurrentPage('content');
-      } else if (hash === 'admin-dashboard' || hash === '') {
+      } else if (hash === 'admin-dashboard' || hash === 'admin-login') {
         setCurrentPage('dashboard');
       }
     } else {
@@ -39,7 +39,7 @@ export default function AdminApp() {
 
       if (hash === 'admin-content') {
         setCurrentPage('content');
-      } else if (hash === 'admin-dashboard' || hash === '') {
+      } else if (hash === 'admin-dashboard' || hash === 'admin-login') {
         setCurrentPage('dashboard');
       }
     };
@@ -59,7 +59,7 @@ export default function AdminApp() {
     localStorage.removeItem('adminUser');
     setIsAuthenticated(false);
     setCurrentPage('login');
-    window.location.hash = '';
+    window.location.hash = 'admin-login';
   };
 
   const navigateToDashboard = () => {
@@ -89,11 +89,7 @@ export default function AdminApp() {
 
   // Content Management Page
   if (currentPage === 'content') {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <AdminPage onBack={navigateToDashboard} />
-      </div>
-    );
+    return <AdminPage onBack={navigateToDashboard} />;
   }
 
   return null;
