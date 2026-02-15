@@ -9,20 +9,21 @@
     "setup-admin": "node scripts/setupSuperAdmin.js"
   },
   "keywords": [
-    "real-estate",
-    "api",
-    "mysql"
+    "express",
+    "mysql",
+    "api"
   ],
-  "author": "CTP RED CORP",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
-    "mysql2": "^3.6.0",
-    "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

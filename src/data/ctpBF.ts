@@ -55,8 +55,6 @@ export interface BuildingStats {
 
 export interface BuildingHours {
   weekdays: string;
-  saturday: string;
-  sunday: string;
   security: string;
 }
 
@@ -155,8 +153,6 @@ export const ctpBFBuildingInfo: BuildingInfo = {
   },
   buildingHours: {
     weekdays: "9:00 AM - 5:00 PM",
-    saturday: "8:00 AM - 8:00 PM",
-    sunday: "10:00 AM - 6:00 PM",
     security: "24/7"
   },
   contact: {
