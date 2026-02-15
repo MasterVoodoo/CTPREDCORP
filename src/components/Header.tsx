@@ -41,10 +41,6 @@ const navigationItems = {
       label: "Policies & Procedures",
       href: "#sustainability-policies",
     },
-    {
-      label: "Financial Reports",
-      href: "#sustainability-financial-reports",
-    },
     { label: "Compliance", href: "#sustainability-compliance" },
     {
       label: "Investor Relations",
