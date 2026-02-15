@@ -96,7 +96,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 </svg>
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">CTP RED CORP</h1>
+                <h1 className="text-xl font-bold text-transparent">CTP RED CORP</h1>
                 <p className="text-xs text-gray-500">Admin Dashboard</p>
               </div>
             </div>
