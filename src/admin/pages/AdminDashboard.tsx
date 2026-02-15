@@ -158,8 +158,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 {/* Buildings Card - Red */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                       </svg>
@@ -173,8 +173,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 {/* Units Card - Red */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
                         <rect x="14" y="14" width="7" height="7"></rect>
@@ -190,8 +190,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 {/* Occupancy Card - Red */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
                         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                       </svg>
                     </div>
