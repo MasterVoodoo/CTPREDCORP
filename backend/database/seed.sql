@@ -1,6 +1,6 @@
 -- =============================================
 -- CTP RED CORP Database Seed Data
--- Clean data extracted from TypeScript files
+-- Fixed: Units now reference building IDs correctly
 -- =============================================
 
 USE ctpredcorp_db;
@@ -8,7 +8,7 @@ USE ctpredcorp_db;
 -- Disable foreign key checks temporarily
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Clear existing data (order doesn't matter now)
+-- Clear existing data
 DELETE FROM financial_data;
 DELETE FROM units;
 DELETE FROM building_floor_plans;
@@ -82,25 +82,18 @@ INSERT INTO buildings (id, name, display_name, location, short_location, descrip
 -- INSERT BUILDING FEATURES
 -- =============================================
 
--- CTP Asean Tower Features
 INSERT INTO building_features (building_id, title, description) VALUES
 ('ctp-red-corp', 'High-Speed Internet', 'Fiber optic ready'),
 ('ctp-red-corp', '24/7 Security', 'Advanced security systems and on-site guards'),
 ('ctp-red-corp', 'Parking', 'Reserved and visitor parking available'),
 ('ctp-red-corp', 'Passenger Lifts', '12 high-speed elevators'),
 ('ctp-red-corp', 'Backup Power', '100% emergency power supply'),
-('ctp-red-corp', 'Floor Efficiency', '83%');
-
--- CTP Alpha Tower Features
-INSERT INTO building_features (building_id, title, description) VALUES
+('ctp-red-corp', 'Floor Efficiency', '83%'),
 ('ctp-alpha-tower', 'High-Speed Internet', 'Fiber optic connectivity'),
 ('ctp-alpha-tower', '24/7 Security', 'CCTV monitoring and security personnel'),
 ('ctp-alpha-tower', 'Parking', 'Ample parking space'),
 ('ctp-alpha-tower', 'Elevators', 'Modern high-speed elevators'),
-('ctp-alpha-tower', 'Backup Power', 'Full generator backup');
-
--- CTP BF Building Features
-INSERT INTO building_features (building_id, title, description) VALUES
+('ctp-alpha-tower', 'Backup Power', 'Full generator backup'),
 ('ctp-bf-building', 'Secure Access', 'Controlled entry system'),
 ('ctp-bf-building', 'Parking', 'Dedicated parking slots'),
 ('ctp-bf-building', 'Backup Power', 'Emergency power supply'),
@@ -110,7 +103,6 @@ INSERT INTO building_features (building_id, title, description) VALUES
 -- INSERT BUILDING FLOOR PLANS
 -- =============================================
 
--- CTP Asean Tower Floor Plans
 INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES
 ('ctp-red-corp', 0, 10, 1741.98, 1, 'Bare'),
 ('ctp-red-corp', 4, 1, 35.96, 0, 'Bare'),
@@ -123,10 +115,7 @@ INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, availab
 ('ctp-red-corp', 11, 6, 2527.96, 0, 'Bare'),
 ('ctp-red-corp', 12, 6, 2573.52, 0, 'Bare'),
 ('ctp-red-corp', 13, 4, 2107.48, 2, 'Bare'),
-('ctp-red-corp', 14, 3, 960.27, 1, 'Bare');
-
--- CTP Alpha Tower Floor Plans (sample data)
-INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES
+('ctp-red-corp', 14, 3, 960.27, 1, 'Bare'),
 ('ctp-alpha-tower', 0, 3, 450.50, 0, 'Fitted'),
 ('ctp-alpha-tower', 2, 2, 380.25, 1, 'Warm Shell'),
 ('ctp-alpha-tower', 3, 2, 380.25, 0, 'Bare'),
@@ -137,24 +126,21 @@ INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, availab
 ('ctp-alpha-tower', 8, 2, 380.25, 0, 'Bare'),
 ('ctp-alpha-tower', 9, 2, 380.25, 1, 'Fitted'),
 ('ctp-alpha-tower', 10, 1, 450.50, 0, 'Fitted'),
-('ctp-alpha-tower', 11, 1, 450.50, 0, 'Fitted');
-
--- CTP BF Building Floor Plans (sample data)
-INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES
+('ctp-alpha-tower', 11, 1, 450.50, 0, 'Fitted'),
 ('ctp-bf-building', 0, 3, 280.50, 0, 'Fitted'),
 ('ctp-bf-building', 1, 2, 240.80, 0, 'Warm Shell'),
 ('ctp-bf-building', 2, 2, 240.80, 1, 'Bare'),
 ('ctp-bf-building', 3, 2, 240.80, 0, 'Bare');
 
 -- =============================================
--- INSERT UNITS (CTP Asean Tower - Available Units Only)
+-- INSERT UNITS - FIXED: Using building IDs
 -- =============================================
 
 INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES
 (
   'CRC-GF12',
   'Ground Floor (Unit GF12)',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   0,
   109.40,
@@ -171,7 +157,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-1001',
   '10th Floor (Unit 1001)',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   10,
   372.63,
@@ -188,7 +174,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-1008',
   '10th Floor (UNIT 1008)',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   10,
   395.57,
@@ -205,7 +191,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-LP03',
   'Lower Penthouse (Unit LP03)',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   13,
   461.20,
@@ -222,7 +208,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-LP04',
   'Lower Penthouse (Unit LP04)',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   13,
   466.87,
@@ -239,7 +225,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-UP02',
   'Upper Penthouse Exclusive Suite',
-  'CTP Asean Tower',
+  'ctp-red-corp',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   14,
   310.12,
@@ -257,7 +243,6 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 -- =============================================
 -- INSERT FINANCIAL DATA
 -- =============================================
--- Schema columns: year, quarter, revenue, expenses, net_income, occupancy_rate, total_units, leased_units
 
 INSERT INTO financial_data (year, quarter, revenue, expenses, net_income, occupancy_rate, total_units, leased_units) VALUES
 (2023, 1, 11.2, 8.1, 3.1, 92.5, 92, 85),
