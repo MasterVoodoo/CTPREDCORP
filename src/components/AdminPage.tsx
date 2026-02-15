@@ -258,7 +258,7 @@ export default function AdminPage({ onBack }: AdminPageProps) {
                       <TableHead className="font-semibold">Floor</TableHead>
                       <TableHead className="font-semibold">Size (sq m)</TableHead>
                       <TableHead className="font-semibold">Capacity</TableHead>
-                      <TableHead className="font-semibold">Price ($)</TableHead>
+                      <TableHead className="font-semibold">Price (₱)</TableHead>
                       <TableHead className="font-semibold">Status</TableHead>
                       <TableHead className="font-semibold">Condition</TableHead>
                     </TableRow>
@@ -313,13 +313,16 @@ export default function AdminPage({ onBack }: AdminPageProps) {
                           />
                         </TableCell>
                         <TableCell>
-                          <Input
-                            type="number"
-                            value={unit.price}
-                            onChange={(e) => updateUnit(unit.id, "price", parseInt(e.target.value) || 0)}
-                            className="w-24"
-                            min="0"
-                          />
+                          <div className="flex items-center gap-1">
+                            <span className="text-gray-600 font-medium">₱</span>
+                            <Input
+                              type="number"
+                              value={unit.price}
+                              onChange={(e) => updateUnit(unit.id, "price", parseInt(e.target.value) || 0)}
+                              className="w-28"
+                              min="0"
+                            />
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Select 
