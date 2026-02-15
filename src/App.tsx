@@ -26,6 +26,9 @@ import PoliciesProcedures from "./components/PoliciesProcedures";
 import FinancialReports from "./components/FinancialReports";
 import Compliance from "./components/Compliance";
 import InvestorRelations from "./components/InvestorRelations";
+// New Admin Pages
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -47,8 +50,14 @@ export default function App() {
       const pathname = window.location.pathname;
       const prevPage = currentPage; // Store current page before changing it
       
-      // Check for admin page route (both hash and pathname)
-      if (hash === "#admin-page" || pathname === "/admin-page") {
+      // Check for admin pages
+      if (hash === "#admin-login" || pathname === "/admin/login") {
+        setPreviousPage(prevPage);
+        setCurrentPage("admin-login");
+      } else if (hash === "#admin-dashboard" || pathname === "/admin/dashboard") {
+        setPreviousPage(prevPage);
+        setCurrentPage("admin-dashboard");
+      } else if (hash === "#admin-page" || pathname === "/admin-page") {
         setPreviousPage(prevPage);
         setCurrentPage("admin-page");
       } else if (hash === "#ctp-red-corp") {
@@ -429,6 +438,26 @@ export default function App() {
         window.location.hash = "";
     }
   };
+
+  // Admin Login Page (No Header/Footer)
+  if (currentPage === "admin-login") {
+    return (
+      <div className="min-h-screen">
+        <AdminLogin />
+        <ScrollToTop />
+      </div>
+    );
+  }
+
+  // Admin Dashboard (No Header/Footer - has its own header)
+  if (currentPage === "admin-dashboard") {
+    return (
+      <div className="min-h-screen">
+        <AdminDashboard />
+        <ScrollToTop />
+      </div>
+    );
+  }
 
   if (currentPage === "admin-page") {
     return (
