@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Building2, BarChart3, Users, LogOut, Grid3x3 } from 'lucide-react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
 
@@ -63,10 +64,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
+              <Building2 size={32} className="text-blue-600" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">CTP RED CORP</h1>
                 <p className="text-xs text-gray-500">Admin Dashboard</p>
@@ -75,10 +73,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={user?.role === 'super_admin' ? '#9333EA' : '#2563EB'} strokeWidth="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-semibold text-sm">
+                  {user?.fullName?.charAt(0) || 'A'}
+                </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
                   <p className="text-xs text-gray-500">
@@ -90,11 +87,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
+                <LogOut size={20} />
                 <span className="font-medium">Logout</span>
               </button>
             </div>
@@ -114,11 +107,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
-              </svg>
+              <BarChart3 size={20} />
               Overview
             </button>
             <button
@@ -129,10 +118,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
+              <Building2 size={20} />
               Property Management
             </button>
             {user?.role === 'super_admin' && (
@@ -144,12 +130,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
+                <Users size={20} />
                 User Management
               </button>
             )}
@@ -166,9 +147,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    </svg>
+                    <Building2 size={32} className="text-blue-600" />
                     <span className="text-sm font-medium text-gray-500">Buildings</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">3</p>
@@ -177,12 +156,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2">
-                      <rect x="3" y="3" width="7" height="7"/>
-                      <rect x="14" y="3" width="7" height="7"/>
-                      <rect x="14" y="14" width="7" height="7"/>
-                      <rect x="3" y="14" width="7" height="7"/>
-                    </svg>
+                    <Grid3x3 size={32} className="text-green-600" />
                     <span className="text-sm font-medium text-gray-500">Units</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">92</p>
@@ -191,9 +165,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9333EA" strokeWidth="2">
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
+                    <BarChart3 size={32} className="text-purple-600" />
                     <span className="text-sm font-medium text-gray-500">Occupancy</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">96%</p>
@@ -209,9 +181,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     onClick={() => setCurrentPage('properties')}
                     className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
                   >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    </svg>
+                    <Building2 size={24} className="text-blue-600" />
                     <div className="text-left">
                       <p className="font-medium text-gray-900">Manage Properties</p>
                       <p className="text-sm text-gray-600">Edit buildings and units</p>
@@ -222,10 +192,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       onClick={() => setCurrentPage('users')}
                       className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
                     >
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                      </svg>
+                      <Users size={24} className="text-blue-600" />
                       <div className="text-left">
                         <p className="font-medium text-gray-900">Manage Users</p>
                         <p className="text-sm text-gray-600">Add or edit admin users</p>
