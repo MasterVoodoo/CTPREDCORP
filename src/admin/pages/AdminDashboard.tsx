@@ -83,6 +83,8 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         .quick-action-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .quick-action-card:hover { transform: translateY(-4px); border-color: #DC2626 !important; background-color: #FEF2F2 !important; box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.2), 0 4px 6px -2px rgba(220, 38, 38, 0.1); }
         .content-fade-in { animation: slideIn 0.5s ease-out; }
+        .stat-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15); }
       `}</style>
 
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -96,7 +98,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 </svg>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-transparent">CTP RED CORP</h1>
+                <h1 className="text-xl font-bold text-gray-900">CTP RED CORP</h1>
                 <p className="text-xs text-gray-500">Admin Dashboard</p>
               </div>
             </div>
@@ -153,39 +155,62 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div className="bg-gradient-to-br from-red-50 to-white p-6 rounded-lg shadow-sm border border-red-100">
+                {/* Buildings Card - Red */}
+                <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                      </svg>
                     </div>
-                    <span className="text-sm font-medium text-red-600">Buildings</span>
+                    <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">BUILDINGS</span>
                   </div>
-                  <p className="text-3xl font-bold text-gray-900">3</p>
-                  <p className="text-sm text-gray-600 mt-2">Total Properties</p>
+                  <p className="text-4xl font-extrabold text-gray-900 mb-1">3</p>
+                  <p className="text-sm text-gray-600 font-medium">Total Properties</p>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg shadow-sm border border-green-100">
+
+                {/* Units Card - Red */}
+                <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                      </svg>
                     </div>
-                    <span className="text-sm font-medium text-green-600">Units</span>
+                    <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">UNITS</span>
                   </div>
-                  <p className="text-3xl font-bold text-gray-900">92</p>
-                  <p className="text-sm text-gray-600 mt-2">Total Available</p>
+                  <p className="text-4xl font-extrabold text-gray-900 mb-1">92</p>
+                  <p className="text-sm text-gray-600 font-medium">Total Available</p>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg shadow-sm border border-purple-100">
+
+                {/* Occupancy Card - Red */}
+                <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                      </svg>
                     </div>
-                    <span className="text-sm font-medium text-purple-600">Occupancy</span>
+                    <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">OCCUPANCY</span>
                   </div>
-                  <p className="text-3xl font-bold text-gray-900">96%</p>
-                  <p className="text-sm text-gray-600 mt-2">Current Rate</p>
+                  <p className="text-4xl font-extrabold text-gray-900 mb-1">96%</p>
+                  <p className="text-sm text-gray-600 font-medium">Current Rate</p>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+
+              {/* Quick Actions */}
+              <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  Quick Actions
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div onClick={() => setActiveTab('properties')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
