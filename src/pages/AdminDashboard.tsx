@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Building2,
   Users,
   Activity,
   LogOut,
   Shield,
-  UserPlus,
   Settings,
   BarChart3
 } from 'lucide-react';
@@ -21,7 +19,6 @@ interface AdminUser {
 }
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState<AdminUser | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs'>('overview');
   const [loading, setLoading] = useState(true);
@@ -35,7 +32,7 @@ const AdminDashboard = () => {
     const userData = localStorage.getItem('adminUser');
 
     if (!token || !userData) {
-      navigate('/admin/login');
+      window.location.hash = '#admin-login';
       return;
     }
 
@@ -55,7 +52,7 @@ const AdminDashboard = () => {
       console.error('Auth verification failed:', error);
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      navigate('/admin/login');
+      window.location.hash = '#admin-login';
     } finally {
       setLoading(false);
     }
@@ -76,7 +73,7 @@ const AdminDashboard = () => {
     } finally {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      navigate('/admin/login');
+      window.location.hash = '#admin-login';
     }
   };
 

@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Building2, Lock, User, AlertCircle } from 'lucide-react';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -35,8 +33,8 @@ const AdminLogin = () => {
       localStorage.setItem('adminToken', data.token);
       localStorage.setItem('adminUser', JSON.stringify(data.user));
 
-      // Redirect to admin dashboard
-      navigate('/admin/dashboard');
+      // Redirect to admin dashboard using hash navigation
+      window.location.hash = '#admin-dashboard';
     } catch (err: any) {
       setError(err.message || 'An error occurred during login');
     } finally {
