@@ -23,7 +23,6 @@ import BoardOfDirectors from "./components/BoardOfDirectors";
 import ManagementTeam from "./components/ManagementTeam";
 import ModernManagementTeam from "./components/ModernManagementTeam";
 import PoliciesProcedures from "./components/PoliciesProcedures";
-import FinancialReports from "./components/FinancialReports";
 import Compliance from "./components/Compliance";
 import InvestorRelations from "./components/InvestorRelations";
 // New Admin Pages
@@ -354,7 +353,6 @@ export default function App() {
       case "sustainability-board-directors":
       case "sustainability-management-team":
       case "sustainability-policies":
-      case "sustainability-financial-reports":
       case "sustainability-compliance":
       case "sustainability-investor-relations":
         setCurrentPage(backTo);
@@ -695,26 +693,6 @@ export default function App() {
     );
   }
 
-  if (currentPage === "sustainability-financial-reports") {
-    return (
-      <div className="min-h-screen">
-        <Header currentPage="sustainability" />
-        <div className="pt-16">
-          <FinancialReports 
-            onBack={goToHome} 
-            onNavigateToInvestorRelations={() => {
-              setPreviousPage(currentPage);
-              setCurrentPage("sustainability-investor-relations");
-              window.location.hash = "#sustainability-investor-relations";
-            }}
-          />
-          <Footer />
-        </div>
-        <ScrollToTop />
-      </div>
-    );
-  }
-
   if (currentPage === "sustainability-compliance") {
     return (
       <div className="min-h-screen">
@@ -736,9 +714,8 @@ export default function App() {
           <InvestorRelations 
             onBack={goToHome}
             onNavigateToFinancialReports={() => {
-              setPreviousPage(currentPage);
-              setCurrentPage("sustainability-financial-reports");
-              window.location.hash = "#sustainability-financial-reports";
+              // This link no longer works since Financial Reports is admin-only
+              goToHome();
             }}
           />
           <Footer />
