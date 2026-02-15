@@ -50,7 +50,11 @@ export default function UserManagement() {
       }
       
       const data = await response.json();
-      setUsers(Array.isArray(data) ? data : []);
+      console.log('Users API response:', data);
+      
+      // Handle both formats: direct array or wrapped in success object
+      const usersArray = data.admins || data;
+      setUsers(Array.isArray(usersArray) ? usersArray : []);
       setError(null);
     } catch (error: any) {
       console.error('Failed to load users:', error);
@@ -191,7 +195,7 @@ export default function UserManagement() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 bg-red-100 rounded-full flex items-center justify-center">
                           <span className="text-red-600 font-semibold">
-                            {user.fullName.split(' ').map(n => n[0]).join('')}
+                            {user.fullName?.split(' ').map(n => n[0]).join('') || 'A'}
                           </span>
                         </div>
                         <div className="ml-4">
