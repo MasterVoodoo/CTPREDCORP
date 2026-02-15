@@ -22,6 +22,7 @@ export default function PropertyManagement() {
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
   const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -38,13 +39,16 @@ export default function PropertyManagement() {
   const loadBuildings = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/buildings');
+      if (!response.ok) throw new Error('Failed to load buildings');
       const data = await response.json();
       setBuildings(data);
       if (data.length > 0) {
         setSelectedBuilding(data[0].id);
       }
-    } catch (error) {
+      setError(null);
+    } catch (error: any) {
       console.error('Failed to load buildings:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -53,10 +57,17 @@ export default function PropertyManagement() {
   const loadUnits = async (buildingId: string) => {
     try {
       const response = await fetch(`http://localhost:5000/api/buildings/${buildingId}/units`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to load units');
+      }
       const data = await response.json();
-      setUnits(data);
-    } catch (error) {
+      setUnits(Array.isArray(data) ? data : []);
+      setError(null);
+    } catch (error: any) {
       console.error('Failed to load units:', error);
+      setError(error.message);
+      setUnits([]);
     }
   };
 
@@ -79,22 +90,24 @@ export default function PropertyManagement() {
         body: JSON.stringify(editingUnit)
       });
 
-      if (response.ok) {
-        setShowEditModal(false);
-        setEditingUnit(null);
-        if (selectedBuilding) {
-          loadUnits(selectedBuilding);
-        }
+      if (!response.ok) throw new Error('Failed to update unit');
+
+      setShowEditModal(false);
+      setEditingUnit(null);
+      if (selectedBuilding) {
+        loadUnits(selectedBuilding);
       }
-    } catch (error) {
+      setError(null);
+    } catch (error: any) {
       console.error('Failed to update unit:', error);
+      setError(error.message);
     }
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
       </div>
     );
   }
@@ -105,13 +118,19 @@ export default function PropertyManagement() {
         <h2 className="text-2xl font-bold text-gray-900">Property Management</h2>
       </div>
 
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-800">⚠️ {error}</p>
+        </div>
+      )}
+
       {/* Building Selector */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-2">Select Building</label>
         <select
           value={selectedBuilding || ''}
           onChange={(e) => setSelectedBuilding(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
         >
           {buildings.map((building) => (
             <option key={building.id} value={building.id}>
@@ -137,30 +156,38 @@ export default function PropertyManagement() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {units.map((unit) => (
-                <tr key={unit.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.unitNumber}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{unit.floor}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{unit.size}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">₱{unit.pricePerSqm.toLocaleString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      unit.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {unit.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{unit.condition}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => handleEditUnit(unit)}
-                      className="text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      Edit
-                    </button>
+              {units.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                    No units found for this building
                   </td>
                 </tr>
-              ))}
+              ) : (
+                units.map((unit) => (
+                  <tr key={unit.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.unitNumber}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{unit.floor}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{unit.size}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">₱{unit.pricePerSqm.toLocaleString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        unit.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {unit.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">{unit.condition}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleEditUnit(unit)}
+                        className="text-red-600 hover:text-red-800 font-medium"
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -179,7 +206,7 @@ export default function PropertyManagement() {
                   type="number"
                   value={editingUnit.size}
                   onChange={(e) => setEditingUnit({ ...editingUnit, size: parseFloat(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 />
               </div>
               
@@ -189,7 +216,7 @@ export default function PropertyManagement() {
                   type="number"
                   value={editingUnit.pricePerSqm}
                   onChange={(e) => setEditingUnit({ ...editingUnit, pricePerSqm: parseFloat(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 />
               </div>
               
@@ -198,7 +225,7 @@ export default function PropertyManagement() {
                 <select
                   value={editingUnit.status}
                   onChange={(e) => setEditingUnit({ ...editingUnit, status: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 >
                   <option value="available">Available</option>
                   <option value="occupied">Occupied</option>
@@ -210,7 +237,7 @@ export default function PropertyManagement() {
                 <select
                   value={editingUnit.condition}
                   onChange={(e) => setEditingUnit({ ...editingUnit, condition: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 >
                   <option value="warm-shell">Warm Shell</option>
                   <option value="bare-shell">Bare Shell</option>
@@ -231,7 +258,7 @@ export default function PropertyManagement() {
               </button>
               <button
                 onClick={handleSaveUnit}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
               >
                 Save Changes
               </button>
