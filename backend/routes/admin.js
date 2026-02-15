@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+const { promisePool } = require('../config/database');
 
 // JWT Secret (should be in .env file)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
@@ -45,7 +45,7 @@ const requireAdmin = (req, res, next) => {
 // ===== LOG ACTIVITY =====
 const logActivity = async (adminId, action, entityType = null, entityId = null, details = null, ipAddress = null) => {
   try {
-    await db.execute(
+    await promisePool.query(
       'INSERT INTO admin_activity_logs (admin_id, action, entity_type, entity_id, details, ip_address) VALUES (?, ?, ?, ?, ?, ?)',
       [adminId, action, entityType, entityId, JSON.stringify(details), ipAddress]
     );
@@ -57,7 +57,7 @@ const logActivity = async (adminId, action, entityType = null, entityId = null, 
 // ===== LOG LOGIN ATTEMPT =====
 const logLoginAttempt = async (adminId, success, ipAddress, userAgent, failureReason = null) => {
   try {
-    await db.execute(
+    await promisePool.query(
       'INSERT INTO admin_login_logs (admin_id, success, ip_address, user_agent, failure_reason) VALUES (?, ?, ?, ?, ?)',
       [adminId, success, ipAddress, userAgent, failureReason]
     );
@@ -76,7 +76,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Find user
-    const [users] = await db.execute(
+    const [users] = await promisePool.query(
       'SELECT id, username, email, password_hash, role, full_name, is_active FROM admin_users WHERE username = ?',
       [username]
     );
@@ -102,7 +102,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Update last login
-    await db.execute('UPDATE admin_users SET last_login = NOW() WHERE id = ?', [user.id]);
+    await promisePool.query('UPDATE admin_users SET last_login = NOW() WHERE id = ?', [user.id]);
 
     // Log successful login
     await logLoginAttempt(user.id, true, req.ip, req.headers['user-agent']);
@@ -134,7 +134,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({ error: 'Login failed', details: error.message });
   }
 });
 
@@ -157,7 +157,7 @@ router.post('/logout', authenticateToken, async (req, res) => {
 // ===== ROUTE: Get All Admins (Super Admin Only) =====
 router.get('/users', authenticateToken, requireSuperAdmin, async (req, res) => {
   try {
-    const [admins] = await db.execute(
+    const [admins] = await promisePool.query(
       `SELECT id, username, email, role, full_name, is_active, last_login, created_at, updated_at 
        FROM admin_users 
        ORDER BY created_at DESC`
@@ -189,7 +189,7 @@ router.post('/users', authenticateToken, requireSuperAdmin, async (req, res) => 
     }
 
     // Check if username or email exists
-    const [existing] = await db.execute(
+    const [existing] = await promisePool.query(
       'SELECT id FROM admin_users WHERE username = ? OR email = ?',
       [username, email]
     );
@@ -202,7 +202,7 @@ router.post('/users', authenticateToken, requireSuperAdmin, async (req, res) => 
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Insert new admin
-    const [result] = await db.execute(
+    const [result] = await promisePool.query(
       'INSERT INTO admin_users (username, email, password_hash, role, full_name, created_by) VALUES (?, ?, ?, ?, ?, ?)',
       [username, email, passwordHash, role || 'admin', fullName, req.user.id]
     );
@@ -264,7 +264,7 @@ router.put('/users/:id', authenticateToken, requireSuperAdmin, async (req, res) 
 
     values.push(id);
 
-    await db.execute(
+    await promisePool.query(
       `UPDATE admin_users SET ${updates.join(', ')} WHERE id = ?`,
       values
     );
@@ -296,12 +296,12 @@ router.delete('/users/:id', authenticateToken, requireSuperAdmin, async (req, re
     }
 
     // Check if user exists
-    const [users] = await db.execute('SELECT username FROM admin_users WHERE id = ?', [id]);
+    const [users] = await promisePool.query('SELECT username FROM admin_users WHERE id = ?', [id]);
     if (users.length === 0) {
       return res.status(404).json({ error: 'Admin not found' });
     }
 
-    await db.execute('DELETE FROM admin_users WHERE id = ?', [id]);
+    await promisePool.query('DELETE FROM admin_users WHERE id = ?', [id]);
 
     await logActivity(
       req.user.id,
@@ -333,7 +333,7 @@ router.put('/change-password', authenticateToken, async (req, res) => {
     }
 
     // Get current password hash
-    const [users] = await db.execute(
+    const [users] = await promisePool.query(
       'SELECT password_hash FROM admin_users WHERE id = ?',
       [req.user.id]
     );
@@ -352,7 +352,7 @@ router.put('/change-password', authenticateToken, async (req, res) => {
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
 
     // Update password
-    await db.execute(
+    await promisePool.query(
       'UPDATE admin_users SET password_hash = ? WHERE id = ?',
       [newPasswordHash, req.user.id]
     );
@@ -378,7 +378,7 @@ router.get('/logs/activity', authenticateToken, requireAdmin, async (req, res) =
   try {
     const { limit = 100, offset = 0 } = req.query;
 
-    const [logs] = await db.execute(
+    const [logs] = await promisePool.query(
       `SELECT al.*, au.username, au.full_name 
        FROM admin_activity_logs al
        JOIN admin_users au ON al.admin_id = au.id
@@ -399,7 +399,7 @@ router.get('/logs/login', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { limit = 100, offset = 0 } = req.query;
 
-    const [logs] = await db.execute(
+    const [logs] = await promisePool.query(
       `SELECT ll.*, au.username, au.full_name 
        FROM admin_login_logs ll
        JOIN admin_users au ON ll.admin_id = au.id
