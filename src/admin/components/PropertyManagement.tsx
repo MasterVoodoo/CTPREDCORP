@@ -9,11 +9,11 @@ interface Building {
 
 interface Unit {
   id: string;
-  unitNumber: string;
+  title: string;
   building: string;
   floor: number;
   size: number;
-  pricePerSqm: number;
+  price: number;
   status: string;
   condition: string;
 }
@@ -118,7 +118,7 @@ export default function PropertyManagement() {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(unit => 
-        unit.unitNumber.toLowerCase().includes(query) ||
+        unit.title.toLowerCase().includes(query) ||
         unit.id.toLowerCase().includes(query) ||
         unit.building.toLowerCase().includes(query)
       );
@@ -141,8 +141,8 @@ export default function PropertyManagement() {
         image: '/images/units/default.jpg',
         images: JSON.stringify(['/images/units/default.jpg']),
         description: `Unit ${newUnit.title}`,
-        floor_plan: JSON.stringify({}),
-        availability: JSON.stringify({})
+        floorPlan: {},
+        availability: {}
       };
 
       const response = await fetch('http://localhost:5000/api/units', {
@@ -193,10 +193,20 @@ export default function PropertyManagement() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
+          title: editingUnit.title,
+          building: editingUnit.building,
+          location: '',
+          floor: editingUnit.floor,
           size: editingUnit.size,
-          price: editingUnit.pricePerSqm,
+          capacity: 0,
+          price: editingUnit.price,
           status: editingUnit.status,
-          condition: editingUnit.condition
+          condition: editingUnit.condition,
+          image: '',
+          images: [],
+          description: '',
+          floorPlan: {},
+          availability: {}
         })
       });
 
@@ -402,7 +412,7 @@ export default function PropertyManagement() {
                 filteredUnits.map((unit, index) => (
                   <tr key={unit.id} className={`hover:bg-red-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-gray-900">{unit.unitNumber}</div>
+                      <div className="text-sm font-semibold text-gray-900">{unit.title}</div>
                       <div className="text-xs text-gray-500">{unit.id}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -414,7 +424,7 @@ export default function PropertyManagement() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.size} sqm</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">₱{unit.pricePerSqm.toLocaleString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">₱{(unit.price || 0).toLocaleString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
                         unit.status === 'Available' ? 'bg-green-100 text-green-800' : 
@@ -623,7 +633,7 @@ export default function PropertyManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
             <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl">
-              <h3 className="text-xl font-bold text-white">Edit Unit {editingUnit.unitNumber}</h3>
+              <h3 className="text-xl font-bold text-white">Edit Unit {editingUnit.title}</h3>
             </div>
             
             <div className="p-6 space-y-4">
@@ -643,8 +653,8 @@ export default function PropertyManagement() {
                 <input
                   type="number"
                   step="0.01"
-                  value={editingUnit.pricePerSqm}
-                  onChange={(e) => setEditingUnit({ ...editingUnit, pricePerSqm: parseFloat(e.target.value) })}
+                  value={editingUnit.price}
+                  onChange={(e) => setEditingUnit({ ...editingUnit, price: parseFloat(e.target.value) })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
