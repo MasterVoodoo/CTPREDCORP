@@ -330,7 +330,7 @@ export default function AdminPage({ onBack }: AdminPageProps) {
                 </div>
                 <Button
                   onClick={() => setShowAddUnitModal(true)}
-                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800"
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                   Add Unit

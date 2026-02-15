@@ -1,4 +1,4 @@
-import { useState, useEffect, React } from 'react';
+import { useState, useEffect } from 'react';
 import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, LineChart, Line, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { DollarSign, TrendingUp, Target, Download, Eye, Calendar, Clock, FileText, Search, Filter, RefreshCw, ExternalLink, AlertCircle, BarChart3, PieChart as PieChartIcon, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { 
