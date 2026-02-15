@@ -9,7 +9,12 @@ interface AdminUser {
   fullName: string;
 }
 
-const AdminDashboard = () => {
+interface AdminDashboardProps {
+  onLogout: () => void;
+  onNavigateToContent: () => void;
+}
+
+const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) => {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs'>('overview');
   const [loading, setLoading] = useState(true);
@@ -23,7 +28,7 @@ const AdminDashboard = () => {
     const userData = localStorage.getItem('adminUser');
 
     if (!token || !userData) {
-      window.location.hash = '#admin-login';
+      onLogout();
       return;
     }
 
@@ -41,9 +46,7 @@ const AdminDashboard = () => {
       setUser(JSON.parse(userData));
     } catch (error) {
       console.error('Auth verification failed:', error);
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminUser');
-      window.location.hash = '#admin-login';
+      onLogout();
     } finally {
       setLoading(false);
     }
@@ -62,18 +65,12 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminUser');
-      window.location.hash = '#admin-login';
+      onLogout();
     }
   };
 
-  const goToAdminPage = () => {
-    window.location.hash = '#admin-page';
-  };
-
   const goToFinancialReports = () => {
-    window.location.hash = '#sustainability-financial-reports';
+    window.location.href = '/#sustainability-financial-reports';
   };
 
   if (loading) {
@@ -261,7 +258,7 @@ const AdminDashboard = () => {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div
-                    onClick={goToAdminPage}
+                    onClick={onNavigateToContent}
                     className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer"
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
