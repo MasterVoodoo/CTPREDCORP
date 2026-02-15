@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AdminUserManagement from '../components/AdminUserManagement';
+import FinancialReports from '../components/FinancialReports';
 
 interface AdminUser {
   id: number;
@@ -16,7 +17,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) => {
   const [user, setUser] = useState<AdminUser | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs' | 'reports'>('overview');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,10 +68,6 @@ const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) 
     } finally {
       onLogout();
     }
-  };
-
-  const goToFinancialReports = () => {
-    window.location.href = '/#sustainability-financial-reports';
   };
 
   if (loading) {
@@ -186,6 +183,19 @@ const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) 
               </svg>
               Overview
             </button>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === 'reports' ? 'active' : 'text-gray-600'}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              Financial Reports
+            </button>
             {user?.role === 'super_admin' && (
               <button
                 onClick={() => setActiveTab('users')}
@@ -271,13 +281,14 @@ const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) 
                     </div>
                   </div>
                   <div
-                    onClick={goToFinancialReports}
+                    onClick={() => setActiveTab('reports')}
                     className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer"
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
-                      <line x1="18" y1="20" x2="18" y2="10"></line>
-                      <line x1="12" y1="20" x2="12" y2="4"></line>
-                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
                     </svg>
                     <div className="text-left">
                       <p className="font-medium text-gray-900">View Reports</p>
@@ -286,6 +297,12 @@ const AdminDashboard = ({ onLogout, onNavigateToContent }: AdminDashboardProps) 
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'reports' && (
+            <div>
+              <FinancialReports onBack={() => setActiveTab('overview')} />
             </div>
           )}
 
