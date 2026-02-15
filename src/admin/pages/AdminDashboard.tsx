@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Building2, BarChart3, Users, LogOut, Grid3x3 } from 'lucide-react';
+import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
 import FinancialReports from '../components/FinancialReports';
 
@@ -91,34 +92,27 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-              </div>
+              <Building2 size={32} className="text-blue-600" />
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">CTP RED CORP</h1>
                 <p className="text-xs text-gray-500">Admin Dashboard</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-red-50 to-pink-50 rounded-lg border border-red-100">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={user?.role === 'super_admin' ? '#9333EA' : '#DC2626'} strokeWidth="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
+              <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-semibold text-sm">
+                  {user?.fullName?.charAt(0) || 'A'}
+                </div>
                 <div>
                   <p className="text-sm font-medium text-gray-900">{user?.fullName}</p>
                   <p className="text-xs text-red-600 font-medium">{user?.role === 'super_admin' ? 'Super Admin' : 'Admin'}</p>
                 </div>
               </div>
-              <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                <LogOut size={20} />
                 <span className="font-medium">Logout</span>
               </button>
             </div>
@@ -129,17 +123,38 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-1">
           <nav className="flex gap-2">
-            <button onClick={() => setActiveTab('overview')} className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold ${activeTab === 'overview' ? 'active' : 'text-gray-600'}`}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <button
+              onClick={() => setCurrentPage('overview')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                currentPage === 'overview'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <BarChart3 size={20} />
               Overview
             </button>
-            <button onClick={() => setActiveTab('financial')} className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold ${activeTab === 'financial' ? 'active' : 'text-gray-600'}`}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M2 12h20"></path></svg>
-              Financial Reports
+            <button
+              onClick={() => setCurrentPage('properties')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                currentPage === 'properties'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              <Building2 size={20} />
+              Property Management
             </button>
             {user?.role === 'super_admin' && (
-              <button onClick={() => setActiveTab('users')} className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold ${activeTab === 'users' ? 'active' : 'text-gray-600'}`}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <button
+                onClick={() => setCurrentPage('users')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                  currentPage === 'users'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                <Users size={20} />
                 User Management
               </button>
             )}
@@ -157,30 +172,24 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="bg-gradient-to-br from-red-50 to-white p-6 rounded-lg shadow-sm border border-red-100">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    </div>
-                    <span className="text-sm font-medium text-red-600">Buildings</span>
+                    <Building2 size={32} className="text-blue-600" />
+                    <span className="text-sm font-medium text-gray-500">Buildings</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">3</p>
                   <p className="text-sm text-gray-600 mt-2">Total Properties</p>
                 </div>
                 <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-lg shadow-sm border border-emerald-100">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                    </div>
-                    <span className="text-sm font-medium text-emerald-600">Units</span>
+                    <Grid3x3 size={32} className="text-green-600" />
+                    <span className="text-sm font-medium text-gray-500">Units</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">92</p>
                   <p className="text-sm text-gray-600 mt-2">Total Available</p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-lg shadow-sm border border-purple-100">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg flex items-center justify-center shadow-md">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    </div>
-                    <span className="text-sm font-medium text-purple-600">Occupancy</span>
+                    <BarChart3 size={32} className="text-purple-600" />
+                    <span className="text-sm font-medium text-gray-500">Occupancy</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">96%</p>
                   <p className="text-sm text-gray-600 mt-2">Current Rate</p>
@@ -188,13 +197,29 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               </div>
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                  <div onClick={() => navigate('/admin/content')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.66-13.66l-4.24 4.24m0 6l-4.24 4.24M23 12h-6m-6 0H5m13.66 5.66l-4.24-4.24m0-6l-4.24-4.24"></path></svg>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <button
+                    onClick={() => setCurrentPage('properties')}
+                    className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
+                  >
+                    <Building2 size={24} className="text-blue-600" />
+                    <div className="text-left">
+                      <p className="font-medium text-gray-900">Manage Properties</p>
+                      <p className="text-sm text-gray-600">Edit buildings and units</p>
                     </div>
-                    <div className="text-left"><p className="font-semibold text-gray-900">Manage Content</p><p className="text-sm text-gray-600">Update buildings and units</p></div>
-                  </div>
+                  </button>
+                  {user?.role === 'super_admin' && (
+                    <button
+                      onClick={() => setCurrentPage('users')}
+                      className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
+                    >
+                      <Users size={24} className="text-blue-600" />
+                      <div className="text-left">
+                        <p className="font-medium text-gray-900">Manage Users</p>
+                        <p className="text-sm text-gray-600">Add or edit admin users</p>
+                      </div>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
