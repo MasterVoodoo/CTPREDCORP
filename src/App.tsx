@@ -14,7 +14,6 @@ import ServicesPageCombined from "./components/ServicesPageCombined";
 import ContactPage from "./components/ContactPage";
 import UnitDetailsPage from "./components/UnitDetailsPage";
 import SearchResults from "./components/SearchResults";
-import AdminPage from "./components/AdminPage";
 import AllAvailableSpaces from "./components/AllAvailableSpaces";
 import PropertiesPage from "./components/PropertiesPage";
 import TenantsPortal from "./components/TenantsPortal";
@@ -25,9 +24,6 @@ import ModernManagementTeam from "./components/ModernManagementTeam";
 import PoliciesProcedures from "./components/PoliciesProcedures";
 import Compliance from "./components/Compliance";
 import InvestorRelations from "./components/InvestorRelations";
-// New Admin Pages
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -49,17 +45,7 @@ export default function App() {
       const pathname = window.location.pathname;
       const prevPage = currentPage; // Store current page before changing it
       
-      // Check for admin pages
-      if (hash === "#admin-login" || pathname === "/admin/login") {
-        setPreviousPage(prevPage);
-        setCurrentPage("admin-login");
-      } else if (hash === "#admin-dashboard" || pathname === "/admin/dashboard") {
-        setPreviousPage(prevPage);
-        setCurrentPage("admin-dashboard");
-      } else if (hash === "#admin-page" || pathname === "/admin-page") {
-        setPreviousPage(prevPage);
-        setCurrentPage("admin-page");
-      } else if (hash === "#ctp-red-corp") {
+      if (hash === "#ctp-red-corp") {
         setPreviousPage(prevPage);
         setCurrentPage("ctp-red-corp");
       } else if (hash === "#ctp-alpha-tower") {
@@ -346,10 +332,6 @@ export default function App() {
       case "modern-management-team":
         goToModernManagementTeam();
         break;
-      case "admin-page":
-        setCurrentPage("admin-page");
-        window.location.hash = "#admin-page";
-        break;
       case "sustainability-board-directors":
       case "sustainability-management-team":
       case "sustainability-policies":
@@ -366,12 +348,6 @@ export default function App() {
   };
 
   const goBackFromSearch = () => {
-    setPreviousPage(currentPage);
-    setCurrentPage("home");
-    window.location.hash = "";
-  };
-
-  const goBackFromAdmin = () => {
     setPreviousPage(currentPage);
     setCurrentPage("home");
     window.location.hash = "";
@@ -436,38 +412,6 @@ export default function App() {
         window.location.hash = "";
     }
   };
-
-  // Admin Login Page (No Header/Footer)
-  if (currentPage === "admin-login") {
-    return (
-      <div className="min-h-screen">
-        <AdminLogin />
-        <ScrollToTop />
-      </div>
-    );
-  }
-
-  // Admin Dashboard (No Header/Footer - has its own header)
-  if (currentPage === "admin-dashboard") {
-    return (
-      <div className="min-h-screen">
-        <AdminDashboard />
-        <ScrollToTop />
-      </div>
-    );
-  }
-
-  if (currentPage === "admin-page") {
-    return (
-      <div className="min-h-screen">
-        <Header currentPage="admin-page" />
-        <div className="pt-16">
-          <AdminPage onBack={goBackFromAdmin} />
-        </div>
-        <ScrollToTop />
-      </div>
-    );
-  }
 
   if (currentPage === "ctp-red-corp") {
     return (
@@ -714,7 +658,7 @@ export default function App() {
           <InvestorRelations 
             onBack={goToHome}
             onNavigateToFinancialReports={() => {
-              // This link no longer works since Financial Reports is admin-only
+              // Financial Reports is admin-only, redirect to home
               goToHome();
             }}
           />
