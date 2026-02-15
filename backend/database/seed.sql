@@ -1,6 +1,6 @@
 -- =============================================
 -- CTP RED CORP Database Seed Data
--- Fixed: Units now reference building IDs correctly
+-- Building IDs use display names for consistency
 -- =============================================
 
 USE ctpredcorp_db;
@@ -27,9 +27,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- INSERT BUILDINGS
 -- =============================================
 
--- CTP Asean Tower (ctp-red-corp)
+-- CTP Asean Tower
 INSERT INTO buildings (id, name, display_name, location, short_location, description, stats, building_hours, contact, hero_image, badge, cta_title, cta_description) VALUES (
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'CTP Red Corp',
   'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
@@ -46,7 +46,7 @@ INSERT INTO buildings (id, name, display_name, location, short_location, descrip
 
 -- CTP Alpha Tower
 INSERT INTO buildings (id, name, display_name, location, short_location, description, stats, building_hours, contact, hero_image, badge, cta_title, cta_description) VALUES (
-  'ctp-alpha-tower',
+  'CTP Alpha Tower',
   'CTP Alpha Tower',
   'CTP Alpha Tower',
   '1709 Investment Dr, Muntinlupa, Metro Manila',
@@ -63,7 +63,7 @@ INSERT INTO buildings (id, name, display_name, location, short_location, descrip
 
 -- CTP BF Building
 INSERT INTO buildings (id, name, display_name, location, short_location, description, stats, building_hours, contact, hero_image, badge, cta_title, cta_description) VALUES (
-  'ctp-bf-building',
+  'CTP BF Building',
   'CTP BF Building',
   'CTP BF Building',
   '11 President\'s Ave, BF Homes, Parañaque, Metro Manila',
@@ -83,64 +83,64 @@ INSERT INTO buildings (id, name, display_name, location, short_location, descrip
 -- =============================================
 
 INSERT INTO building_features (building_id, title, description) VALUES
-('ctp-red-corp', 'High-Speed Internet', 'Fiber optic ready'),
-('ctp-red-corp', '24/7 Security', 'Advanced security systems and on-site guards'),
-('ctp-red-corp', 'Parking', 'Reserved and visitor parking available'),
-('ctp-red-corp', 'Passenger Lifts', '12 high-speed elevators'),
-('ctp-red-corp', 'Backup Power', '100% emergency power supply'),
-('ctp-red-corp', 'Floor Efficiency', '83%'),
-('ctp-alpha-tower', 'High-Speed Internet', 'Fiber optic connectivity'),
-('ctp-alpha-tower', '24/7 Security', 'CCTV monitoring and security personnel'),
-('ctp-alpha-tower', 'Parking', 'Ample parking space'),
-('ctp-alpha-tower', 'Elevators', 'Modern high-speed elevators'),
-('ctp-alpha-tower', 'Backup Power', 'Full generator backup'),
-('ctp-bf-building', 'Secure Access', 'Controlled entry system'),
-('ctp-bf-building', 'Parking', 'Dedicated parking slots'),
-('ctp-bf-building', 'Backup Power', 'Emergency power supply'),
-('ctp-bf-building', 'Internet Ready', 'Fiber optic infrastructure');
+('CTP Asean Tower', 'High-Speed Internet', 'Fiber optic ready'),
+('CTP Asean Tower', '24/7 Security', 'Advanced security systems and on-site guards'),
+('CTP Asean Tower', 'Parking', 'Reserved and visitor parking available'),
+('CTP Asean Tower', 'Passenger Lifts', '12 high-speed elevators'),
+('CTP Asean Tower', 'Backup Power', '100% emergency power supply'),
+('CTP Asean Tower', 'Floor Efficiency', '83%'),
+('CTP Alpha Tower', 'High-Speed Internet', 'Fiber optic connectivity'),
+('CTP Alpha Tower', '24/7 Security', 'CCTV monitoring and security personnel'),
+('CTP Alpha Tower', 'Parking', 'Ample parking space'),
+('CTP Alpha Tower', 'Elevators', 'Modern high-speed elevators'),
+('CTP Alpha Tower', 'Backup Power', 'Full generator backup'),
+('CTP BF Building', 'Secure Access', 'Controlled entry system'),
+('CTP BF Building', 'Parking', 'Dedicated parking slots'),
+('CTP BF Building', 'Backup Power', 'Emergency power supply'),
+('CTP BF Building', 'Internet Ready', 'Fiber optic infrastructure');
 
 -- =============================================
 -- INSERT BUILDING FLOOR PLANS
 -- =============================================
 
 INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, available, `condition`) VALUES
-('ctp-red-corp', 0, 10, 1741.98, 1, 'Bare'),
-('ctp-red-corp', 4, 1, 35.96, 0, 'Bare'),
-('ctp-red-corp', 5, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 6, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 7, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 8, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 9, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 10, 6, 2568.62, 2, 'Warm Shell'),
-('ctp-red-corp', 11, 6, 2527.96, 0, 'Bare'),
-('ctp-red-corp', 12, 6, 2573.52, 0, 'Bare'),
-('ctp-red-corp', 13, 4, 2107.48, 2, 'Bare'),
-('ctp-red-corp', 14, 3, 960.27, 1, 'Bare'),
-('ctp-alpha-tower', 0, 3, 450.50, 0, 'Fitted'),
-('ctp-alpha-tower', 2, 2, 380.25, 1, 'Warm Shell'),
-('ctp-alpha-tower', 3, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 4, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 5, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 6, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 7, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 8, 2, 380.25, 0, 'Bare'),
-('ctp-alpha-tower', 9, 2, 380.25, 1, 'Fitted'),
-('ctp-alpha-tower', 10, 1, 450.50, 0, 'Fitted'),
-('ctp-alpha-tower', 11, 1, 450.50, 0, 'Fitted'),
-('ctp-bf-building', 0, 3, 280.50, 0, 'Fitted'),
-('ctp-bf-building', 1, 2, 240.80, 0, 'Warm Shell'),
-('ctp-bf-building', 2, 2, 240.80, 1, 'Bare'),
-('ctp-bf-building', 3, 2, 240.80, 0, 'Bare');
+('CTP Asean Tower', 0, 10, 1741.98, 1, 'Bare'),
+('CTP Asean Tower', 4, 1, 35.96, 0, 'Bare'),
+('CTP Asean Tower', 5, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 6, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 7, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 8, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 9, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 10, 6, 2568.62, 2, 'Warm Shell'),
+('CTP Asean Tower', 11, 6, 2527.96, 0, 'Bare'),
+('CTP Asean Tower', 12, 6, 2573.52, 0, 'Bare'),
+('CTP Asean Tower', 13, 4, 2107.48, 2, 'Bare'),
+('CTP Asean Tower', 14, 3, 960.27, 1, 'Bare'),
+('CTP Alpha Tower', 0, 3, 450.50, 0, 'Fitted'),
+('CTP Alpha Tower', 2, 2, 380.25, 1, 'Warm Shell'),
+('CTP Alpha Tower', 3, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 4, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 5, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 6, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 7, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 8, 2, 380.25, 0, 'Bare'),
+('CTP Alpha Tower', 9, 2, 380.25, 1, 'Fitted'),
+('CTP Alpha Tower', 10, 1, 450.50, 0, 'Fitted'),
+('CTP Alpha Tower', 11, 1, 450.50, 0, 'Fitted'),
+('CTP BF Building', 0, 3, 280.50, 0, 'Fitted'),
+('CTP BF Building', 1, 2, 240.80, 0, 'Warm Shell'),
+('CTP BF Building', 2, 2, 240.80, 1, 'Bare'),
+('CTP BF Building', 3, 2, 240.80, 0, 'Bare');
 
 -- =============================================
--- INSERT UNITS - FIXED: Using building IDs
+-- INSERT UNITS
 -- =============================================
 
 INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES
 (
   'CRC-GF12',
   'Ground Floor (Unit GF12)',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   0,
   109.40,
@@ -157,7 +157,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-1001',
   '10th Floor (Unit 1001)',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   10,
   372.63,
@@ -174,7 +174,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-1008',
   '10th Floor (UNIT 1008)',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   10,
   395.57,
@@ -191,7 +191,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-LP03',
   'Lower Penthouse (Unit LP03)',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   13,
   461.20,
@@ -208,7 +208,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-LP04',
   'Lower Penthouse (Unit LP04)',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   13,
   466.87,
@@ -225,7 +225,7 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
 (
   'CRC-UP02',
   'Upper Penthouse Exclusive Suite',
-  'ctp-red-corp',
+  'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   14,
   310.12,
