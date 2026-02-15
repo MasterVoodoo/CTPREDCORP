@@ -47,12 +47,12 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-4 text-center">
           <button
             onClick={goToMainSite}
-            className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:border-blue-600 hover:text-blue-600 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:border-red-600 hover:text-red-600 transition-all"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -62,7 +62,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
         </div>
 
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl mb-4 shadow-lg">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -72,7 +72,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
           <p className="text-gray-600">Admin Portal</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
 
           {error && (
@@ -107,7 +107,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   disabled={loading}
                   placeholder="Enter your username"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
@@ -132,7 +132,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   disabled={loading}
                   placeholder="Enter your password"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-3 rounded-lg font-medium transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-red-300 disabled:to-red-400 text-white py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
