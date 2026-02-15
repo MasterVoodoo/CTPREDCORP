@@ -42,13 +42,13 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back Button */}
-        <div className="mb-4 text-center">
+        <div className="mb-6 text-center">
           <a
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-200 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-200 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors shadow-sm"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -57,20 +57,20 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
           </a>
         </div>
 
-        {/* Logo */}
+        {/* Logo & Title */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl mb-4 shadow-lg">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
               <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">CTP RED CORP</h1>
-          <p className="text-gray-600">Admin Portal</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">CTP RED CORP</h1>
+          <p className="text-gray-600 text-lg">Admin Portal</p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Sign In</h2>
 
           {error && (
@@ -84,10 +84,10 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
                 Username
               </label>
               <div className="relative">
@@ -106,14 +106,14 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                   onChange={handleChange}
                   disabled={loading}
                   placeholder="Enter your username"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -132,7 +132,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
                   onChange={handleChange}
                   disabled={loading}
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -141,15 +141,25 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-medium py-3 rounded-lg transition-colors"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-blue-300 disabled:to-blue-400 text-white font-semibold py-3 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:shadow-none mt-6"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Signing in...
+                </span>
+              ) : (
+                'Sign In'
+              )}
             </button>
           </form>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-600 mt-8">
           © {new Date().getFullYear()} CTP RED CORP. All rights reserved.
         </p>
       </div>
