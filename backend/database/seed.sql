@@ -116,24 +116,22 @@ INSERT INTO building_floor_plans (building_id, floor, units, total_sqft, availab
 ('CTP Asean Tower', 12, 6, 2573.52, 0, 'Bare'),
 ('CTP Asean Tower', 13, 4, 2107.48, 2, 'Bare'),
 ('CTP Asean Tower', 14, 3, 960.27, 1, 'Bare'),
-('CTP Alpha Tower', 0, 3, 450.50, 0, 'Fitted'),
-('CTP Alpha Tower', 2, 2, 380.25, 1, 'Warm Shell'),
-('CTP Alpha Tower', 3, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 4, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 5, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 6, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 7, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 8, 2, 380.25, 0, 'Bare'),
-('CTP Alpha Tower', 9, 2, 380.25, 1, 'Fitted'),
-('CTP Alpha Tower', 10, 1, 450.50, 0, 'Fitted'),
-('CTP Alpha Tower', 11, 1, 450.50, 0, 'Fitted'),
-('CTP BF Building', 0, 3, 280.50, 0, 'Fitted'),
-('CTP BF Building', 1, 2, 240.80, 0, 'Warm Shell'),
-('CTP BF Building', 2, 2, 240.80, 1, 'Bare'),
-('CTP BF Building', 3, 2, 240.80, 0, 'Bare');
+('CTP Alpha Tower', 0, 2, 527.53, 0, 'Bare'),
+('CTP Alpha Tower', 2, 3, 437.78, 0, 'Bare'),
+('CTP Alpha Tower', 3, 3, 467.65, 2, 'Warm Shell'),
+('CTP Alpha Tower', 4, 3, 467.65, 0, 'Bare'),
+('CTP Alpha Tower', 5, 1, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 6, 1, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 7, 1, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 8, 2, 454.58, 1, 'Bare'),
+('CTP Alpha Tower', 9, 1, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 10, 1, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 11, 2, 454.58, 0, 'Bare'),
+('CTP Alpha Tower', 12, 1, 454.58, 0, 'Bare'),
+('CTP BF Building', 1, 1, 265, 1, 'Bare');
 
 -- =============================================
--- INSERT UNITS
+-- INSERT UNITS - CTP ASEAN TOWER
 -- =============================================
 
 INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES
@@ -238,6 +236,103 @@ INSERT INTO units (id, title, building, location, floor, size, capacity, price, 
   'Exclusive expansive upper penthouse with top floor privacy and 360-degree city views.',
   '{"totalArea":310.12,"privateOffices":6,"openWorkspace":3,"meetingRooms":3,"bathrooms":3,"kitchenette":true,"storage":true}',
   '{"availableFrom":"Immediate","leaseTerms":["3 years","5 years"],"includedUtilities":["Security","Cleaning"],"additionalCosts":["HVAC: ₱250","Parking: ₱300"]}'
+);
+
+-- =============================================
+-- INSERT UNITS - CTP ALPHA TOWER
+-- =============================================
+
+INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES
+(
+  'CAT-304',
+  '3rd Floor (Unit 304)',
+  'CTP Alpha Tower',
+  '1709 Investment Dr, Muntinlupa',
+  3,
+  77.79,
+  12,
+  900,
+  'Available',
+  'Warm Shell',
+  '/images/units/CTP_ALPHA/304.jpg',
+  '["/images/units/CTP_ALPHA/304.jpg"]',
+  'Spacious office space perfect for growing teams in the heart of Makati CBD.',
+  '{"totalArea":77.79,"privateOffices":2,"openWorkspace":2,"meetingRooms":1,"bathrooms":1,"kitchenette":true,"storage":true}',
+  '{"availableFrom":"Available Now","leaseTerms":["1 year","2 years","3 years"],"includedUtilities":["Internet","Security","HVAC"],"additionalCosts":["Parking: ₱250"]}'
+),
+(
+  'CAT-305',
+  '3rd Floor (Unit 305)',
+  'CTP Alpha Tower',
+  '1709 Investment Dr, Muntinlupa',
+  3,
+  6.77,
+  3,
+  900,
+  'Available',
+  'Warm Shell',
+  '/images/units/CTP_ALPHA/305.jpg',
+  '["/images/units/CTP_ALPHA/305.jpg"]',
+  'Efficient business suite ideal for startups and small enterprises in Makati.',
+  '{"totalArea":6.77,"privateOffices":1,"openWorkspace":1,"meetingRooms":0,"bathrooms":1,"kitchenette":false,"storage":false}',
+  '{"availableFrom":"Available Now","leaseTerms":["1 year","2 years"],"includedUtilities":["Internet","Security","HVAC"],"additionalCosts":["Parking: ₱250"]}'
+),
+(
+  'CAT-801',
+  '8th Floor (Unit 801)',
+  'CTP Alpha Tower',
+  '1709 Investment Dr, Muntinlupa',
+  8,
+  112.23,
+  18,
+  900,
+  'Available',
+  'Bare',
+  '/images/units/CTP_ALPHA/801.jpg',
+  '["/images/units/CTP_ALPHA/801.jpg"]',
+  'Spacious high floor executive office with excellent views and customizable bare shell condition.',
+  '{"totalArea":112.23,"privateOffices":3,"openWorkspace":2,"meetingRooms":2,"bathrooms":2,"kitchenette":true,"storage":true}',
+  '{"availableFrom":"Available Now","leaseTerms":["1 year","2 years","3 years"],"includedUtilities":["Security"],"additionalCosts":["HVAC: ₱150","Parking: ₱300"]}'
+),
+(
+  'CAT-802',
+  '8th Floor (Unit 802)',
+  'CTP Alpha Tower',
+  '1709 Investment Dr, Muntinlupa',
+  8,
+  12.36,
+  5,
+  900,
+  'Taken',
+  'Bare',
+  '/images/units/CTP_ALPHA/802.jpg',
+  '["/images/units/CTP_ALPHA/802.jpg"]',
+  'Premium office space on the 8th floor with panoramic city views and flexible layout options.',
+  '{"totalArea":12.36,"privateOffices":2,"openWorkspace":1,"meetingRooms":1,"bathrooms":1,"kitchenette":true,"storage":true}',
+  '{"availableFrom":"Available Now","leaseTerms":["1 year","2 years","3 years"],"includedUtilities":["Security"],"additionalCosts":["HVAC: ₱150","Parking: ₱300"]}'
+);
+
+-- =============================================
+-- INSERT UNITS - CTP BF BUILDING
+-- =============================================
+
+INSERT INTO units (id, title, building, location, floor, size, capacity, price, status, `condition`, image, images, description, floor_plan, availability) VALUES
+(
+  'CBF-001',
+  '1st Floor (Unit 001)',
+  'CTP BF Building',
+  '11 President\'s Ave, Parañaque, Metro Manila',
+  1,
+  265,
+  9,
+  900,
+  'Available',
+  'Bare',
+  '/images/units/CTP_BF/001.jpg',
+  '["/images/units/CTP_BF/001.jpg"]',
+  'Spacious bare shell office space in BGC offering complete customization flexibility for your business needs.',
+  '{"totalArea":265,"privateOffices":0,"openWorkspace":1,"meetingRooms":0,"bathrooms":2,"kitchenette":false,"storage":true}',
+  '{"availableFrom":"Available Now","leaseTerms":["1 year","2 years","3 years"],"includedUtilities":["Security","Cleaning"],"additionalCosts":["HVAC: ₱200","Parking: ₱200"]}'
 );
 
 -- =============================================
