@@ -75,6 +75,31 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET units for a building
+router.get('/:id/units', async (req, res) => {
+  try {
+    const [units] = await promisePool.query(
+      `SELECT 
+        id,
+        unit_number as unitNumber,
+        floor,
+        size,
+        price_per_sqm as pricePerSqm,
+        status,
+        \`condition\`
+      FROM units 
+      WHERE building_id = ? 
+      ORDER BY floor, unit_number`,
+      [req.params.id]
+    );
+    
+    res.json(units);
+  } catch (error) {
+    console.error('Error fetching units:', error);
+    res.status(500).json({ error: 'Failed to fetch units' });
+  }
+});
+
 // POST create new building
 router.post('/', async (req, res) => {
   const connection = await promisePool.getConnection();
