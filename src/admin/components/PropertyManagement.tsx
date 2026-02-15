@@ -56,12 +56,15 @@ export default function PropertyManagement() {
 
   const loadUnits = async (buildingId: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/buildings/${buildingId}/units`);
+      // Encode building ID for URL (handles spaces and special characters)
+      const encodedBuildingId = encodeURIComponent(buildingId);
+      const response = await fetch(`http://localhost:5000/api/buildings/${encodedBuildingId}/units`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to load units');
       }
       const data = await response.json();
+      console.log('Units loaded:', data);
       setUnits(Array.isArray(data) ? data : []);
       setError(null);
     } catch (error: any) {
@@ -171,7 +174,7 @@ export default function PropertyManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">₱{unit.pricePerSqm.toLocaleString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        unit.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        unit.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
                         {unit.status}
                       </span>
@@ -227,8 +230,10 @@ export default function PropertyManagement() {
                   onChange={(e) => setEditingUnit({ ...editingUnit, status: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 >
-                  <option value="available">Available</option>
-                  <option value="occupied">Occupied</option>
+                  <option value="Available">Available</option>
+                  <option value="Coming Soon">Coming Soon</option>
+                  <option value="Taken">Taken</option>
+                  <option value="Unavailable">Unavailable</option>
                 </select>
               </div>
               
@@ -239,9 +244,9 @@ export default function PropertyManagement() {
                   onChange={(e) => setEditingUnit({ ...editingUnit, condition: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                 >
-                  <option value="warm-shell">Warm Shell</option>
-                  <option value="bare-shell">Bare Shell</option>
-                  <option value="fitted">Fitted</option>
+                  <option value="Warm Shell">Warm Shell</option>
+                  <option value="Bare">Bare</option>
+                  <option value="Fitted">Fitted</option>
                 </select>
               </div>
             </div>
