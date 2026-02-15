@@ -163,12 +163,12 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   <p className="text-3xl font-bold text-gray-900">3</p>
                   <p className="text-sm text-gray-600 mt-2">Total Properties</p>
                 </div>
-                <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-lg shadow-sm border border-emerald-100">
+                <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-lg shadow-sm border border-green-100">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-lg flex items-center justify-center shadow-md">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center shadow-md">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     </div>
-                    <span className="text-sm font-medium text-emerald-600">Units</span>
+                    <span className="text-sm font-medium text-green-600">Units</span>
                   </div>
                   <p className="text-3xl font-bold text-gray-900">92</p>
                   <p className="text-sm text-gray-600 mt-2">Total Available</p>

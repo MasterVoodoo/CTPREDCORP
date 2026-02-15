@@ -214,11 +214,11 @@ export default function UserManagement() {
                   <tr key={user.id} className={`hover:bg-red-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-12 w-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-md">
+                        {/* <div className="flex-shrink-0 h-12 w-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-md">
                           <span className="text-white font-bold text-lg">
                             {user.fullName?.split(' ').map(n => n[0]).join('').toUpperCase() || 'A'}
                           </span>
-                        </div>
+                        </div> */}
                         <div className="ml-4">
                           <div className="text-sm font-semibold text-gray-900">{user.fullName}</div>
                           <div className="text-xs text-gray-500">@{user.username}</div>
@@ -239,8 +239,8 @@ export default function UserManagement() {
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
                         user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
-                        <span className={`w-2 h-2 rounded-full mr-2 ${user.isActive ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        {user.isActive ? 'Active' : 'Inactive'}
+                        <span className={`w-2 h-2 rounded-full mr-2 ${user.isActive ? 'bg-red-500' : 'bg-green-500'}`}></span>
+                        {user.isActive ? 'Inactive' : 'Active'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
