@@ -81,15 +81,15 @@ router.get('/:id/units', async (req, res) => {
     const [units] = await promisePool.query(
       `SELECT 
         id,
-        unit_number as unitNumber,
+        title as unitNumber,
         floor,
         size,
-        price_per_sqm as pricePerSqm,
+        price as pricePerSqm,
         status,
         \`condition\`
       FROM units 
-      WHERE building_id = ? 
-      ORDER BY floor, unit_number`,
+      WHERE building = ? 
+      ORDER BY floor, title`,
       [req.params.id]
     );
     
