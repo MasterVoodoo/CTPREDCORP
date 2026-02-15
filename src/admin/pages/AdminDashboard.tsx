@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
+import { Building2, Building } from 'lucide-react';
 
 interface AdminUser {
   id: number;
@@ -92,10 +93,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <Building className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">CTP RED CORP</h1>
@@ -159,10 +157,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                      </svg>
+                      <Building2 className="h-8 w-8 text-red-600" />
                     </div>
                     <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">BUILDINGS</span>
                   </div>

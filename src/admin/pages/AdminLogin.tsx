@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Building } from 'lucide-react';
 
 interface AdminLoginProps {
   onLoginSuccess: () => void;
@@ -63,10 +64,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
 
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl mb-4 shadow-lg">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
+            <Building className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">CTP RED CORP</h1>
           <p className="text-gray-600">Admin Portal</p>
@@ -92,7 +90,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                 Username
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+                <div className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
@@ -107,7 +105,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   disabled={loading}
                   placeholder="Enter your username"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
+                  className="block w-full pl-10 px-8 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
@@ -117,7 +115,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                 Password
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+                <div className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -132,7 +130,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   disabled={loading}
                   placeholder="Enter your password"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
+                  className="block w-full pl-10 px-8 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
             </div>
