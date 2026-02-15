@@ -10,7 +10,7 @@ import {
   downloadReport,
   getLastUpdated,
   type FinancialReport 
-} from '../data/financialData';
+} from '../../data/financialData';
 import { toast } from "sonner";
 
 interface FinancialReportsProps {
