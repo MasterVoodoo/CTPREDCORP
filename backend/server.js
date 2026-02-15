@@ -7,6 +7,7 @@ const { testConnection } = require('./config/database');
 const buildingsRouter = require('./routes/buildings');
 const unitsRouter = require('./routes/units');
 const financialRouter = require('./routes/financial');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
+app.use('/api/admin', adminRouter);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -38,6 +40,7 @@ app.get('/', (req, res) => {
       buildings: '/api/buildings',
       units: '/api/units',
       financial: '/api/financial',
+      admin: '/api/admin',
       health: '/api/health'
     }
   });
@@ -64,6 +67,7 @@ const startServer = async () => {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
     console.log(`📝 API Documentation: http://localhost:${PORT}`);
+    console.log(`🔐 Admin API: http://localhost:${PORT}/api/admin`);
   });
 };
 
