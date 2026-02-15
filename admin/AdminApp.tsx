@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminContent from './pages/AdminContent';
+import AdminFinancialReports from './pages/AdminFinancialReports';
 
 function AdminRoutes() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,6 +67,14 @@ function AdminRoutes() {
         element={
           isAuthenticated ? 
             <AdminContent onLogout={handleLogout} /> : 
+            <Navigate to="/admin/login" replace />
+        } 
+      />
+      <Route 
+        path="/financial" 
+        element={
+          isAuthenticated ? 
+            <AdminFinancialReports onLogout={handleLogout} /> : 
             <Navigate to="/admin/login" replace />
         } 
       />
