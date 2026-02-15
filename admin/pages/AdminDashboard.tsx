@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminUserManagement from '../../src/components/AdminUserManagement';
+import FinancialReports from '../../src/components/FinancialReports';
 
 interface AdminUser {
   id: number;
@@ -16,7 +17,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [user, setUser] = useState<AdminUser | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs' | 'financial'>('overview');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -132,6 +133,10 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
               Overview
             </button>
+            <button onClick={() => setActiveTab('financial')} className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold ${activeTab === 'financial' ? 'active' : 'text-gray-600'}`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M2 12h20"></path></svg>
+              Financial Reports
+            </button>
             {user?.role === 'super_admin' && (
               <button onClick={() => setActiveTab('users')} className={`tab-button flex items-center gap-2 px-6 py-3 rounded-lg font-semibold ${activeTab === 'users' ? 'active' : 'text-gray-600'}`}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -192,6 +197,17 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+          {activeTab === 'financial' && (
+            <div>
+              <FinancialReports 
+                onBack={() => setActiveTab('overview')} 
+                onNavigateToInvestorRelations={() => {
+                  // Investor Relations is still accessible from main site
+                  window.location.href = '/#sustainability-investor-relations';
+                }}
+              />
             </div>
           )}
           {activeTab === 'users' && user?.role === 'super_admin' && <AdminUserManagement />}
