@@ -3,25 +3,45 @@
 ## Prerequisites
 
 - Plesk hosting with Node.js support (Node.js Manager extension installed)
-- SSH access to your server
+- SSH access to your server (optional but recommended)
 - MySQL database access through Plesk
 - Domain configured in Plesk
 
-## Step 1: Prepare Your Local Environment
+## Deployment Methods
 
-### Build the Frontend
+This guide covers **two deployment methods**:
+
+### Method 1: Pre-Built Deployment (Recommended - Simpler)
+If you've already built the project locally and committed the `dist` folder to your repository, you can skip the build step on the server.
+
+### Method 2: Build on Server
+Build the frontend directly on the Plesk server (requires more setup).
+
+---
+
+# Method 1: Pre-Built Deployment (Simpler)
+
+## Step 1: Build Locally (If Not Already Done)
 
 ```bash
 # Install dependencies
 npm install
 
 # Build for production
-npm run build
+npm run build:all
 ```
 
-This creates a `dist` folder with both the main website and admin portal.
+This creates a `dist` folder with the compiled frontend.
 
-## Step 2: Database Setup
+## Step 2: Push to Repository
+
+```bash
+git add .
+git commit -m "Build production version"
+git push origin main
+```
+
+## Step 3: Database Setup
 
 ### Create MySQL Database in Plesk
 
@@ -35,7 +55,7 @@ This creates a `dist` folder with both the main website and admin portal.
 
 1. Go to **Databases** → Select your database → **phpMyAdmin**
 2. Click **Import** tab
-3. Upload `backend/database/schema.sql`
+3. Upload `backend/database/schema.sql` from the repository
 4. Click **Go** to execute
 
 ### Change Default Admin Password
@@ -47,16 +67,40 @@ This creates a `dist` folder with both the main website and admin portal.
 
 **Change this immediately after first login!**
 
-Alternatively, run the setup script (see Backend Setup section).
+## Step 4: Deploy Frontend (Simple Method)
 
-## Step 3: Deploy Frontend to Plesk
+### Option A: Direct Download from GitHub
 
-### Upload Files
+1. Download the repository as ZIP from GitHub
+2. Extract the `dist` folder
+3. Connect to Plesk via FTP/SFTP or use File Manager
+4. Navigate to your domain's `httpdocs` folder
+5. Upload all contents from the `dist` folder to `httpdocs`
+6. Upload `public/.htaccess` to the root of `httpdocs`
 
-1. Connect via FTP/SFTP or use Plesk File Manager
-2. Navigate to your domain's `httpdocs` folder
-3. Upload all contents from the `dist` folder
-4. Ensure `.htaccess` file from `public/.htaccess` is in the root
+### Option B: Git Clone on Server
+
+If you have SSH access:
+
+```bash
+# SSH into your server
+ssh user@yourserver.com
+
+# Navigate to temp directory
+cd /tmp
+
+# Clone repository
+git clone https://github.com/MasterVoodoo/CTPREDCORP.git
+
+# Copy dist files to httpdocs
+cp -r CTPREDCORP/dist/* /var/www/vhosts/yourdomain.com/httpdocs/
+
+# Copy .htaccess
+cp CTPREDCORP/public/.htaccess /var/www/vhosts/yourdomain.com/httpdocs/
+
+# Clean up
+rm -rf /tmp/CTPREDCORP
+```
 
 ### File Structure in httpdocs
 
@@ -64,39 +108,27 @@ Alternatively, run the setup script (see Backend Setup section).
 httpdocs/
 ├── .htaccess
 ├── index.html
-├── admin/
-│   └── index.html
 ├── assets/
 │   ├── index-[hash].js
 │   ├── index-[hash].css
+│   ├── vendor-[hash].js
+│   ├── ui-[hash].js
 │   └── ...
 └── [other static files]
 ```
 
-### Configure Apache (if needed)
-
-1. Go to **Apache & Nginx Settings** for your domain
-2. Ensure `mod_rewrite` is enabled
-3. Add this to additional directives if .htaccess doesn't work:
-
-```apache
-<Directory /var/www/vhosts/yourdomain.com/httpdocs>
-    AllowOverride All
-</Directory>
-```
-
-## Step 4: Deploy Backend to Plesk
+## Step 5: Deploy Backend
 
 ### Upload Backend Files
 
 1. Create a folder outside httpdocs: `/var/www/vhosts/yourdomain.com/backend`
-2. Upload all files from `backend` folder
-3. Do NOT upload `node_modules` folder
+2. Upload all files from the `backend` folder (do NOT upload `node_modules`)
+3. You can use FTP, File Manager, or git clone
 
 ### Configure Environment Variables
 
-1. Copy `.env.production` to `.env`
-2. Update with your actual credentials:
+1. In the `backend` folder, create `.env` file
+2. Copy content from `.env.production` and update:
 
 ```bash
 DB_HOST=localhost
@@ -128,13 +160,11 @@ npm install --production
 
 ### Setup Super Admin (Optional)
 
-If you want to create a custom super admin instead of using the default:
+Create a custom super admin:
 
 ```bash
 npm run setup-admin
 ```
-
-Follow the prompts to create your admin account.
 
 ### Create Logs Directory
 
@@ -143,7 +173,7 @@ mkdir -p /var/www/vhosts/yourdomain.com/backend/logs
 chmod 755 /var/www/vhosts/yourdomain.com/backend/logs
 ```
 
-## Step 5: Configure Node.js in Plesk
+## Step 6: Configure Node.js in Plesk
 
 ### Using Plesk Node.js Manager
 
@@ -164,8 +194,6 @@ chmod 755 /var/www/vhosts/yourdomain.com/backend/logs
 
 ### Alternative: Using PM2
 
-If Plesk Node.js Manager is limited, use PM2:
-
 ```bash
 cd /var/www/vhosts/yourdomain.com/backend
 
@@ -182,9 +210,7 @@ pm2 save
 pm2 startup
 ```
 
-## Step 6: Configure Reverse Proxy
-
-### Setup API Proxy in Plesk
+## Step 7: Configure Reverse Proxy
 
 1. Go to **Apache & Nginx Settings**
 2. Add to **Additional nginx directives**:
@@ -206,7 +232,7 @@ location /api/ {
 
 3. Click **OK** and restart nginx
 
-## Step 7: Configure SSL Certificate
+## Step 8: Configure SSL Certificate
 
 1. Go to **SSL/TLS Certificates**
 2. Click **Install** or use Let's Encrypt
@@ -214,7 +240,7 @@ location /api/ {
 4. Update `CLIENT_URL` in backend `.env` to use `https://`
 5. Restart the Node.js application
 
-## Step 8: Testing
+## Step 9: Testing
 
 ### Test Frontend
 
@@ -226,10 +252,6 @@ location /api/ {
 ### Test Backend API
 
 ```bash
-# Test health endpoint (create one if needed)
-curl https://yourdomain.com/api/health
-
-# Test admin login
 curl -X POST https://yourdomain.com/api/admin/login \
   -H "Content-Type: application/json" \
   -d '{"username":"superadmin","password":"Admin123!"}'
@@ -242,9 +264,7 @@ curl -X POST https://yourdomain.com/api/admin/login \
 3. Test creating/editing content
 4. Verify all routes work correctly
 
-## Step 9: Post-Deployment Security
-
-### Essential Security Steps
+## Step 10: Post-Deployment Security
 
 1. **Change default admin password immediately**
 2. **Set file permissions**:
@@ -252,27 +272,87 @@ curl -X POST https://yourdomain.com/api/admin/login \
    chmod 644 /var/www/vhosts/yourdomain.com/backend/.env
    chmod 755 /var/www/vhosts/yourdomain.com/backend
    ```
-
 3. **Disable directory listing** (add to .htaccess):
    ```apache
    Options -Indexes
    ```
-
 4. **Configure firewall** to only allow necessary ports
-5. **Enable fail2ban** for SSH and login attempts
-6. **Regular backups**: Setup automated backups in Plesk
+5. **Regular backups**: Setup automated backups in Plesk
 
-### Monitor Application
+---
+
+# Method 2: Build on Server
+
+## Step 1: Install Build Tools on Server
 
 ```bash
-# Check PM2 status
-pm2 status
+# SSH into your server
+ssh user@yourserver.com
 
-# View logs
-pm2 logs ctpredcorp-backend
+# Navigate to a build directory
+cd /var/www/vhosts/yourdomain.com
 
-# Monitor resources
-pm2 monit
+# Clone repository
+git clone https://github.com/MasterVoodoo/CTPREDCORP.git
+cd CTPREDCORP
+
+# Install dependencies
+npm install
+
+# Build frontend
+npm run build
+```
+
+## Step 2: Deploy Built Files
+
+```bash
+# Copy dist files to httpdocs
+cp -r dist/* /var/www/vhosts/yourdomain.com/httpdocs/
+
+# Copy .htaccess
+cp public/.htaccess /var/www/vhosts/yourdomain.com/httpdocs/
+```
+
+## Step 3-10: Follow Same Steps as Method 1
+
+Continue with Steps 3-10 from Method 1 above (Database Setup through Post-Deployment Security).
+
+---
+
+## Updating the Application
+
+### For Pre-Built Method (Method 1)
+
+1. **Build locally:**
+   ```bash
+   npm run build:all
+   git add .
+   git commit -m "Update production build"
+   git push origin main
+   ```
+
+2. **Deploy to server:**
+   - Download new `dist` folder from repository
+   - Upload to `httpdocs` (overwrite existing files)
+   - Or use git pull if you cloned on server
+
+3. **Update backend (if needed):**
+   ```bash
+   cd /var/www/vhosts/yourdomain.com/backend
+   git pull origin main
+   npm install --production
+   pm2 restart ctpredcorp-backend
+   ```
+
+### For Build on Server Method (Method 2)
+
+```bash
+cd /var/www/vhosts/yourdomain.com/CTPREDCORP
+git pull origin main
+npm install
+npm run build
+cp -r dist/* /var/www/vhosts/yourdomain.com/httpdocs/
+pm2 restart ctpredcorp-backend
 ```
 
 ## Troubleshooting
@@ -282,22 +362,22 @@ pm2 monit
 **Problem**: 404 errors on page refresh
 - **Solution**: Ensure `.htaccess` is uploaded and `mod_rewrite` is enabled
 
-**Problem**: Admin routes not working
-- **Solution**: Check that `admin/index.html` exists in the dist folder
+**Problem**: Admin page not loading
+- **Solution**: Clear browser cache, check that assets are loading correctly
 
 ### Backend Issues
 
 **Problem**: Cannot connect to database
-- **Solution**: Verify database credentials in `.env`, check if MySQL allows connections from localhost
+- **Solution**: Verify database credentials in `.env`, check MySQL connection
 
 **Problem**: Node.js app not starting
-- **Solution**: Check logs in Plesk Node.js interface or `backend/logs/`
+- **Solution**: Check logs in `backend/logs/` or Plesk Node.js interface
 
 **Problem**: CORS errors
 - **Solution**: Verify `CLIENT_URL` in `.env` matches your domain exactly
 
 **Problem**: 502 Bad Gateway
-- **Solution**: Ensure Node.js app is running and reverse proxy is configured correctly
+- **Solution**: Ensure Node.js app is running, check reverse proxy configuration
 
 ### Permission Issues
 
@@ -310,22 +390,9 @@ find /var/www/vhosts/yourdomain.com/backend -type d -exec chmod 755 {} \;
 
 # Fix file permissions
 find /var/www/vhosts/yourdomain.com/backend -type f -exec chmod 644 {} \;
-
-# Make server.js executable
-chmod 755 /var/www/vhosts/yourdomain.com/backend/server.js
 ```
 
 ## Maintenance
-
-### Updating the Application
-
-1. Build new version locally: `npm run build`
-2. Backup current production files
-3. Upload new dist files
-4. If backend changes:
-   - Upload new backend files
-   - Run `npm install` if dependencies changed
-   - Restart Node.js app: `pm2 restart ctpredcorp-backend`
 
 ### Database Backups
 
@@ -335,10 +402,20 @@ chmod 755 /var/www/vhosts/yourdomain.com/backend/server.js
 
 ### Monitoring
 
-- Check application logs regularly
-- Monitor server resources in Plesk
+```bash
+# Check PM2 status
+pm2 status
+
+# View logs
+pm2 logs ctpredcorp-backend
+
+# Monitor resources
+pm2 monit
+```
+
 - Setup uptime monitoring (e.g., UptimeRobot)
 - Review admin activity logs through admin portal
+- Monitor server resources in Plesk
 
 ## Support
 
@@ -349,14 +426,16 @@ For issues specific to:
 
 ---
 
-**Deployment Checklist:**
+## Deployment Checklist
 
+### Pre-Built Method (Recommended)
+- [ ] Build completed locally (`npm run build:all`)
 - [ ] Database created and schema imported
-- [ ] Frontend built and uploaded to httpdocs
-- [ ] .htaccess configured for React Router
+- [ ] `dist` folder uploaded to httpdocs
+- [ ] `.htaccess` configured in httpdocs root
 - [ ] Backend uploaded outside httpdocs
-- [ ] .env configured with production values
-- [ ] Node.js dependencies installed
+- [ ] `.env` configured with production values
+- [ ] Node.js dependencies installed (`npm install --production`)
 - [ ] Node.js app enabled in Plesk or PM2
 - [ ] Reverse proxy configured for /api/
 - [ ] SSL certificate installed and HTTPS enabled
