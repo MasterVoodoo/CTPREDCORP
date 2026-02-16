@@ -99,7 +99,7 @@ export default function ContactPage() {
       icon: Mail,
       title: "Email Address", 
       description: "Send us a message",
-      contact: "leasing@ctpred.com.ph",
+      contact: "aseantower@ctpred.com.ph",
       hours: "Response within 24hrs",
       type: "primary"
     }
