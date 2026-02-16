@@ -100,7 +100,7 @@ export interface SimpleBuildingStats {
 export const companyOverview = {
   totalBuildings: 3,
   totalCapacity: 27,
-  experienceYears: "15+",
+  experienceYears: "10+",
   availabilityPercentage: "100%",
   name: "CTP RED CORP",
   tagline: "Home for Every Vision",
