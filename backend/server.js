@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 require('dotenv').config();
 
 const { testConnection } = require('./config/database');
@@ -12,41 +13,36 @@ const adminRouter = require('./routes/admin');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// -------------------- Middleware -------------------- //
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true
 }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routes
+// -------------------- API Routes -------------------- //
 app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
 app.use('/api/admin', adminRouter);
 
-// Health check endpoint
+// -------------------- Health Check -------------------- //
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'CTP RED API is running' });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'CTP RED Corp API',
-    version: '1.0.0',
-    endpoints: {
-      buildings: '/api/buildings',
-      units: '/api/units',
-      financial: '/api/financial',
-      admin: '/api/admin',
-      health: '/api/health'
-    }
-  });
+// -------------------- Serve Frontend -------------------- //
+// Make sure your frontend build is in backend/dist
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// For React/Vite frontend routing (catch-all)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Error handling middleware
+// -------------------- Error Handling -------------------- //
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
@@ -55,12 +51,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
+// -------------------- Start Server -------------------- //
 const startServer = async () => {
   const dbConnected = await testConnection();
   
   if (!dbConnected) {
-    console.error('Failed to connect to database. Please check your configuration.');
+    console.error('❌ Failed to connect to database. Please check your configuration.');
     process.exit(1);
   }
   
