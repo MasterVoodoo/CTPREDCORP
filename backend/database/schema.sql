@@ -1,94 +1,110 @@
--- CTP RED Corp Database Schema
--- MySQL Database for CTP RED WEBSITE
+-- CTP RED CORP Database Schema
+-- This script creates the necessary tables for the application
 
--- Create database
-CREATE DATABASE IF NOT EXISTS ctpredcorp_db;
+CREATE DATABASE IF NOT EXISTS ctpredcorp_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE ctpredcorp_db;
 
--- ===== BUILDINGS TABLE =====
+-- Admin Users Table
+CREATE TABLE IF NOT EXISTS admin_users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'super_admin') DEFAULT 'admin',
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  last_login TIMESTAMP NULL,
+  INDEX idx_username (username),
+  INDEX idx_email (email),
+  INDEX idx_role (role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Admin Activity Logs Table
+CREATE TABLE IF NOT EXISTS admin_activity_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT NOT NULL,
+  action VARCHAR(100) NOT NULL,
+  description TEXT,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE CASCADE,
+  INDEX idx_admin_id (admin_id),
+  INDEX idx_action (action),
+  INDEX idx_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Building Information Table
 CREATE TABLE IF NOT EXISTS buildings (
-  id VARCHAR(50) PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  display_name VARCHAR(100) NOT NULL,
-  location VARCHAR(255) NOT NULL,
-  short_location VARCHAR(255) NOT NULL,
-  description JSON,
-  stats JSON,
-  building_hours JSON,
-  contact JSON,
-  hero_image VARCHAR(500),
-  badge VARCHAR(100),
-  cta_title VARCHAR(255),
-  cta_description TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- ===== BUILDING FEATURES TABLE =====
-CREATE TABLE IF NOT EXISTS building_features (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  building_id VARCHAR(50) NOT NULL,
-  title VARCHAR(100) NOT NULL,
   description TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (building_id) REFERENCES buildings(id) ON DELETE CASCADE
-);
-
--- ===== BUILDING FLOOR PLANS TABLE =====
-CREATE TABLE IF NOT EXISTS building_floor_plans (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  building_id VARCHAR(50) NOT NULL,
-  floor INT NOT NULL,
-  units INT NOT NULL,
-  total_sqft INT NOT NULL,
-  available INT NOT NULL,
-  `condition` ENUM('Bare', 'Warm Shell', 'Fitted') NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (building_id) REFERENCES buildings(id) ON DELETE CASCADE
-);
-
--- ===== UNITS TABLE =====
-CREATE TABLE IF NOT EXISTS units (
-  id VARCHAR(50) PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  building VARCHAR(100) NOT NULL,
-  location VARCHAR(255) NOT NULL,
-  floor INT NOT NULL,
-  size INT NOT NULL,
-  capacity INT NOT NULL,
-  price DECIMAL(10, 2) NOT NULL,
-  status ENUM('Available', 'Coming Soon', 'Taken', 'Unavailable') NOT NULL DEFAULT 'Available',
-  `condition` ENUM('Bare', 'Warm Shell', 'Fitted') NOT NULL,
-  image VARCHAR(500),
-  images JSON,
-  description TEXT,
-  floor_plan JSON,
-  availability JSON,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  INDEX idx_building (building),
-  INDEX idx_status (status),
-  INDEX idx_floor (floor)
-);
-
--- ===== FINANCIAL DATA TABLE =====
-CREATE TABLE IF NOT EXISTS financial_data (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  year INT NOT NULL,
-  quarter INT NOT NULL,
-  revenue DECIMAL(15, 2) NOT NULL,
-  expenses DECIMAL(15, 2) NOT NULL,
-  net_income DECIMAL(15, 2) NOT NULL,
-  occupancy_rate DECIMAL(5, 2),
+  location VARCHAR(255),
+  total_floors INT,
   total_units INT,
-  leased_units INT,
+  amenities JSON,
+  images JSON,
+  status ENUM('active', 'inactive', 'maintenance') DEFAULT 'active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY unique_year_quarter (year, quarter)
-);
+  INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ===== INDEXES FOR PERFORMANCE =====
-CREATE INDEX idx_building_id ON building_features(building_id);
-CREATE INDEX idx_floor_plan_building ON building_floor_plans(building_id);
-CREATE INDEX idx_financial_year ON financial_data(year);
-CREATE INDEX idx_financial_quarter ON financial_data(quarter);
+-- Units Table
+CREATE TABLE IF NOT EXISTS units (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  building_id INT NOT NULL,
+  unit_number VARCHAR(20) NOT NULL,
+  floor INT NOT NULL,
+  type ENUM('studio', '1br', '2br', '3br', 'penthouse') NOT NULL,
+  size_sqm DECIMAL(10, 2),
+  price DECIMAL(15, 2),
+  status ENUM('available', 'reserved', 'sold') DEFAULT 'available',
+  features JSON,
+  images JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (building_id) REFERENCES buildings(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_unit (building_id, unit_number),
+  INDEX idx_building_id (building_id),
+  INDEX idx_status (status),
+  INDEX idx_type (type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Content Management Table
+CREATE TABLE IF NOT EXISTS content (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  section VARCHAR(50) NOT NULL,
+  key_name VARCHAR(100) NOT NULL,
+  value TEXT,
+  type ENUM('text', 'html', 'json', 'image', 'file') DEFAULT 'text',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  updated_by INT,
+  FOREIGN KEY (updated_by) REFERENCES admin_users(id) ON DELETE SET NULL,
+  UNIQUE KEY unique_content (section, key_name),
+  INDEX idx_section (section)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insert default super admin (password: Admin123! - CHANGE THIS IMMEDIATELY)
+-- Password hash for 'Admin123!' - bcrypt with 10 rounds
+INSERT INTO admin_users (username, email, password, role, is_active) 
+VALUES (
+  'superadmin',
+  'admin@ctpredcorp.com',
+  '$2b$10$rQVFqE3jPXPh5vPVYqHxl.F6Q9mNc8R3hYHxOZO8q.cYNGK3mK4ZS',
+  'super_admin',
+  true
+) ON DUPLICATE KEY UPDATE username=username;
+
+-- Insert sample building data
+INSERT INTO buildings (name, description, location, total_floors, total_units, status)
+VALUES (
+  'CTP Red Tower',
+  'Luxury residential tower in the heart of the city',
+  'Metro Manila, Philippines',
+  25,
+  100,
+  'active'
+) ON DUPLICATE KEY UPDATE name=name;
