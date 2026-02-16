@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { ExternalLink } from "lucide-react";
+import EnvoyLogo from "../assets/CTP_Red/Envoy_logo.svg";
 
 export default function TenantsPortal() {
 
@@ -38,7 +39,7 @@ export default function TenantsPortal() {
             <CardContent className="flex flex-col items-center space-y-6">
               <div className="bg-white p-8 rounded-lg shadow-lg border">
                 <div className="flex justify-center mb-6">
-                  <div className="h-16 w-48 flex items-center justify-center bg-white rounded-lg cursor-pointer hover:opacity-90 transition-opacity p-2"
+                  <div className="h-16 w-48 flex items-center justify-center bg-gray-100 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                     onClick={() => window.open("https://www.getmaintainx.com/?fbclid=IwY2xjawMl9chleHRuA2FlbQIxMABicmlkETFka25WZGdJVkZQTHd3bnF1AR5QWUuotv-FbCc-n1KZGrg9GES1W0-4FB3NWNgbjroztI99HelKO601NTctWQ_aem_etKcJu1-OkV1SLq1f8LyxA", "_blank")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 16" fill="none" className="h-6 w-full max-w-[180px] object-contain">
@@ -96,10 +97,10 @@ export default function TenantsPortal() {
             <CardContent className="flex flex-col items-center space-y-6">
               <div className="bg-white p-8 rounded-lg shadow-lg border">
                 <div className="flex justify-center mb-6">
-                  <div className="h-16 w-48 flex items-center justify-center bg-gray-100 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                  <div className="h-16 w-48 flex items-center justify-center bg-white rounded-lg cursor-pointer hover:opacity-90 transition-opacity p-2"
                     onClick={() => window.open("https://envoy.com/?fbclid=IwY2xjawM84vNleHRuA2FlbQIxMQABHuOtWp3K_odhtCEnSoe1V1tTBHgsPOnQf8KCdLybcNpzG_lGWLBv978uxywj_aem_QbG3SGEsvTL_EcaIQPsFew", "_blank")}
                   >
-                    <span className="text-2xl font-bold text-gray-700">Envoy</span>
+                    <img src={EnvoyLogo} alt="Envoy" className="h-8 w-full max-w-[180px] object-contain" />
                   </div>
                 </div>
                 <div className="text-center">
