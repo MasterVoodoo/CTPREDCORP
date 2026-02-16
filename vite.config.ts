@@ -17,10 +17,6 @@ export default defineConfig(({ command, mode }) => {
       outDir: 'dist',
       sourcemap: mode === 'production' ? false : true,
       rollupOptions: {
-        input: {
-          main: path.resolve(__dirname, 'index.html'),
-          admin: path.resolve(__dirname, 'admin/index.html'),
-        },
         output: {
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom'],
