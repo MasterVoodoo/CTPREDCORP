@@ -22,7 +22,7 @@ const buildings = [
   {
     name: "CTP BF Building",
     address: "Presidents Avenue BF Homes Paranaque",
-    phone: "(02) 8856-7758 / 0939 927 8239",
+    phone: "(02) 8856-7758",
     map: "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
   },
   {
