@@ -80,6 +80,8 @@ export interface BuildingStats {
 
 export interface BuildingHours {
   weekdays: string;
+  saturday: string;
+  sunday: string;
   security: string;
 }
 
@@ -307,21 +309,20 @@ export const ctpAseanBuildingInfo: BuildingInfo = {
   },
   buildingHours: {
     weekdays: "9:00 AM - 5:00 PM",
+    saturday: "8:00 AM - 8:00 PM",
+    sunday: "10:00 AM - 6:00 PM",
     security: "24/7"
   },
   contact: {
-    phone: "(02) 8334-2091",
-    email: "aseantower@ctpred.com.ph",
+    phone: "(555) 123-CORP",
+    email: "aseantower@ctpcmc.com.ph",
     address: "Asean Drive, Filinvest City, Alabang, Muntinlupa"
   },
   buildingFeatures: [
     { title: "High-Speed Internet", description: "Fiber optic ready" },
     { title: "24/7 Security", description: "Advanced security systems and on-site guards" },
     { title: "Parking", description: "Reserved and visitor parking available" },
-    { title: "Passenger Lifts", description: "12 high-speed elevators" },
-    { title: "Backup Power", description: "100% emergency power supply" },
-    { title: "Floor Efficiency", description: "83%" },
-
+    { title: "Passenger Lifts", description: "12 high-speed elevators" }
   ],
   floorPlans: ctpAseanFloorPlans,
   heroImage: CTPAseanTowerImg,
