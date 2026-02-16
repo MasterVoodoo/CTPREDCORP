@@ -39,7 +39,7 @@ export default function TenantsPortal() {
             <CardContent className="flex flex-col items-center space-y-6">
               <div className="bg-white p-8 rounded-lg shadow-lg border">
                 <div className="flex justify-center mb-6">
-                  <div className="h-16 w-48 flex items-center justify-center bg-gray-100 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                  <div className="h-16 w-48 flex items-center justify-center rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                     onClick={() => window.open("https://www.getmaintainx.com/?fbclid=IwY2xjawMl9chleHRuA2FlbQIxMABicmlkETFka25WZGdJVkZQTHd3bnF1AR5QWUuotv-FbCc-n1KZGrg9GES1W0-4FB3NWNgbjroztI99HelKO601NTctWQ_aem_etKcJu1-OkV1SLq1f8LyxA", "_blank")}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 16" fill="none" className="h-6 w-full max-w-[180px] object-contain">
