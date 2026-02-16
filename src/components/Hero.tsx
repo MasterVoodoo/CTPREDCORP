@@ -11,6 +11,7 @@ import {
 import { Card } from "./ui/card";
 import { getBuildingsList, companyOverview } from "../data/ctpData";
 import PanningVideo from "../assets/ctp_pan.mov";
+// dsadasdasdasd
 
 interface HeroProps {
   onSearch?: (building: string, condition: string) => void;
