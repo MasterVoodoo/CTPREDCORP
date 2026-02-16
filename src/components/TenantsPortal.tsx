@@ -53,7 +53,7 @@ export default function TenantsPortal() {
                   </p>
                   <Button 
                     className="bg-primary hover:bg-accent text-white cursor-pointer"
-                    onClick={() => window.open("https://www.getmaintainx.com/?fbclid=IwY2xjawMl9chleHRuA2FlbQIxMABicmlkETFka25WZGdJVkZQTHd3bnF1AR5QWUuotv-FbCc-n1KZGrg9GES1W0-4FB3NWNgbjroztI99HelKO601NTctWQ_aem_etKcJu1-OkV1SLq1f8LyxA", "_blank")}
+                    onClick={() => window.open("https://app.getmaintainx.com/request-portal/9d04f974-ba1e-4fbe-ad7e-f2a25fc3a674")}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Access MaintainX Platform
