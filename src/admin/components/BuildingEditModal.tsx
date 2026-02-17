@@ -19,7 +19,7 @@ interface Building {
 interface Props {
   building: Building;
   onClose: () => void;
-  onSave: (formData: FormData) => Promise<void>;
+  onSave: (buildingData: any) => Promise<void>;
 }
 
 export default function BuildingEditModal({ building, onClose, onSave }: Props) {
@@ -48,6 +48,9 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     hero_image_preview: '',
     keep_current_image: true
   });
+
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Parse description array
@@ -104,7 +107,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     const file = e.target.files?.[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file');
+        setError('Please upload an image file');
         return;
       }
       
@@ -119,47 +122,70 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
   };
 
   const handleSubmit = async () => {
-    const submitData = new FormData();
-    
-    // Basic fields
-    submitData.append('id', formData.id);
-    submitData.append('name', formData.name);
-    submitData.append('display_name', formData.display_name);
-    submitData.append('location', formData.location);
-    submitData.append('short_location', formData.short_location);
-    
-    // Description
-    submitData.append('description_paragraph_1', formData.description_paragraph_1);
-    submitData.append('description_paragraph_2', formData.description_paragraph_2);
-    submitData.append('description_paragraph_3', formData.description_paragraph_3);
-    
-    // Stats
-    submitData.append('stats_total_floors', formData.stats_total_floors);
-    submitData.append('stats_total_units', formData.stats_total_units);
-    submitData.append('stats_occupancy_rate', formData.stats_occupancy_rate);
-    submitData.append('stats_available_units', formData.stats_available_units);
-    
-    // Hours
-    submitData.append('hours_weekdays', formData.hours_weekdays);
-    submitData.append('hours_security', formData.hours_security);
-    
-    // Contact
-    submitData.append('contact_phone', formData.contact_phone);
-    submitData.append('contact_email', formData.contact_email);
-    submitData.append('contact_address', formData.contact_address);
-    
-    // Image
-    if (formData.hero_image) {
-      submitData.append('hero_image', formData.hero_image);
-    }
-    submitData.append('keep_current_image', String(formData.keep_current_image));
-    
-    // CTA
-    submitData.append('badge', formData.badge);
-    submitData.append('cta_title', formData.cta_title);
-    submitData.append('cta_description', formData.cta_description);
+    setLoading(true);
+    setError(null);
 
-    await onSave(submitData);
+    try {
+      // Create description array from paragraphs
+      const description = [
+        formData.description_paragraph_1,
+        formData.description_paragraph_2,
+        formData.description_paragraph_3
+      ].filter(p => p.trim());
+
+      // Create stats object
+      const stats = {
+        totalFloors: formData.stats_total_floors,
+        totalUnits: formData.stats_total_units,
+        occupancyRate: formData.stats_occupancy_rate,
+        availableUnits: formData.stats_available_units
+      };
+
+      // Create hours object
+      const buildingHours = {
+        weekdays: formData.hours_weekdays,
+        security: formData.hours_security
+      };
+
+      // Create contact object
+      const contact = {
+        phone: formData.contact_phone,
+        email: formData.contact_email,
+        address: formData.contact_address
+      };
+
+      // Create the building data object - send as JSON like the add modal
+      const buildingData = {
+        name: formData.name,
+        displayName: formData.display_name || formData.name,
+        location: formData.location,
+        shortLocation: formData.short_location || formData.location,
+        description: description,
+        stats: stats,
+        buildingHours: buildingHours,
+        contact: contact,
+        heroImage: formData.keep_current_image ? building.hero_image : (formData.hero_image_preview || ''),
+        badge: formData.badge,
+        ctaTitle: formData.cta_title,
+        ctaDescription: formData.cta_description,
+        buildingFeatures: [],
+        floorPlans: []
+      };
+
+      await onSave(buildingData);
+      onClose();
+    } catch (err: any) {
+      setError(err.message || 'Failed to update building');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (formData.hero_image_preview) {
+      URL.revokeObjectURL(formData.hero_image_preview);
+    }
+    onClose();
   };
 
   return (
@@ -169,6 +195,12 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
           <h3 className="text-xl font-bold text-white">Edit Building: {building.name}</h3>
           <p className="text-sm text-red-100 mt-1">Update building information</p>
         </div>
+
+        {error && (
+          <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-800">⚠️ {error}</p>
+          </div>
+        )}
         
         <div className="p-6 space-y-6">
           {/* Basic Information */}
@@ -192,6 +224,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
 
@@ -202,6 +235,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.display_name}
                   onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
 
@@ -213,6 +247,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Premium Location"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -229,6 +264,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               
@@ -239,6 +275,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.short_location}
                   onChange={(e) => setFormData({ ...formData, short_location: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -255,6 +292,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   onChange={(e) => setFormData({ ...formData, description_paragraph_1: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -264,6 +302,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   onChange={(e) => setFormData({ ...formData, description_paragraph_2: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -273,6 +312,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   onChange={(e) => setFormData({ ...formData, description_paragraph_3: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -285,37 +325,41 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Total Floors</label>
                 <input
-                  type="number"
+                  type="text"
                   value={formData.stats_total_floors}
                   onChange={(e) => setFormData({ ...formData, stats_total_floors: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Total Units</label>
                 <input
-                  type="number"
+                  type="text"
                   value={formData.stats_total_units}
                   onChange={(e) => setFormData({ ...formData, stats_total_units: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Occupancy Rate (%)</label>
                 <input
-                  type="number"
+                  type="text"
                   value={formData.stats_occupancy_rate}
                   onChange={(e) => setFormData({ ...formData, stats_occupancy_rate: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Available Units</label>
                 <input
-                  type="number"
+                  type="text"
                   value={formData.stats_available_units}
                   onChange={(e) => setFormData({ ...formData, stats_available_units: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -332,6 +376,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.hours_weekdays}
                   onChange={(e) => setFormData({ ...formData, hours_weekdays: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -341,6 +386,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.hours_security}
                   onChange={(e) => setFormData({ ...formData, hours_security: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -357,6 +403,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.contact_phone}
                   onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -366,6 +413,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.contact_email}
                   onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -375,6 +423,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.contact_address}
                   onChange={(e) => setFormData({ ...formData, contact_address: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -402,6 +451,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
 
@@ -429,6 +479,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   value={formData.cta_title}
                   onChange={(e) => setFormData({ ...formData, cta_title: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
               <div>
@@ -438,6 +489,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                   onChange={(e) => setFormData({ ...formData, cta_description: e.target.value })}
                   rows={2}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -446,16 +498,18 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
 
         <div className="bg-gray-50 px-6 py-4 flex gap-3 rounded-b-xl sticky bottom-0">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
+            disabled={loading}
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Save Changes
+            {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>
