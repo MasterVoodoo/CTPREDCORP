@@ -37,12 +37,11 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
   });
 
   const [images, setImages] = useState<string[]>([]);
-  const [imageInput, setImageInput] = useState('');
+  const [uploadingFiles, setUploadingFiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Parse existing images
     if (unit.images && Array.isArray(unit.images)) {
       setImages(unit.images);
     } else if (unit.images && typeof unit.images === 'string') {
@@ -57,27 +56,67 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
     }
   }, [unit]);
 
-  const handleAddImage = () => {
-    if (!imageInput.trim()) {
-      setError('Please enter an image URL');
-      return;
-    }
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
-    // Basic URL validation
-    try {
-      new URL(imageInput);
-    } catch {
-      setError('Please enter a valid URL');
-      return;
-    }
-
-    setImages([...images, imageInput.trim()]);
-    setImageInput('');
+    setUploadingFiles(true);
     setError(null);
+
+    try {
+      const uploadedPaths: string[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        if (!file.type.startsWith('image/')) {
+          throw new Error(`${file.name} is not an image file`);
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error(`${file.name} is too large. Maximum size is 5MB`);
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('type', 'units');
+
+        const response = await fetch('http://localhost:5000/api/uploads/single', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to upload image');
+        }
+
+        const data = await response.json();
+        uploadedPaths.push(data.path);
+      }
+
+      setImages([...images, ...uploadedPaths]);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload images');
+    } finally {
+      setUploadingFiles(false);
+      e.target.value = '';
+    }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
+  const handleRemoveImage = async (index: number, imagePath: string) => {
+    try {
+      await fetch('http://localhost:5000/api/uploads', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: imagePath })
+      });
+      setImages(images.filter((_, i) => i !== index));
+    } catch (err) {
+      console.error('Failed to delete image:', err);
+      setImages(images.filter((_, i) => i !== index));
+    }
   };
 
   const handleSubmit = async () => {
@@ -139,7 +178,6 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
         )}
         
         <div className="p-6 space-y-6">
-          {/* Unit Information */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Unit Information</h4>
             <div className="space-y-4">
@@ -243,29 +281,33 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* Unit Images */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Unit Images</h4>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Add Image URL</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={imageInput}
-                    onChange={(e) => setImageInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddImage()}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    placeholder="https://example.com/image.jpg"
-                    disabled={loading}
-                  />
-                  <button
-                    onClick={handleAddImage}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
-                    disabled={loading}
-                  >
-                    Add
-                  </button>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Images</label>
+                <div className="flex items-center gap-2">
+                  <label className="flex-1 cursor-pointer">
+                    <div className="flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition-colors">
+                      <div className="text-center">
+                        <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <p className="mt-1 text-sm text-gray-600">
+                          {uploadingFiles ? 'Uploading...' : 'Click to upload images'}
+                        </p>
+                        <p className="text-xs text-gray-500">PNG, JPG, GIF, WEBP up to 5MB</p>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      disabled={loading || uploadingFiles}
+                    />
+                  </label>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">First image will be used as the main unit image</p>
               </div>
@@ -273,31 +315,34 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
               {images.length > 0 && (
                 <div>
                   <p className="text-sm font-medium text-gray-700 mb-2">Images ({images.length})</p>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {images.map((img, index) => (
-                      <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <div key={index} className="relative group">
                         <img
-                          src={img}
-                          alt={`Unit preview ${index + 1}`}
-                          className="w-16 h-16 object-cover rounded"
+                          src={img.startsWith('http') ? img : `http://localhost:5000${img}`}
+                          alt={`Unit image ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
                           onError={(e) => {
                             e.currentTarget.src = '/images/units/default.jpg';
                           }}
                         />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-700 truncate">{img}</p>
-                          {index === 0 && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                        {index === 0 && (
+                          <div className="absolute top-2 left-2">
+                            <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-500 text-white shadow-sm">
                               Main Image
                             </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
                         <button
-                          onClick={() => handleRemoveImage(index)}
-                          className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded font-medium transition-colors"
+                          onClick={() => handleRemoveImage(index, img)}
+                          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
                           disabled={loading}
+                          title="Remove image"
                         >
-                          Remove
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
                         </button>
                       </div>
                     ))}
@@ -307,7 +352,6 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* Status & Condition */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Status & Condition</h4>
             <div className="grid grid-cols-2 gap-4">
@@ -347,16 +391,16 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
           <button
             onClick={onClose}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
-            disabled={loading}
+            disabled={loading || uploadingFiles}
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
+            disabled={loading || uploadingFiles}
           >
-            {loading ? 'Saving...' : 'Save Changes'}
+            {loading ? 'Saving...' : uploadingFiles ? 'Uploading...' : 'Save Changes'}
           </button>
         </div>
       </div>
