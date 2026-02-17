@@ -60,9 +60,9 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
     try {
       const uploadFormData = new FormData();
       uploadFormData.append('image', file);
-      uploadFormData.append('type', 'buildings');
 
-      const response = await fetch('http://localhost:5000/api/uploads/single', {
+      // Send type as query parameter instead of body
+      const response = await fetch('http://localhost:5000/api/uploads/single?type=buildings', {
         method: 'POST',
         body: uploadFormData
       });
