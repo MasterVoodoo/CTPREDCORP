@@ -264,16 +264,22 @@ export default function PropertyManagement() {
   };
 
   // Building handlers
-  const handleAddBuilding = async (formData: FormData) => {
+  const handleAddBuilding = async (buildingData: any) => {
     const token = localStorage.getItem('adminToken');
     try {
       const response = await fetch('http://localhost:5000/api/buildings', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify(buildingData)
       });
 
-      if (!response.ok) throw new Error('Failed to add building');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add building');
+      }
 
       setShowAddBuildingModal(false);
       loadBuildings();
