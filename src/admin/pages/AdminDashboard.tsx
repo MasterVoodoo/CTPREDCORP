@@ -98,13 +98,13 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         .content-fade-in { animation: slideIn 0.5s ease-out; }
         .stat-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15); }
-        .modal-overlay { animation: fadeIn 0.2s ease-out; }
+        .modal-overlay { animation: fadeIn 0.2s ease-out; backdrop-filter: blur(2px); }
         .modal-content { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
       `}</style>
 
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
-        <div className="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="modal-overlay fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50 p-4">
           <div className="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
