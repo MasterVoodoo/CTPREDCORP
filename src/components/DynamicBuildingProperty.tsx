@@ -49,6 +49,34 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("units");
 
+  // Default building features (copied from other view details pages)
+  const defaultBuildingFeatures = [
+    {
+      title: "Prime Location",
+      description: "Strategically located in a major business district with easy access to transportation."
+    },
+    {
+      title: "24/7 Security",
+      description: "Round-the-clock security personnel and modern surveillance systems ensure safety."
+    },
+    {
+      title: "High-Speed Elevators",
+      description: "Modern elevator systems with minimal wait time for efficient vertical transportation."
+    },
+    {
+      title: "Backup Power",
+      description: "Uninterruptible power supply and generator backup for business continuity."
+    },
+    {
+      title: "Modern Infrastructure",
+      description: "State-of-the-art facilities with fiber optic internet and modern HVAC systems."
+    },
+    {
+      title: "Ample Parking",
+      description: "Dedicated parking spaces for tenants and visitors with 24/7 access."
+    }
+  ];
+
   useEffect(() => {
     fetchBuildingData();
   }, [buildingId]);
@@ -191,6 +219,9 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
   const contact = parseContact(building.contact);
   const buildingHours = parseBuildingHours(building.building_hours);
   const buildingFeatures = parseBuildingFeatures(building.building_features);
+  
+  // Use default features if none provided in database
+  const displayFeatures = buildingFeatures.length > 0 ? buildingFeatures : defaultBuildingFeatures;
 
   const totalFloors = stats.totalFloors || '0';
   const totalUnits = stats.totalUnits || '0';
@@ -452,35 +483,24 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <div className="grid md:grid-cols-2 gap-8">
-                    {buildingFeatures.length > 0 ? (
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Building Features</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            {buildingFeatures.map((feature: any, index: number) => (
-                              <div key={index} className="flex items-start space-x-3">
-                                <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                                <div>
-                                  <h4 className="font-semibold text-gray-900">{feature.title}</h4>
-                                  <p className="text-sm text-gray-600">{feature.description}</p>
-                                </div>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Building Features</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {displayFeatures.map((feature: any, index: number) => (
+                            <div key={index} className="flex items-start space-x-3">
+                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900">{feature.title}</h4>
+                                <p className="text-sm text-gray-600">{feature.description}</p>
                               </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ) : (
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Building Features</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-gray-600">Building features information coming soon.</p>
-                        </CardContent>
-                      </Card>
-                    )}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
 
                     <div className="space-y-6">
                       {contact.phone || contact.email || contact.address ? (
