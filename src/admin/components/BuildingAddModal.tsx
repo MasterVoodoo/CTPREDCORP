@@ -130,7 +130,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
 
   return (
     <div
-      className="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4"
       onClick={handleClose}
     >
       <div
