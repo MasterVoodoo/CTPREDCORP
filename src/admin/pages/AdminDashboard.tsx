@@ -104,7 +104,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
 
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
-        <div className="modal-overlay fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50 p-4">
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
