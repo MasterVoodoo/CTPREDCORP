@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 interface BuildingAddModalProps {
   onClose: () => void;
-  onSave: (formData: FormData) => Promise<void>;
+  onSave: (buildingData: any) => Promise<void>;
 }
 
 export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalProps) {
@@ -93,7 +93,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
         address: formData.contact_address
       };
 
-      // Create the building data object
+      // Create the building data object - pass directly as JSON
       const buildingData = {
         id: formData.id,
         name: formData.name,
@@ -112,23 +112,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
         floorPlans: []
       };
 
-      // Create FormData for file upload
-      const submitData = new FormData();
-      
-      // Append all data as JSON string for now since backend expects JSON
-      Object.entries(buildingData).forEach(([key, value]) => {
-        if (key === 'description' || key === 'stats' || key === 'buildingHours' || key === 'contact' || key === 'buildingFeatures' || key === 'floorPlans') {
-          submitData.append(key, JSON.stringify(value));
-        } else {
-          submitData.append(key, String(value));
-        }
-      });
-
-      if (formData.hero_image) {
-        submitData.append('hero_image', formData.hero_image);
-      }
-
-      await onSave(submitData);
+      await onSave(buildingData);
       onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to add building');
