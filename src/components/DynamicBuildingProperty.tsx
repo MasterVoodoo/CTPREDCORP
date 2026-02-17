@@ -175,6 +175,12 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
     return [];
   };
 
+  // Helper function to get floor display name
+  const getFloorDisplayName = (floor: number): string => {
+    if (floor === 0) return "Ground Floor";
+    return `Floor ${floor}`;
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Available":
@@ -407,7 +413,7 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
                           <CardContent className="p-6">
                             <div className="flex justify-between items-start mb-3">
                               <h3 className="text-lg font-bold text-gray-900">{unit.title}</h3>
-                              <span className="text-sm text-gray-500">Floor {unit.floor}</span>
+                              <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
                             </div>
                             
                             <div className="mb-4 text-sm text-gray-600">
