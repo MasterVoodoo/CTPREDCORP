@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -9,6 +9,22 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitById } from "../data/ctpData";
+
+interface Unit {
+  id: string;
+  title: string;
+  building: string;
+  location: string;
+  floor: number;
+  size: number;
+  capacity: number;
+  price: number;
+  status: string;
+  condition: string;
+  description?: string;
+  image: string;
+  images?: string[];
+}
 
 interface UnitDetailsPageProps {
   unitId: string;
@@ -22,8 +38,54 @@ export default function UnitDetailsPage({
   onScheduleAppointment,
 }: UnitDetailsPageProps) {
   const [selectedImage, setSelectedImage] = useState(0);
+  const [unit, setUnit] = useState<Unit | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const unit = getUnitById(unitId);
+  useEffect(() => {
+    fetchUnitData();
+  }, [unitId]);
+
+  const fetchUnitData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // First try to get from hardcoded data (for legacy units)
+      const hardcodedUnit = getUnitById(unitId);
+      if (hardcodedUnit) {
+        setUnit(hardcodedUnit);
+        setLoading(false);
+        return;
+      }
+
+      // If not found in hardcoded data, fetch from database
+      const response = await fetch('http://localhost:5000/api/units');
+      if (!response.ok) {
+        throw new Error('Failed to fetch units');
+      }
+      
+      const allUnits = await response.json();
+      const foundUnit = allUnits.find((u: Unit) => u.id === unitId);
+      
+      if (!foundUnit) {
+        throw new Error('Unit not found');
+      }
+      
+      setUnit(foundUnit);
+    } catch (err: any) {
+      console.error('Error fetching unit data:', err);
+      setError(err.message || 'Failed to load unit');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getImageUrl = (imagePath?: string) => {
+    if (!imagePath) return '/images/units/default.jpg';
+    if (imagePath.startsWith('http')) return imagePath;
+    return `http://localhost:5000${imagePath}`;
+  };
 
   // Function to get back button text based on unit ID
   const getBackButtonText = (unitId: string) => {
@@ -36,30 +98,9 @@ export default function UnitDetailsPage({
     } else if (unitId.startsWith("featured-")) {
       return "Back to Home";
     } else {
-      return "Back";
+      return "Back to Building";
     }
   };
-
-  if (!unit) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Unit Not Found
-          </h1>
-          <p className="text-gray-600 mb-6">
-            The requested unit could not be found.
-          </p>
-          <Button
-            onClick={onBack}
-              className="bg-primary hover:bg-accent text-white cursor-pointer"
-          >
-            Go Back
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -74,8 +115,41 @@ export default function UnitDetailsPage({
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading unit details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !unit) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Unit Not Found
+          </h1>
+          <p className="text-gray-600 mb-6">
+            {error || 'The requested unit could not be found.'}
+          </p>
+          <Button
+            onClick={onBack}
+            className="bg-primary hover:bg-accent text-white cursor-pointer"
+          >
+            Go Back
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   // Default images if unit doesn't have images
   const unitImages = unit.images || [unit.image];
+  const displayImages = unitImages.map(img => getImageUrl(img));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -118,7 +192,7 @@ export default function UnitDetailsPage({
           <div className="space-y-4">
             <div className="relative">
               <ImageWithFallback
-                src={unitImages[selectedImage]}
+                src={displayImages[selectedImage]}
                 alt={`${unit.title} - View ${selectedImage + 1}`}
                 className="w-full h-96 object-cover rounded-lg shadow-lg"
               />
@@ -130,9 +204,9 @@ export default function UnitDetailsPage({
             </div>
 
             {/* Image Thumbnails */}
-            {unitImages.length > 1 && (
+            {displayImages.length > 1 && (
               <div className="grid grid-cols-3 gap-2">
-                {unitImages.map(
+                {displayImages.map(
                   (image: string, index: number) => (
                     <button
                       key={index}
@@ -161,9 +235,13 @@ export default function UnitDetailsPage({
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 {unit.title}
               </h2>
-              {unit.description && (
+              {unit.description ? (
                 <p className="text-gray-600 mb-6">
                   {unit.description}
+                </p>
+              ) : (
+                <p className="text-gray-600 mb-6">
+                  Prime office space located at {unit.building}, {unit.location}. This {unit.size} sqm unit on Floor {unit.floor} offers modern amenities and a professional environment for your business.
                 </p>
               )}
 
@@ -208,6 +286,17 @@ export default function UnitDetailsPage({
                     Location
                   </div>
                 </div>
+                {unit.capacity && (
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <Building className="h-6 w-6 text-primary mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-gray-900">
+                      {unit.capacity}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Capacity
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Pricing */}
