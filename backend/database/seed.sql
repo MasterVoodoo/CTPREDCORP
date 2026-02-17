@@ -30,7 +30,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- CTP Asean Tower
 INSERT INTO buildings (id, name, display_name, location, short_location, description, stats, building_hours, contact, hero_image, badge, cta_title, cta_description) VALUES (
   'CTP Asean Tower',
-  'CTP Red Corp',
+  'CTP Asean Tower',
   'CTP Asean Tower',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
   'Asean Drive, Filinvest City, Alabang, Muntinlupa',
