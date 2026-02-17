@@ -3,6 +3,17 @@ import { useState, useEffect } from 'react';
 interface Building {
   id: string;
   name: string;
+  display_name?: string;
+  location?: string;
+  short_location?: string;
+  description?: string[];
+  stats?: any;
+  building_hours?: any;
+  contact?: any;
+  hero_image?: string;
+  badge?: string;
+  cta_title?: string;
+  cta_description?: string;
   totalUnits: number;
   availableUnits: number;
 }
@@ -33,8 +44,19 @@ interface NewUnit {
 interface NewBuilding {
   id: string;
   name: string;
+  display_name: string;
   location: string;
+  short_location: string;
   description: string;
+  stats: string;
+  building_hours: string;
+  contact_phone: string;
+  contact_email: string;
+  contact_address: string;
+  hero_image: string;
+  badge: string;
+  cta_title: string;
+  cta_description: string;
 }
 
 export default function PropertyManagement() {
@@ -79,8 +101,19 @@ export default function PropertyManagement() {
   const [newBuilding, setNewBuilding] = useState<NewBuilding>({
     id: '',
     name: '',
+    display_name: '',
     location: '',
-    description: ''
+    short_location: '',
+    description: '',
+    stats: '',
+    building_hours: '',
+    contact_phone: '',
+    contact_email: '',
+    contact_address: '',
+    hero_image: '',
+    badge: '',
+    cta_title: '',
+    cta_description: ''
   });
 
   useEffect(() => {
@@ -277,18 +310,61 @@ export default function PropertyManagement() {
   // Building handlers
   const handleAddBuilding = async () => {
     if (!newBuilding.name || !newBuilding.id) {
-      setError('Building name and ID are required');
+      setError('Building ID and name are required');
       return;
     }
 
     const token = localStorage.getItem('adminToken');
     try {
+      // Parse description as JSON array if provided
+      let descriptionArray = [];
+      if (newBuilding.description) {
+        try {
+          descriptionArray = JSON.parse(newBuilding.description);
+        } catch {
+          descriptionArray = [newBuilding.description];
+        }
+      }
+
+      // Parse stats as JSON if provided
+      let statsObj = {};
+      if (newBuilding.stats) {
+        try {
+          statsObj = JSON.parse(newBuilding.stats);
+        } catch {
+          statsObj = {};
+        }
+      }
+
+      // Parse building_hours as JSON if provided
+      let hoursObj = {};
+      if (newBuilding.building_hours) {
+        try {
+          hoursObj = JSON.parse(newBuilding.building_hours);
+        } catch {
+          hoursObj = {};
+        }
+      }
+
       const buildingData = {
-        id: newBuilding.id.replace(/\s+/g, '-').toUpperCase(),
+        id: newBuilding.id,
         name: newBuilding.name,
+        display_name: newBuilding.display_name || newBuilding.name,
         location: newBuilding.location,
-        description: newBuilding.description,
-        image: '/images/buildings/default.jpg',
+        short_location: newBuilding.short_location || newBuilding.location,
+        description: JSON.stringify(descriptionArray),
+        stats: JSON.stringify(statsObj),
+        building_hours: JSON.stringify(hoursObj),
+        contact: JSON.stringify({
+          phone: newBuilding.contact_phone,
+          email: newBuilding.contact_email,
+          address: newBuilding.contact_address
+        }),
+        hero_image: newBuilding.hero_image || '/images/buildings/default.jpg',
+        badge: newBuilding.badge,
+        cta_title: newBuilding.cta_title,
+        cta_description: newBuilding.cta_description,
+        image: newBuilding.hero_image || '/images/buildings/default.jpg',
         images: [],
         features: [],
         floors: 0,
@@ -309,7 +385,23 @@ export default function PropertyManagement() {
       if (!response.ok) throw new Error('Failed to add building');
 
       setShowAddBuildingModal(false);
-      setNewBuilding({ id: '', name: '', location: '', description: '' });
+      setNewBuilding({
+        id: '',
+        name: '',
+        display_name: '',
+        location: '',
+        short_location: '',
+        description: '',
+        stats: '',
+        building_hours: '',
+        contact_phone: '',
+        contact_email: '',
+        contact_address: '',
+        hero_image: '',
+        badge: '',
+        cta_title: '',
+        cta_description: ''
+      });
       loadBuildings();
       setError(null);
     } catch (error: any) {
@@ -335,7 +427,8 @@ export default function PropertyManagement() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          name: editingBuilding.name
+          name: editingBuilding.name,
+          display_name: editingBuilding.display_name
         })
       });
 
@@ -451,8 +544,10 @@ export default function PropertyManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Building Name</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">ID</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Display Name</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Badge</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Total Units</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Available</th>
                   <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Actions</th>
@@ -461,7 +556,7 @@ export default function PropertyManagement() {
               <tbody className="divide-y divide-gray-100">
                 {buildings.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
+                    <td colSpan={7} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center justify-center text-gray-400">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3">
                           <rect x="2" y="2" width="20" height="20" rx="2"/>
@@ -483,16 +578,29 @@ export default function PropertyManagement() {
                     <tr key={building.id} className={`hover:bg-red-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-semibold text-gray-900">{building.name}</div>
+                        <div className="text-xs text-gray-500">{building.id}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">{building.id}</div>
+                        <div className="text-sm text-gray-700">{building.display_name || building.name}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-700">{building.short_location || building.location || '-'}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {building.badge ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            {building.badge}
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{building.totalUnits}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                          {building.availableUnits} Available
+                          {building.availableUnits}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -520,7 +628,7 @@ export default function PropertyManagement() {
         </div>
       </div>
 
-      {/* Units Section */}
+      {/* Units Section - Keeping existing implementation */}
       <div>
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold text-gray-900">Units</h3>
@@ -722,63 +830,234 @@ export default function PropertyManagement() {
       {/* Add Building Modal */}
       {showAddBuildingModal && (
         <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-lg">
-            <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl">
+          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl sticky top-0 z-10">
               <h3 className="text-xl font-bold text-white">Add New Building</h3>
-              <p className="text-sm text-red-100 mt-1">Create a new building in your portfolio</p>
+              <p className="text-sm text-red-100 mt-1">Fill in all building details</p>
             </div>
             
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
+              {/* Basic Information */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Building ID *</label>
-                <input
-                  type="text"
-                  value={newBuilding.id}
-                  onChange={(e) => setNewBuilding({ ...newBuilding, id: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="e.g., CPT"
-                />
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Basic Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Building ID *</label>
+                    <input
+                      type="text"
+                      value={newBuilding.id}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, id: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="CTP Asean Tower"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Building Name *</label>
+                    <input
+                      type="text"
+                      value={newBuilding.name}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, name: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="CTP Asean Tower"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
+                    <input
+                      type="text"
+                      value={newBuilding.display_name}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, display_name: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="CTP Asean Tower"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Badge</label>
+                    <input
+                      type="text"
+                      value={newBuilding.badge}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, badge: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Premium Location"
+                    />
+                  </div>
+                </div>
               </div>
-              
+
+              {/* Location Information */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Building Name *</label>
-                <input
-                  type="text"
-                  value={newBuilding.name}
-                  onChange={(e) => setNewBuilding({ ...newBuilding, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="e.g., Central Park Tower"
-                />
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Location</h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Full Location</label>
+                    <input
+                      type="text"
+                      value={newBuilding.location}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, location: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Asean Drive, Filinvest City, Alabang, Muntinlupa"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Short Location</label>
+                    <input
+                      type="text"
+                      value={newBuilding.short_location}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, short_location: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Asean Drive, Filinvest City, Alabang, Muntinlupa"
+                    />
+                  </div>
+                </div>
               </div>
-              
+
+              {/* Description */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
-                <input
-                  type="text"
-                  value={newBuilding.location}
-                  onChange={(e) => setNewBuilding({ ...newBuilding, location: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="Building address"
-                />
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Description</h4>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description (JSON array format)</label>
+                  <textarea
+                    value={newBuilding.description}
+                    onChange={(e) => setNewBuilding({ ...newBuilding, description: e.target.value })}
+                    rows={5}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono text-sm"
+                    placeholder='["Paragraph 1", "Paragraph 2", "Paragraph 3"]'
+                  />
+                </div>
               </div>
-              
+
+              {/* Stats & Hours */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-                <textarea
-                  value={newBuilding.description}
-                  onChange={(e) => setNewBuilding({ ...newBuilding, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="Brief description of the building"
-                />
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Stats & Hours</h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Stats (JSON format)</label>
+                    <textarea
+                      value={newBuilding.stats}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, stats: e.target.value })}
+                      rows={3}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono text-sm"
+                      placeholder='{"totalFloors":12,"totalUnits":62,"occupancyRate":90,"availableUnits":6}'
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Building Hours (JSON format)</label>
+                    <textarea
+                      value={newBuilding.building_hours}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, building_hours: e.target.value })}
+                      rows={2}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono text-sm"
+                      placeholder='{"weekdays":"9:00 AM - 5:00 PM","security":"24/7"}'
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Contact Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                    <input
+                      type="text"
+                      value={newBuilding.contact_phone}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, contact_phone: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="(02) 8334-2091"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={newBuilding.contact_email}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, contact_email: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="aseantower@ctpred.com.ph"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+                    <input
+                      type="text"
+                      value={newBuilding.contact_address}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, contact_address: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Asean Drive, Filinvest City, Alabang, Muntinlupa"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Media & CTA */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Media & Call-to-Action</h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Hero Image Path</label>
+                    <input
+                      type="text"
+                      value={newBuilding.hero_image}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, hero_image: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="/images/CTP_Asean.PNG"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">CTA Title</label>
+                    <input
+                      type="text"
+                      value={newBuilding.cta_title}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, cta_title: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Explore Premium Office Solutions"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">CTA Description</label>
+                    <textarea
+                      value={newBuilding.cta_description}
+                      onChange={(e) => setNewBuilding({ ...newBuilding, cta_description: e.target.value })}
+                      rows={2}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="Discover the perfect workspace for your business..."
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 px-6 py-4 flex gap-3 rounded-b-xl">
+            <div className="bg-gray-50 px-6 py-4 flex gap-3 rounded-b-xl sticky bottom-0">
               <button
                 onClick={() => {
                   setShowAddBuildingModal(false);
-                  setNewBuilding({ id: '', name: '', location: '', description: '' });
+                  setNewBuilding({
+                    id: '',
+                    name: '',
+                    display_name: '',
+                    location: '',
+                    short_location: '',
+                    description: '',
+                    stats: '',
+                    building_hours: '',
+                    contact_phone: '',
+                    contact_email: '',
+                    contact_address: '',
+                    hero_image: '',
+                    badge: '',
+                    cta_title: '',
+                    cta_description: ''
+                  });
                 }}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
               >
@@ -810,6 +1089,15 @@ export default function PropertyManagement() {
                   type="text"
                   value={editingBuilding.name}
                   onChange={(e) => setEditingBuilding({ ...editingBuilding, name: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
+                <input
+                  type="text"
+                  value={editingBuilding.display_name || ''}
+                  onChange={(e) => setEditingBuilding({ ...editingBuilding, display_name: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
