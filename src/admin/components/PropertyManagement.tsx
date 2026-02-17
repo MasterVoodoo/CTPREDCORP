@@ -262,7 +262,7 @@ export default function PropertyManagement() {
       <style>{`
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
         .add-unit-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .add-unit-button:hover { transform: translateY(-2px); background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4), 0 2px 4px -1px rgba(220, 38, 38, 0.3); }
@@ -274,7 +274,7 @@ export default function PropertyManagement() {
         .delete-button:hover { transform: translateY(-2px); background-color: #FEE2E2 !important; color: #DC2626 !important; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); }
         
         .content-fade-in { animation: slideIn 0.5s ease-out; }
-        .modal-overlay { animation: fadeIn 0.2s ease-out; backdrop-filter: blur(2px); }
+        .modal-overlay { animation: fadeIn 0.3s ease-out; backdrop-filter: blur(4px); }
         .modal-content { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
       `}</style>
 
@@ -489,8 +489,8 @@ export default function PropertyManagement() {
 
       {/* Add Unit Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
               <h3 className="text-xl font-bold text-gray-900">Add New Unit</h3>
               <p className="text-sm text-gray-500 mt-1">Add a new unit to your property portfolio</p>
@@ -648,8 +648,8 @@ export default function PropertyManagement() {
 
       {/* Edit Modal */}
       {showEditModal && editingUnit && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-md">
             <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl">
               <h3 className="text-xl font-bold text-white">Edit Unit {editingUnit.title}</h3>
             </div>
