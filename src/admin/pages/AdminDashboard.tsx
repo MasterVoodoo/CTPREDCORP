@@ -20,10 +20,33 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'users' | 'logs'>('overview');
   const [loading, setLoading] = useState(true);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [buildingCount, setBuildingCount] = useState<number>(0);
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     verifyAuth();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'overview') {
+      fetchBuildingCount();
+    }
+  }, [activeTab]);
+
+  const fetchBuildingCount = async () => {
+    setLoadingStats(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/buildings');
+      if (response.ok) {
+        const buildings = await response.json();
+        setBuildingCount(buildings.length);
+      }
+    } catch (error) {
+      console.error('Failed to fetch building count:', error);
+    } finally {
+      setLoadingStats(false);
+    }
+  };
 
   const verifyAuth = async () => {
     const token = localStorage.getItem('adminToken');
@@ -89,6 +112,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .tab-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .tab-button:hover:not(.active) { transform: translateY(-2px); background-color: #FEE2E2 !important; }
         .tab-button.active { background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important; color: white !important; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4), 0 2px 4px -1px rgba(220, 38, 38, 0.3); }
@@ -100,6 +124,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
         .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15); }
         .modal-overlay { animation: fadeIn 0.2s ease-out; backdrop-filter: blur(2px); }
         .modal-content { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .loading-pulse { animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
       `}</style>
 
       {/* Logout Confirmation Modal */}
@@ -202,7 +227,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {/* Buildings Card - Red */}
+                {/* Buildings Card - Red - DYNAMIC */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
@@ -210,8 +235,17 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                     </div>
                     <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">BUILDINGS</span>
                   </div>
-                  <p className="text-4xl font-extrabold text-gray-900 mb-1">3</p>
-                  <p className="text-sm text-gray-600 font-medium">Total Properties</p>
+                  {loadingStats ? (
+                    <div className="loading-pulse">
+                      <div className="h-10 w-24 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-4xl font-extrabold text-gray-900 mb-1">{buildingCount}</p>
+                      <p className="text-sm text-gray-600 font-medium">Total Properties</p>
+                    </>
+                  )}
                 </div>
 
                 {/* Units Card - Red */}
