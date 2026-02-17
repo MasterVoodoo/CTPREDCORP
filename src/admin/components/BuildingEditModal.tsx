@@ -43,17 +43,16 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     contact_address: '',
     badge: building.badge || '',
     cta_title: building.cta_title || '',
-    cta_description: building.cta_description || '',
-    hero_image: null as File | null,
-    hero_image_preview: '',
-    keep_current_image: true
+    cta_description: building.cta_description || ''
   });
 
+  const [heroImage, setHeroImage] = useState<string>(building.hero_image || '');
+  const [heroImagePreview, setHeroImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Parse description array
     if (building.description) {
       const desc = Array.isArray(building.description) 
         ? building.description 
@@ -69,7 +68,6 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       }));
     }
 
-    // Parse stats
     if (building.stats) {
       const stats = typeof building.stats === 'string' ? JSON.parse(building.stats) : building.stats;
       setFormData(prev => ({
@@ -81,7 +79,6 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       }));
     }
 
-    // Parse building hours
     if (building.building_hours) {
       const hours = typeof building.building_hours === 'string' ? JSON.parse(building.building_hours) : building.building_hours;
       setFormData(prev => ({
@@ -91,7 +88,6 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       }));
     }
 
-    // Parse contact
     if (building.contact) {
       const contact = typeof building.contact === 'string' ? JSON.parse(building.contact) : building.contact;
       setFormData(prev => ({
@@ -103,22 +99,64 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     }
   }, [building]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        setError('Please upload an image file');
-        return;
-      }
-      
-      const previewUrl = URL.createObjectURL(file);
-      setFormData(prev => ({
-        ...prev,
-        hero_image: file,
-        hero_image_preview: previewUrl,
-        keep_current_image: false
-      }));
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please upload an image file');
+      return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image file is too large. Maximum size is 5MB');
+      return;
+    }
+
+    setUploadingImage(true);
+    setError(null);
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('image', file);
+      uploadFormData.append('type', 'buildings');
+
+      const response = await fetch('http://localhost:5000/api/uploads/single', {
+        method: 'POST',
+        body: uploadFormData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload image');
+      }
+
+      const data = await response.json();
+      setHeroImage(data.path);
+      setHeroImagePreview(`http://localhost:5000${data.path}`);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleRemoveNewImage = async () => {
+    if (heroImage && heroImage !== building.hero_image) {
+      try {
+        await fetch('http://localhost:5000/api/uploads', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: heroImage })
+        });
+      } catch (err) {
+        console.error('Failed to delete image:', err);
+      }
+    }
+    setHeroImage(building.hero_image || '');
+    setHeroImagePreview('');
   };
 
   const handleSubmit = async () => {
@@ -126,14 +164,12 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     setError(null);
 
     try {
-      // Create description array from paragraphs
       const description = [
         formData.description_paragraph_1,
         formData.description_paragraph_2,
         formData.description_paragraph_3
       ].filter(p => p.trim());
 
-      // Create stats object
       const stats = {
         totalFloors: formData.stats_total_floors,
         totalUnits: formData.stats_total_units,
@@ -141,20 +177,17 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
         availableUnits: formData.stats_available_units
       };
 
-      // Create hours object
       const buildingHours = {
         weekdays: formData.hours_weekdays,
         security: formData.hours_security
       };
 
-      // Create contact object
       const contact = {
         phone: formData.contact_phone,
         email: formData.contact_email,
         address: formData.contact_address
       };
 
-      // Create the building data object - send as JSON like the add modal
       const buildingData = {
         name: formData.name,
         displayName: formData.display_name || formData.name,
@@ -164,7 +197,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
         stats: stats,
         buildingHours: buildingHours,
         contact: contact,
-        heroImage: formData.keep_current_image ? building.hero_image : (formData.hero_image_preview || ''),
+        heroImage: heroImage,
         badge: formData.badge,
         ctaTitle: formData.cta_title,
         ctaDescription: formData.cta_description,
@@ -179,13 +212,6 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleClose = () => {
-    if (formData.hero_image_preview) {
-      URL.revokeObjectURL(formData.hero_image_preview);
-    }
-    onClose();
   };
 
   return (
@@ -433,38 +459,62 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Hero Image</h4>
             <div className="space-y-4">
-              {building.hero_image && formData.keep_current_image && (
+              {building.hero_image && !heroImagePreview && (
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Current Image:</p>
                   <img 
-                    src={building.hero_image} 
+                    src={building.hero_image.startsWith('http') ? building.hero_image : `http://localhost:5000${building.hero_image}`}
                     alt="Current hero" 
                     className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300"
                   />
                 </div>
               )}
               
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Upload New Image (Optional)</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
-              </div>
-
-              {formData.hero_image_preview && (
+              {heroImagePreview && (
                 <div>
-                  <p className="text-sm text-gray-600 mb-2">New Image Preview:</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-gray-600">New Image:</p>
+                    <button
+                      onClick={handleRemoveNewImage}
+                      className="text-sm text-red-600 hover:text-red-700"
+                      disabled={loading}
+                    >
+                      Remove new image
+                    </button>
+                  </div>
                   <img 
-                    src={formData.hero_image_preview} 
+                    src={heroImagePreview} 
                     alt="New hero preview" 
                     className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300"
                   />
                 </div>
               )}
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  {heroImagePreview ? 'Upload Different Image' : 'Upload New Image (Optional)'}
+                </label>
+                <label className="cursor-pointer">
+                  <div className="flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition-colors">
+                    <div className="text-center">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <p className="mt-1 text-sm text-gray-600">
+                        {uploadingImage ? 'Uploading...' : 'Click to upload image'}
+                      </p>
+                      <p className="text-xs text-gray-500">PNG, JPG, GIF, WEBP up to 5MB</p>
+                    </div>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={loading || uploadingImage}
+                  />
+                </label>
+              </div>
             </div>
           </div>
 
@@ -498,18 +548,18 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
 
         <div className="bg-gray-50 px-6 py-4 flex gap-3 rounded-b-xl sticky bottom-0">
           <button
-            onClick={handleClose}
+            onClick={onClose}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
-            disabled={loading}
+            disabled={loading || uploadingImage}
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
+            disabled={loading || uploadingImage}
           >
-            {loading ? 'Saving...' : 'Save Changes'}
+            {loading ? 'Saving...' : uploadingImage ? 'Uploading...' : 'Save Changes'}
           </button>
         </div>
       </div>
