@@ -206,7 +206,7 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Floor *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Floor * <span className="text-xs text-gray-500">(Floor 0 is Ground Floor)</span></label>
                   <input
                     type="number"
                     value={formData.floor}

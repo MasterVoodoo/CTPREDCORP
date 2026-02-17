@@ -303,13 +303,13 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Short Location</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Floor Levels</label>
                 <input
                   type="text"
                   value={formData.shortLocation}
                   onChange={(e) => handleChange('shortLocation', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="e.g., Makati CBD"
+                  placeholder="e.g., Ground Floor, 4-12, Lower & Upper Penthouse"
                   disabled={loading}
                 />
               </div>
