@@ -6,6 +6,7 @@ import About from "./components/About";
 import Statistics from "./components/Statistics";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import DynamicBuildingProperty from "./components/DynamicBuildingProperty";
 import CtpRedCorpProperty from "./components/CtpRedCorpProperty";
 import CtpAlphaTowerProperty from "./components/CtpAlphaTowerProperty";
 import CtpBfBuildingProperty from "./components/CtpBfBuildingProperty";
@@ -37,6 +38,9 @@ export default function App() {
     building: string;
     condition: string;
   } | null>(null);
+
+  // List of known building pages (hardcoded legacy pages)
+  const knownBuildingPages = ['ctp-red-corp', 'ctp-alpha-tower', 'ctp-bf-building'];
 
   // Handle navigation from external links (like from navigation dropdown)
   useEffect(() => {
@@ -148,6 +152,30 @@ export default function App() {
             setSearchParams({ buildingId, floor });
             setCurrentPage("search-results");
           }
+        }
+      } else if (hash && hash !== "#") {
+        // Check if it's a building page (any hash that starts with # and isn't a known route)
+        const pageId = hash.substring(1); // Remove the #
+        
+        // List of known non-building routes
+        const knownRoutes = [
+          'about', 'services', 'contact', 'schedule-appointment', 
+          'all-available-spaces', 'properties', 'tenant-portal',
+          'modern-management-team', 'home'
+        ];
+        
+        const isKnownRoute = knownRoutes.some(route => pageId === route || pageId.startsWith(route + '-'));
+        const isUnitRoute = pageId.startsWith('unit-');
+        const isSearchRoute = pageId.startsWith('search-');
+        const isSustainabilityRoute = pageId.startsWith('sustainability-');
+        
+        // If it's not a known route, assume it's a building page
+        if (!isKnownRoute && !isUnitRoute && !isSearchRoute && !isSustainabilityRoute) {
+          setPreviousPage(prevPage);
+          setCurrentPage(pageId);
+        } else {
+          setPreviousPage(prevPage);
+          setCurrentPage("home");
         }
       } else {
         setPreviousPage(prevPage);
@@ -401,38 +429,72 @@ export default function App() {
     window.location.hash = `#${buildingId}`;
   };
 
-  if (currentPage === "ctp-red-corp") {
-    return (
-      <div className="min-h-screen">
-        <Header currentPage="ctp-red-corp" />
-        <div className="pt-16">
-          <CtpRedCorpProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
-          <Footer />
-        </div>
-        <ScrollToTop />
-      </div>
-    );
-  }
+  // Check if current page is a building page (not in known special routes)
+  const isBuildingPage = () => {
+    const specialPages = [
+      'home', 'about', 'services', 'contact', 'schedule-appointment',
+      'all-available-spaces', 'properties', 'tenant-portal', 'unit-details',
+      'search-results', 'modern-management-team',
+      'sustainability-board-directors', 'sustainability-management-team',
+      'sustainability-policies', 'sustainability-compliance',
+      'sustainability-investor-relations'
+    ];
+    
+    return !specialPages.includes(currentPage) && currentPage !== 'home';
+  };
 
-  if (currentPage === "ctp-alpha-tower") {
-    return (
-      <div className="min-h-screen">
-        <Header currentPage="ctp-alpha-tower" />
-        <div className="pt-16">
-          <CtpAlphaTowerProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
-          <Footer />
+  // If it's a building page (dynamic or legacy), render the appropriate component
+  if (isBuildingPage()) {
+    // Check if it's one of the legacy hardcoded building pages
+    if (currentPage === "ctp-red-corp") {
+      return (
+        <div className="min-h-screen">
+          <Header currentPage="ctp-red-corp" />
+          <div className="pt-16">
+            <CtpRedCorpProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
+            <Footer />
+          </div>
+          <ScrollToTop />
         </div>
-        <ScrollToTop />
-      </div>
-    );
-  }
+      );
+    }
 
-  if (currentPage === "ctp-bf-building") {
+    if (currentPage === "ctp-alpha-tower") {
+      return (
+        <div className="min-h-screen">
+          <Header currentPage="ctp-alpha-tower" />
+          <div className="pt-16">
+            <CtpAlphaTowerProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
+            <Footer />
+          </div>
+          <ScrollToTop />
+        </div>
+      );
+    }
+
+    if (currentPage === "ctp-bf-building") {
+      return (
+        <div className="min-h-screen">
+          <Header currentPage="ctp-bf-building" />
+          <div className="pt-16">
+            <CtpBfBuildingProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
+            <Footer />
+          </div>
+          <ScrollToTop />
+        </div>
+      );
+    }
+
+    // For any other building page, use DynamicBuildingProperty
     return (
       <div className="min-h-screen">
-        <Header currentPage="ctp-bf-building" />
+        <Header currentPage={currentPage} />
         <div className="pt-16">
-          <CtpBfBuildingProperty onBack={goToHome} onViewDetails={goToUnitDetails} />
+          <DynamicBuildingProperty 
+            buildingId={currentPage} 
+            onBack={goToHome} 
+            onViewDetails={goToUnitDetails} 
+          />
           <Footer />
         </div>
         <ScrollToTop />
