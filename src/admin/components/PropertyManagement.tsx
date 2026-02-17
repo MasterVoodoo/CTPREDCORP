@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import BuildingEditModal from './BuildingEditModal';
 import BuildingAddModal from './BuildingAddModal';
 import UnitAddModal from './UnitAddModal';
+import UnitEditModal from './UnitEditModal';
 
 interface Building {
   id: string;
@@ -27,9 +28,14 @@ interface Unit {
   building: string;
   floor: number;
   size: number;
+  capacity: number;
   price: number;
   status: string;
   condition: string;
+  location?: string;
+  description?: string;
+  image?: string;
+  images?: string[];
 }
 
 export default function PropertyManagement() {
@@ -193,7 +199,7 @@ export default function PropertyManagement() {
     setShowEditModal(true);
   };
 
-  const handleSaveUnit = async () => {
+  const handleSaveUnit = async (unitData: any) => {
     if (!editingUnit) return;
 
     const token = localStorage.getItem('adminToken');
@@ -204,22 +210,7 @@ export default function PropertyManagement() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          title: editingUnit.title,
-          building: editingUnit.building,
-          location: '',
-          floor: editingUnit.floor,
-          size: editingUnit.size,
-          capacity: 0,
-          price: editingUnit.price,
-          status: editingUnit.status,
-          condition: editingUnit.condition,
-          image: '',
-          images: [],
-          description: '',
-          floorPlan: {},
-          availability: {}
-        })
+        body: JSON.stringify(unitData)
       });
 
       if (!response.ok) throw new Error('Failed to update unit');
@@ -232,6 +223,7 @@ export default function PropertyManagement() {
     } catch (error: any) {
       console.error('Failed to update unit:', error);
       setError(error.message);
+      throw error;
     }
   };
 
@@ -778,6 +770,18 @@ export default function PropertyManagement() {
         />
       )}
 
+      {/* Edit Unit Modal */}
+      {showEditModal && editingUnit && (
+        <UnitEditModal
+          unit={editingUnit}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingUnit(null);
+          }}
+          onSave={handleSaveUnit}
+        />
+      )}
+
       {/* Delete Building Modal */}
       {showDeleteBuildingModal && buildingToDelete && (
         <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
@@ -847,107 +851,6 @@ export default function PropertyManagement() {
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
                 >
                   Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Unit Modal */}
-      {showEditModal && editingUnit && (
-        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Edit Unit</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Unit Number/Title</label>
-                  <input
-                    type="text"
-                    value={editingUnit.title}
-                    onChange={(e) => setEditingUnit({ ...editingUnit, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Floor</label>
-                    <input
-                      type="number"
-                      value={editingUnit.floor}
-                      onChange={(e) => setEditingUnit({ ...editingUnit, floor: parseInt(e.target.value) || 0 })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Size (sqm)</label>
-                    <input
-                      type="number"
-                      value={editingUnit.size}
-                      onChange={(e) => setEditingUnit({ ...editingUnit, size: parseFloat(e.target.value) || 0 })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Price per sqm (₱)</label>
-                  <input
-                    type="number"
-                    value={editingUnit.price}
-                    onChange={(e) => setEditingUnit({ ...editingUnit, price: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select
-                      value={editingUnit.status}
-                      onChange={(e) => setEditingUnit({ ...editingUnit, status: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    >
-                      <option value="Available">Available</option>
-                      <option value="Coming Soon">Coming Soon</option>
-                      <option value="Taken">Taken</option>
-                      <option value="Unavailable">Unavailable</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
-                    <select
-                      value={editingUnit.condition}
-                      onChange={(e) => setEditingUnit({ ...editingUnit, condition: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    >
-                      <option value="Bare">Bare</option>
-                      <option value="Warm Shell">Warm Shell</option>
-                      <option value="Fitted">Fitted</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex gap-3 mt-6">
-                <button
-                  onClick={() => {
-                    setShowEditModal(false);
-                    setEditingUnit(null);
-                  }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveUnit}
-                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
-                >
-                  Save Changes
                 </button>
               </div>
             </div>
