@@ -502,7 +502,7 @@ export default function PropertyManagement() {
               </div>
               <h3 className="text-lg font-bold text-gray-900 text-center mb-2">Delete Unit</h3>
               <p className="text-sm text-gray-600 text-center mb-6">
-                Are you sure you want to delete unit <span className="font-semibold">{unitToDelete.title}</span>? This action cannot be undone.
+                Are you sure you want to delete <span className="font-semibold">{unitToDelete.title}</span> in <span className="font-semibold">{unitToDelete.building}</span>? This action cannot be undone.
               </p>
               <div className="flex gap-3">
                 <button
