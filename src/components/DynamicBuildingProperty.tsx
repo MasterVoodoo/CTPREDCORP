@@ -406,7 +406,7 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
                           </div>
                           <CardContent className="p-6">
                             <div className="flex justify-between items-start mb-3">
-                              <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
+                              <h3 className="text-lg font-bold text-gray-900">{unit.title}</h3>
                               <span className="text-sm text-gray-500">Floor {unit.floor}</span>
                             </div>
                             
