@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface BuildingAddModalProps {
   onClose: () => void;
@@ -34,9 +34,36 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [manualIdEdit, setManualIdEdit] = useState(false);
+
+  // Auto-generate URL-safe ID from building name
+  const generateIdFromName = (name: string): string => {
+    return name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-')           // Replace spaces with hyphens
+      .replace(/-+/g, '-')            // Replace multiple hyphens with single
+      .replace(/^-|-$/g, '');         // Remove leading/trailing hyphens
+  };
+
+  // Auto-generate ID when name changes (unless user manually edited ID)
+  useEffect(() => {
+    if (!manualIdEdit && formData.name) {
+      const generatedId = generateIdFromName(formData.name);
+      setFormData(prev => ({ ...prev, id: generatedId }));
+    }
+  }, [formData.name, manualIdEdit]);
 
   const handleChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (error) setError(null);
+  };
+
+  const handleIdChange = (value: string) => {
+    setManualIdEdit(true);
+    const sanitizedId = generateIdFromName(value);
+    setFormData(prev => ({ ...prev, id: sanitizedId }));
     if (error) setError(null);
   };
 
@@ -103,6 +130,12 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   const handleSubmit = async () => {
     if (!formData.id || !formData.name) {
       setError('Building ID and name are required');
+      return;
+    }
+
+    // Validate ID format (URL-safe)
+    if (!/^[a-z0-9-]+$/.test(formData.id)) {
+      setError('Building ID must contain only lowercase letters, numbers, and hyphens');
       return;
     }
 
@@ -200,27 +233,34 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Basic Information</h4>
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Building ID *</label>
-                <input
-                  type="text"
-                  value={formData.id}
-                  onChange={(e) => handleChange('id', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="e.g., makati-skyscraper"
-                  disabled={loading}
-                />
-              </div>
-              <div>
+              <div className="col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Building Name *</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="e.g., Makati Skyscraper"
+                  placeholder="e.g., CTP Test Tower"
                   disabled={loading}
                 />
+                <p className="text-xs text-gray-500 mt-1">The ID will be auto-generated from this name</p>
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Building ID * 
+                  <span className="text-xs font-normal text-gray-500 ml-2">(Auto-generated, editable)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.id}
+                  onChange={(e) => handleIdChange(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent font-mono"
+                  placeholder="ctp-test-tower"
+                  disabled={loading}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  URL-safe ID (lowercase, hyphens only). Used in URLs like: #{formData.id || 'building-id'}
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
