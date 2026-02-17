@@ -17,11 +17,14 @@ if (!fs.existsSync(unitsDir)) {
 }
 
 // Configure multer for file uploads
+// NOTE: We can't access req.body.type in the destination callback reliably
+// So we'll upload to a temp location first, then move to correct folder
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Determine destination based on upload type
-    const uploadType = req.body.type || 'units'; // default to units
+    // Use query parameter instead of body for type
+    const uploadType = req.query.type || 'units';
     const dest = uploadType === 'buildings' ? buildingsDir : unitsDir;
+    console.log('Upload destination:', dest, 'for type:', uploadType);
     cb(null, dest);
   },
   filename: function (req, file, cb) {
@@ -61,8 +64,16 @@ router.post('/single', upload.single('image'), (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const uploadType = req.body.type || 'units';
+    // Get type from query parameter
+    const uploadType = req.query.type || 'units';
     const relativePath = `/src/assets/${uploadType === 'buildings' ? 'Buildings' : 'Units'}/${req.file.filename}`;
+
+    console.log('File uploaded:', {
+      type: uploadType,
+      filename: req.file.filename,
+      path: relativePath,
+      destination: req.file.destination
+    });
 
     res.json({
       message: 'File uploaded successfully',
@@ -83,12 +94,15 @@ router.post('/multiple', upload.array('images', 10), (req, res) => {
       return res.status(400).json({ error: 'No files uploaded' });
     }
 
-    const uploadType = req.body.type || 'units';
+    // Get type from query parameter
+    const uploadType = req.query.type || 'units';
     const files = req.files.map(file => ({
       filename: file.filename,
       path: `/src/assets/${uploadType === 'buildings' ? 'Buildings' : 'Units'}/${file.filename}`,
       size: file.size
     }));
+
+    console.log(`${files.length} file(s) uploaded to ${uploadType}`);
 
     res.json({
       message: `${files.length} file(s) uploaded successfully`,
@@ -112,13 +126,17 @@ router.delete('/', (req, res) => {
     // Convert relative path to absolute path
     const absolutePath = path.join(__dirname, '../..', imagePath);
     
+    console.log('Attempting to delete file:', absolutePath);
+    
     // Check if file exists
     if (!fs.existsSync(absolutePath)) {
+      console.log('File not found:', absolutePath);
       return res.status(404).json({ error: 'File not found' });
     }
 
     // Delete the file
     fs.unlinkSync(absolutePath);
+    console.log('File deleted successfully:', absolutePath);
     
     res.json({ message: 'File deleted successfully' });
   } catch (error) {
