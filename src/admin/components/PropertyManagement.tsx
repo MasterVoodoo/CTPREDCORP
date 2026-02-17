@@ -237,13 +237,10 @@ export default function PropertyManagement() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setError('Please upload an image file');
         return;
       }
-      
-      // Create preview URL
       const previewUrl = URL.createObjectURL(file);
       setNewBuilding({
         ...newBuilding,
@@ -253,7 +250,7 @@ export default function PropertyManagement() {
     }
   };
 
-  // Unit handlers - keeping existing code...
+  // Unit handlers
   const handleAddUnit = async () => {
     if (!newUnit.building) {
       setError('Please select a building');
@@ -379,7 +376,7 @@ export default function PropertyManagement() {
     }
   };
 
-  // Building handlers - keeping existing code...
+  // Building handlers
   const handleAddBuilding = async () => {
     if (!newBuilding.name || !newBuilding.id) {
       setError('Building ID and name are required');
@@ -390,48 +387,35 @@ export default function PropertyManagement() {
     try {
       const formData = new FormData();
       
-      // Basic fields
       formData.append('id', newBuilding.id);
       formData.append('name', newBuilding.name);
       formData.append('display_name', newBuilding.display_name || newBuilding.name);
       formData.append('location', newBuilding.location);
       formData.append('short_location', newBuilding.short_location || newBuilding.location);
-      
-      // Description
       formData.append('description_paragraph_1', newBuilding.description_paragraph_1);
       formData.append('description_paragraph_2', newBuilding.description_paragraph_2);
       formData.append('description_paragraph_3', newBuilding.description_paragraph_3);
-      
-      // Stats
       formData.append('stats_total_floors', newBuilding.stats_total_floors);
       formData.append('stats_total_units', newBuilding.stats_total_units);
       formData.append('stats_occupancy_rate', newBuilding.stats_occupancy_rate);
       formData.append('stats_available_units', newBuilding.stats_available_units);
-      
-      // Hours
       formData.append('hours_weekdays', newBuilding.hours_weekdays);
       formData.append('hours_security', newBuilding.hours_security);
-      
-      // Contact
       formData.append('contact_phone', newBuilding.contact_phone);
       formData.append('contact_email', newBuilding.contact_email);
       formData.append('contact_address', newBuilding.contact_address);
       
-      // Image upload
       if (newBuilding.hero_image) {
         formData.append('hero_image', newBuilding.hero_image);
       }
       
-      // CTA fields
       formData.append('badge', newBuilding.badge);
       formData.append('cta_title', newBuilding.cta_title);
       formData.append('cta_description', newBuilding.cta_description);
 
       const response = await fetch('http://localhost:5000/api/buildings', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
 
@@ -482,9 +466,7 @@ export default function PropertyManagement() {
     try {
       const response = await fetch(`http://localhost:5000/api/buildings/${editingBuilding.id}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
 
@@ -561,6 +543,9 @@ export default function PropertyManagement() {
         .content-fade-in { animation: slideIn 0.5s ease-out; }
         .modal-overlay { animation: fadeIn 0.3s ease-out; backdrop-filter: blur(4px); }
         .modal-content { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .buildings-table { min-width: 1400px; }
+        .units-table { min-width: 1200px; }
       `}</style>
 
       <div className="flex justify-between items-center mb-6">
@@ -597,17 +582,17 @@ export default function PropertyManagement() {
             <h4 className="text-lg font-semibold text-gray-900">All Buildings ({buildings.length})</h4>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="buildings-table w-full">
               <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Location</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Description</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Stats</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Hours</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Contact</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">CTA</th>
-                  <th className="px-4 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '180px'}}>Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '150px'}}>Location</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '200px'}}>Description</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '180px'}}>Stats</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '180px'}}>Hours</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '200px'}}>Contact</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '180px'}}>CTA</th>
+                  <th className="px-4 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '150px'}}>Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -651,7 +636,7 @@ export default function PropertyManagement() {
                         <td className="px-4 py-3">
                           <div className="text-sm text-gray-700">{building.short_location || building.location || '-'}</div>
                         </td>
-                        <td className="px-4 py-3 max-w-xs">
+                        <td className="px-4 py-3">
                           <div className="text-xs text-gray-600 line-clamp-2">
                             {description[0] || '-'}
                           </div>
@@ -689,7 +674,7 @@ export default function PropertyManagement() {
                             ) : '-'}
                           </div>
                         </td>
-                        <td className="px-4 py-3 max-w-xs">
+                        <td className="px-4 py-3">
                           <div className="text-xs space-y-1">
                             {building.cta_title && <div className="font-medium text-gray-700 line-clamp-1">{building.cta_title}</div>}
                             {building.cta_description && <div className="text-gray-500 line-clamp-2">{building.cta_description}</div>}
@@ -722,8 +707,204 @@ export default function PropertyManagement() {
         </div>
       </div>
 
-      {/* Units Section - Keeping exact existing code */}
-      {/* ... rest of component stays the same ... */}
+      {/* Units Section */}
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold text-gray-900">Units</h3>
+          <button
+            onClick={() => setShowAddUnitModal(true)}
+            className="add-unit-button flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Unit
+          </button>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-lg font-semibold text-gray-900">Filters</h4>
+            <button
+              onClick={clearFilters}
+              className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
+            >
+              Clear All
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Unit ID, number, building..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Building</label>
+              <select
+                value={filterBuilding}
+                onChange={(e) => setFilterBuilding(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              >
+                <option value="all">All Buildings</option>
+                {buildings.map((building) => (
+                  <option key={building.id} value={building.id}>
+                    {building.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              >
+                <option value="all">All Statuses</option>
+                <option value="Available">Available</option>
+                <option value="Coming Soon">Coming Soon</option>
+                <option value="Taken">Taken</option>
+                <option value="Unavailable">Unavailable</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
+              <select
+                value={filterCondition}
+                onChange={(e) => setFilterCondition(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              >
+                <option value="all">All Conditions</option>
+                <option value="Bare">Bare</option>
+                <option value="Warm Shell">Warm Shell</option>
+                <option value="Fitted">Fitted</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Units Table */}
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 bg-gradient-to-r from-red-50 to-white border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h4 className="text-lg font-semibold text-gray-900">
+                All Units ({filteredUnits.length} {filteredUnits.length !== allUnits.length && `of ${allUnits.length}`})
+              </h4>
+              {(filterBuilding !== 'all' || filterStatus !== 'all' || filterCondition !== 'all' || searchQuery) && (
+                <span className="text-sm text-gray-500 flex items-center gap-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                  </svg>
+                  Filters active
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="units-table w-full">
+              <thead className="bg-gray-50 border-b-2 border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '150px'}}>Unit</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '150px'}}>Building</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '100px'}}>Floor</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '100px'}}>Size</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '120px'}}>Price/sqm</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '120px'}}>Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '130px'}}>Condition</th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider" style={{minWidth: '150px'}}>Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filteredUnits.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center justify-center text-gray-400">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3">
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <line x1="9" y1="9" x2="15" y2="9" />
+                          <line x1="9" y1="15" x2="15" y2="15" />
+                        </svg>
+                        <p className="text-lg font-medium">No units found</p>
+                        <p className="text-sm mt-1">
+                          {searchQuery || filterBuilding !== 'all' || filterStatus !== 'all' || filterCondition !== 'all' 
+                            ? 'Try adjusting your filters' 
+                            : 'Add your first unit to get started'
+                          }
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUnits.map((unit, index) => (
+                    <tr key={unit.id} className={`hover:bg-red-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-semibold text-gray-900">{unit.title}</div>
+                        <div className="text-xs text-gray-500">{unit.id}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{unit.building}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          Floor {unit.floor}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.size} sqm</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">₱{(unit.price || 0).toLocaleString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                          unit.status === 'Available' ? 'bg-green-100 text-green-800' : 
+                          unit.status === 'Coming Soon' ? 'bg-yellow-100 text-yellow-800' :
+                          unit.status === 'Taken' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {unit.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                          unit.condition === 'Fitted' ? 'bg-purple-100 text-purple-800' :
+                          unit.condition === 'Warm Shell' ? 'bg-orange-100 text-orange-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {unit.condition}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <div className="flex items-center justify-center gap-3">
+                          <button
+                            onClick={() => handleEditUnit(unit)}
+                            className="edit-button px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg font-semibold text-sm transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUnitClick(unit)}
+                            className="delete-button px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg font-semibold text-sm transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       {/* Edit Building Modal */}
       {showEditBuildingModal && editingBuilding && (
@@ -768,6 +949,145 @@ export default function PropertyManagement() {
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
                 >
                   Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Unit Modal */}
+      {showDeleteUnitModal && unitToDelete && (
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 text-center mb-2">Delete Unit</h3>
+              <p className="text-sm text-gray-600 text-center mb-6">
+                Are you sure you want to delete <span className="font-semibold">{unitToDelete.title}</span> in <span className="font-semibold">{unitToDelete.building}</span>? This action cannot be undone.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowDeleteUnitModal(false);
+                    setUnitToDelete(null);
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDeleteUnit}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Unit Modal */}
+      {showEditModal && editingUnit && (
+        <div className="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Edit Unit</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Unit Number/Title</label>
+                  <input
+                    type="text"
+                    value={editingUnit.title}
+                    onChange={(e) => setEditingUnit({ ...editingUnit, title: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Floor</label>
+                    <input
+                      type="number"
+                      value={editingUnit.floor}
+                      onChange={(e) => setEditingUnit({ ...editingUnit, floor: parseInt(e.target.value) || 0 })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Size (sqm)</label>
+                    <input
+                      type="number"
+                      value={editingUnit.size}
+                      onChange={(e) => setEditingUnit({ ...editingUnit, size: parseFloat(e.target.value) || 0 })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Price per sqm (₱)</label>
+                  <input
+                    type="number"
+                    value={editingUnit.price}
+                    onChange={(e) => setEditingUnit({ ...editingUnit, price: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select
+                      value={editingUnit.status}
+                      onChange={(e) => setEditingUnit({ ...editingUnit, status: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    >
+                      <option value="Available">Available</option>
+                      <option value="Coming Soon">Coming Soon</option>
+                      <option value="Taken">Taken</option>
+                      <option value="Unavailable">Unavailable</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Condition</label>
+                    <select
+                      value={editingUnit.condition}
+                      onChange={(e) => setEditingUnit({ ...editingUnit, condition: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    >
+                      <option value="Bare">Bare</option>
+                      <option value="Warm Shell">Warm Shell</option>
+                      <option value="Fitted">Fitted</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingUnit(null);
+                  }}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveUnit}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors"
+                >
+                  Save Changes
                 </button>
               </div>
             </div>
