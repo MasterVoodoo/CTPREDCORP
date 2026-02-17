@@ -156,11 +156,30 @@ export default function UserManagement() {
 
   return (
     <div>
+      <style>{`
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .add-admin-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .add-admin-button:hover { transform: translateY(-2px); background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4), 0 2px 4px -1px rgba(220, 38, 38, 0.3); }
+        
+        .edit-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .edit-button:hover { transform: translateY(-2px); background-color: #DBEAFE !important; color: #3B82F6 !important; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); }
+        
+        .delete-button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .delete-button:hover { transform: translateY(-2px); background-color: #FEE2E2 !important; color: #DC2626 !important; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); }
+        
+        .content-fade-in { animation: slideIn 0.5s ease-out; }
+        .modal-overlay { animation: fadeIn 0.2s ease-out; backdrop-filter: blur(2px); }
+        .modal-content { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+      `}</style>
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">User Management</h2>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          className="add-admin-button flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -259,14 +278,13 @@ export default function UserManagement() {
                         <div className="flex items-center justify-center gap-3">
                           <button
                             onClick={() => handleToggleActive(user.id, user.isActive)}
-                            className="text-red-600 hover:text-red-800 font-semibold text-sm transition-colors"
+                            className="edit-button px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg font-semibold text-sm transition-colors"
                           >
                             {user.isActive ? 'Deactivate' : 'Activate'}
                           </button>
-                          <span className="text-gray-300">|</span>
                           <button
                             onClick={() => handleDeleteUser(user.id)}
-                            className="text-gray-600 hover:text-red-600 font-semibold text-sm transition-colors"
+                            className="delete-button px-3 py-1.5 text-gray-700 border border-gray-300 rounded-lg font-semibold text-sm transition-colors"
                           >
                             Delete
                           </button>
