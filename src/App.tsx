@@ -392,25 +392,13 @@ export default function App() {
     window.location.hash = queryString ? `#all-available-spaces?${queryString}` : "#all-available-spaces";
   };
 
+  // UPDATED: Dynamic building navigation - works with ANY building ID from database
   const handleBuildingNavigation = (buildingId: string) => {
     setPreviousPage(currentPage);
-    switch (buildingId) {
-      case "ctp-red-corp":
-        setCurrentPage("ctp-red-corp");
-        window.location.hash = "#ctp-red-corp";
-        break;
-      case "ctp-alpha-tower":
-        setCurrentPage("ctp-alpha-tower");
-        window.location.hash = "#ctp-alpha-tower";
-        break;
-      case "ctp-bf-building":
-        setCurrentPage("ctp-bf-building");
-        window.location.hash = "#ctp-bf-building";
-        break;
-      default:
-        setCurrentPage("home");
-        window.location.hash = "";
-    }
+    
+    // Use the building ID directly as the page name and hash
+    setCurrentPage(buildingId);
+    window.location.hash = `#${buildingId}`;
   };
 
   if (currentPage === "ctp-red-corp") {
