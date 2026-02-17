@@ -119,9 +119,9 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
     try {
       const uploadFormData = new FormData();
       uploadFormData.append('image', file);
-      uploadFormData.append('type', 'buildings');
 
-      const response = await fetch('http://localhost:5000/api/uploads/single', {
+      // IMPORTANT: Use query parameter for type
+      const response = await fetch('http://localhost:5000/api/uploads/single?type=buildings', {
         method: 'POST',
         body: uploadFormData
       });
@@ -132,6 +132,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       }
 
       const data = await response.json();
+      console.log('Building image uploaded:', data);
       setHeroImage(data.path);
       setHeroImagePreview(`http://localhost:5000${data.path}`);
       setError(null);
@@ -229,244 +230,121 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
         )}
         
         <div className="p-6 space-y-6">
-          {/* Basic Information */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Basic Information</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Building ID</label>
-                <input
-                  type="text"
-                  value={formData.id}
-                  disabled
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
-                />
+                <input type="text" value={formData.id} disabled className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed" />
               </div>
-              
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Building Name *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Display Name</label>
-                <input
-                  type="text"
-                  value={formData.display_name}
-                  onChange={(e) => setFormData({ ...formData, display_name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.display_name} onChange={(e) => setFormData({ ...formData, display_name: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
-
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Badge</label>
-                <input
-                  type="text"
-                  value={formData.badge}
-                  onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="Premium Location"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.badge} onChange={(e) => setFormData({ ...formData, badge: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="Premium Location" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Location */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Location</h4>
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Full Location</label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
-              
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Short Location</label>
-                <input
-                  type="text"
-                  value={formData.short_location}
-                  onChange={(e) => setFormData({ ...formData, short_location: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.short_location} onChange={(e) => setFormData({ ...formData, short_location: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Description */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Description</h4>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Paragraph 1</label>
-                <textarea
-                  value={formData.description_paragraph_1}
-                  onChange={(e) => setFormData({ ...formData, description_paragraph_1: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <textarea value={formData.description_paragraph_1} onChange={(e) => setFormData({ ...formData, description_paragraph_1: e.target.value })} rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Paragraph 2</label>
-                <textarea
-                  value={formData.description_paragraph_2}
-                  onChange={(e) => setFormData({ ...formData, description_paragraph_2: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <textarea value={formData.description_paragraph_2} onChange={(e) => setFormData({ ...formData, description_paragraph_2: e.target.value })} rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Paragraph 3</label>
-                <textarea
-                  value={formData.description_paragraph_3}
-                  onChange={(e) => setFormData({ ...formData, description_paragraph_3: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <textarea value={formData.description_paragraph_3} onChange={(e) => setFormData({ ...formData, description_paragraph_3: e.target.value })} rows={3} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Stats */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Building Statistics</h4>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Total Floors</label>
-                <input
-                  type="text"
-                  value={formData.stats_total_floors}
-                  onChange={(e) => setFormData({ ...formData, stats_total_floors: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.stats_total_floors} onChange={(e) => setFormData({ ...formData, stats_total_floors: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Total Units</label>
-                <input
-                  type="text"
-                  value={formData.stats_total_units}
-                  onChange={(e) => setFormData({ ...formData, stats_total_units: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.stats_total_units} onChange={(e) => setFormData({ ...formData, stats_total_units: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Occupancy Rate (%)</label>
-                <input
-                  type="text"
-                  value={formData.stats_occupancy_rate}
-                  onChange={(e) => setFormData({ ...formData, stats_occupancy_rate: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.stats_occupancy_rate} onChange={(e) => setFormData({ ...formData, stats_occupancy_rate: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Available Units</label>
-                <input
-                  type="text"
-                  value={formData.stats_available_units}
-                  onChange={(e) => setFormData({ ...formData, stats_available_units: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.stats_available_units} onChange={(e) => setFormData({ ...formData, stats_available_units: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Building Hours */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Building Hours</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Weekday Hours</label>
-                <input
-                  type="text"
-                  value={formData.hours_weekdays}
-                  onChange={(e) => setFormData({ ...formData, hours_weekdays: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.hours_weekdays} onChange={(e) => setFormData({ ...formData, hours_weekdays: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Security Hours</label>
-                <input
-                  type="text"
-                  value={formData.hours_security}
-                  onChange={(e) => setFormData({ ...formData, hours_security: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.hours_security} onChange={(e) => setFormData({ ...formData, hours_security: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Contact Information */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Contact Information</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-                <input
-                  type="text"
-                  value={formData.contact_phone}
-                  onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.contact_phone} onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  value={formData.contact_email}
-                  onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="email" value={formData.contact_email} onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
-                <input
-                  type="text"
-                  value={formData.contact_address}
-                  onChange={(e) => setFormData({ ...formData, contact_address: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.contact_address} onChange={(e) => setFormData({ ...formData, contact_address: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
 
-          {/* Hero Image */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Hero Image</h4>
             <div className="space-y-4">
               {building.hero_image && !heroImagePreview && (
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Current Image:</p>
-                  <img 
-                    src={building.hero_image.startsWith('http') ? building.hero_image : `http://localhost:5000${building.hero_image}`}
-                    alt="Current hero" 
-                    className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300"
-                  />
+                  <img src={building.hero_image.startsWith('http') ? building.hero_image : `http://localhost:5000${building.hero_image}`} alt="Current hero" className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300" />
                 </div>
               )}
               
@@ -474,91 +352,48 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm text-gray-600">New Image:</p>
-                    <button
-                      onClick={handleRemoveNewImage}
-                      className="text-sm text-red-600 hover:text-red-700"
-                      disabled={loading}
-                    >
-                      Remove new image
-                    </button>
+                    <button onClick={handleRemoveNewImage} className="text-sm text-red-600 hover:text-red-700" disabled={loading}>Remove new image</button>
                   </div>
-                  <img 
-                    src={heroImagePreview} 
-                    alt="New hero preview" 
-                    className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300"
-                  />
+                  <img src={heroImagePreview} alt="New hero preview" className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300" />
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {heroImagePreview ? 'Upload Different Image' : 'Upload New Image (Optional)'}
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">{heroImagePreview ? 'Upload Different Image' : 'Upload New Image (Optional)'}</label>
                 <label className="cursor-pointer">
                   <div className="flex items-center justify-center px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition-colors">
                     <div className="text-center">
                       <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <p className="mt-1 text-sm text-gray-600">
-                        {uploadingImage ? 'Uploading...' : 'Click to upload image'}
-                      </p>
+                      <p className="mt-1 text-sm text-gray-600">{uploadingImage ? 'Uploading...' : 'Click to upload image'}</p>
                       <p className="text-xs text-gray-500">PNG, JPG, GIF, WEBP up to 5MB</p>
                     </div>
                   </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    disabled={loading || uploadingImage}
-                  />
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={loading || uploadingImage} />
                 </label>
               </div>
             </div>
           </div>
 
-          {/* Call-to-Action */}
           <div>
             <h4 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">Call-to-Action</h4>
             <div className="grid grid-cols-1 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">CTA Title</label>
-                <input
-                  type="text"
-                  value={formData.cta_title}
-                  onChange={(e) => setFormData({ ...formData, cta_title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <input type="text" value={formData.cta_title} onChange={(e) => setFormData({ ...formData, cta_title: e.target.value })} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">CTA Description</label>
-                <textarea
-                  value={formData.cta_description}
-                  onChange={(e) => setFormData({ ...formData, cta_description: e.target.value })}
-                  rows={2}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  disabled={loading}
-                />
+                <textarea value={formData.cta_description} onChange={(e) => setFormData({ ...formData, cta_description: e.target.value })} rows={2} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent" disabled={loading} />
               </div>
             </div>
           </div>
         </div>
 
         <div className="bg-gray-50 px-6 py-4 flex gap-3 rounded-b-xl sticky bottom-0">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors"
-            disabled={loading || uploadingImage}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading || uploadingImage}
-          >
+          <button onClick={onClose} className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-medium transition-colors" disabled={loading || uploadingImage}>Cancel</button>
+          <button onClick={handleSubmit} className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || uploadingImage}>
             {loading ? 'Saving...' : uploadingImage ? 'Uploading...' : 'Save Changes'}
           </button>
         </div>

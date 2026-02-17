@@ -53,9 +53,9 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
 
         const formData = new FormData();
         formData.append('image', file);
-        formData.append('type', 'units');
 
-        const response = await fetch('http://localhost:5000/api/uploads/single', {
+        // IMPORTANT: Use query parameter for type
+        const response = await fetch('http://localhost:5000/api/uploads/single?type=units', {
           method: 'POST',
           body: formData
         });
@@ -66,6 +66,7 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
         }
 
         const data = await response.json();
+        console.log('Unit image uploaded:', data);
         uploadedPaths.push(data.path);
       }
 
