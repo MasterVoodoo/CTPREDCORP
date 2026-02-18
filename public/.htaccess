@@ -3,17 +3,12 @@
   RewriteEngine On
   RewriteBase /
 
-  # Redirect all requests to index.html except for existing files and directories
+  # Don't rewrite files or directories that exist
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !^/admin
-  RewriteRule ^.*$ /index.html [L]
-
-  # Handle admin routes
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} ^/admin
-  RewriteRule ^.*$ /admin/index.html [L]
+  
+  # Route all requests to index.html (including /admin routes)
+  RewriteRule . /index.html [L]
 </IfModule>
 
 # Compression
@@ -32,4 +27,16 @@
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType text/javascript "access plus 1 month"
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  # Prevent clickjacking
+  Header set X-Frame-Options "SAMEORIGIN"
+  
+  # XSS Protection
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Prevent MIME type sniffing
+  Header set X-Content-Type-Options "nosniff"
 </IfModule>
