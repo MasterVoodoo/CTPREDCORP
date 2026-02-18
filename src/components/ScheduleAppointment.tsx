@@ -30,6 +30,7 @@ import {
   getCtpAlphaAvailableFloors,
   getCtpBFAvailableFloors 
 } from "../data/ctpData";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 export default function ScheduleAppointment() {
   const [formData, setFormData] = useState({
@@ -98,7 +99,7 @@ Phone: ${phoneNumber}
 Preferred Date: ${formattedDate}
 Preferred Time: ${preferredTime}
 Property: ${property || 'Not specified'}
-Floor: ${floor || 'Not specified'}
+Floor: ${floor !== '' && floor !== undefined ? getFloorDisplayName(Number(floor)) : 'Not specified'}
 Additional Notes: ${additionalNotes || 'N/A'}
     `.trim();
 
@@ -406,7 +407,7 @@ Additional Notes: ${additionalNotes || 'N/A'}
                           key={floor}
                           value={floor.toString()}
                         >
-                          {floor === 0 ? "Ground Floor" : `Floor ${floor}`}
+                          {getFloorDisplayName(floor)}
                         </SelectItem>
                       ))}
                     </SelectContent>

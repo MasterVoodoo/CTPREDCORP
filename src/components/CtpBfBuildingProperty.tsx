@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
 import { motion, AnimatePresence } from "framer-motion";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface CtpBfBuildingPropertyProps {
   onBack: () => void;
@@ -226,7 +227,7 @@ export default function CtpBfBuildingProperty({ onBack, onViewDetails }: CtpBfBu
                         <CardContent className="p-6">
                           <div className="flex justify-between items-start mb-3">
                             <h3 className="text-lg font-bold text-gray-900">{unit.id}</h3>
-                            <span className="text-sm text-gray-500">{unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}</span>
+                            <span className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</span>
                           </div>
                           
                           <div className="mb-4 text-sm text-gray-600">

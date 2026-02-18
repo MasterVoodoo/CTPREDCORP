@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
 import { motion, AnimatePresence } from "framer-motion";
+import { getFloorDisplayName as getFloorDisplayNameOrdinal } from "../utils/floorDisplay";
 
 interface CtpRedCorpPropertyProps {
   onBack: () => void;
@@ -32,12 +33,12 @@ export default function CtpRedCorpProperty({ onBack, onViewDetails }: CtpRedCorp
   const totalOccupiedUnits = totalUnits - totalAvailableUnits;
   const occupancyRate = totalUnits > 0 ? Math.round((totalOccupiedUnits / totalUnits) * 100) : 0;
   
-  // Helper function to get floor display name
+  // Helper function to get floor display name (with building-specific labels)
   const getFloorDisplayName = (floor: number): string => {
     if (floor === 0) return "Ground Floor";
     if (floor === 13) return "Lower Penthouse";
     if (floor === 14) return "Upper Penthouse";
-    return `Floor ${floor}`;
+    return getFloorDisplayNameOrdinal(floor);
   };
 
   const tabs = [

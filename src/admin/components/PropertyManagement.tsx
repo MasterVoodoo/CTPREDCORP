@@ -3,6 +3,7 @@ import BuildingEditModal from './BuildingEditModal';
 import BuildingAddModal from './BuildingAddModal';
 import UnitAddModal from './UnitAddModal';
 import UnitEditModal from './UnitEditModal';
+import { getFloorDisplayName } from '../../utils/floorDisplay';
 
 interface Building {
   id: string;
@@ -38,7 +39,14 @@ interface Unit {
   images?: string[];
 }
 
-export default function PropertyManagement() {
+interface PropertyManagementProps {
+  /** Open Add Building modal when component mounts (e.g. from sidebar "Add Building") */
+  openAddBuildingModal?: boolean;
+  /** Open Add Unit modal when component mounts (e.g. from sidebar "Add Units") */
+  openAddUnitModal?: boolean;
+}
+
+export default function PropertyManagement({ openAddBuildingModal, openAddUnitModal }: PropertyManagementProps = {}) {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [allUnits, setAllUnits] = useState<Unit[]>([]);
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
@@ -69,6 +77,14 @@ export default function PropertyManagement() {
     loadBuildings();
     loadAllUnits();
   }, []);
+
+  // Open add modals when navigated from sidebar
+  useEffect(() => {
+    if (openAddBuildingModal) setShowAddBuildingModal(true);
+  }, [openAddBuildingModal]);
+  useEffect(() => {
+    if (openAddUnitModal) setShowAddUnitModal(true);
+  }, [openAddUnitModal]);
 
   useEffect(() => {
     applyFilters();
@@ -692,7 +708,7 @@ export default function PropertyManagement() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Floor {unit.floor}
+                          {getFloorDisplayName(unit.floor)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.size} sqm</td>

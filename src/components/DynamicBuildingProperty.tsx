@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { motion, AnimatePresence } from "framer-motion";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface Building {
   id: string;
@@ -173,12 +174,6 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
       }
     }
     return [];
-  };
-
-  // Helper function to get floor display name
-  const getFloorDisplayName = (floor: number): string => {
-    if (floor === 0) return "Ground Floor";
-    return `Floor ${floor}`;
   };
 
   const getStatusColor = (status: string) => {

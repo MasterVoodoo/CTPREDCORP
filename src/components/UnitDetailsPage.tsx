@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitById } from "../data/ctpData";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface Unit {
   id: string;
@@ -241,7 +242,7 @@ export default function UnitDetailsPage({
                 </p>
               ) : (
                 <p className="text-gray-600 mb-6">
-                  Prime office space located at {unit.building}, {unit.location}. This {unit.size} sqm unit on Floor {unit.floor} offers modern amenities and a professional environment for your business.
+                  Prime office space located at {unit.building}, {unit.location}. This {unit.size} sqm unit on {getFloorDisplayName(unit.floor)} offers modern amenities and a professional environment for your business.
                 </p>
               )}
 
@@ -280,7 +281,7 @@ export default function UnitDetailsPage({
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <Building className="h-6 w-6 text-primary mx-auto mb-2" />
                   <div className="text-2xl font-bold text-gray-900">
-                    {unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}
+                    {getFloorDisplayName(unit.floor)}
                   </div>
                   <div className="text-sm text-gray-600">
                     Location
