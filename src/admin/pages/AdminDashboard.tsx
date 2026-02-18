@@ -43,7 +43,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const fetchBuildingCount = async () => {
     setLoadingStats(true);
     try {
-      const response = await fetch('http://localhost:5000/api/buildings');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/buildings`);
       if (response.ok) {
         const buildings = await response.json();
         setBuildingCount(buildings.length);
@@ -65,7 +65,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/verify', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/verify`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -86,7 +86,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const handleLogoutConfirm = async () => {
     const token = localStorage.getItem('adminToken');
     try {
-      await fetch('http://localhost:5000/api/admin/logout', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/admin/logout`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
