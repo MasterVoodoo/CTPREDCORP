@@ -21,7 +21,7 @@ export default function AdminApp() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/verify', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/verify`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
