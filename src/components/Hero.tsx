@@ -10,7 +10,7 @@ import {
 } from "./ui/select";
 import { Card } from "./ui/card";
 import { getBuildingsList, companyOverview } from "../data/ctpData";
-import PanningVideo from "../assets/ctp_pan.mov";
+import PanningVideo from "../assets/ctp_pan.gif";
 // dsadasdasdasd
 
 interface HeroProps {
@@ -57,13 +57,13 @@ export default function Hero({ onSearch }: HeroProps) {
         `}</style>
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <video
+            <img
               className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 scale-110 object-cover"
               src={PanningVideo}
-              autoPlay
-              muted
-              loop
-              playsInline
+              // autoPlay
+              // muted
+              // loop
+              // playsInline
             />
             <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
           </div>
