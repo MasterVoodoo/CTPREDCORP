@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
 import AdminSidebar, { type AdminTabId } from '../components/AdminSidebar';
-import { Building2, Building, Menu, PanelLeftClose } from 'lucide-react';
+import { Building2, Menu } from 'lucide-react';
 
 interface AdminUser {
   id: number;
@@ -194,10 +194,10 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               <button
                 type="button"
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden rounded-lg hover:bg-gray-100 text-gray-600"
+                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600"
                 aria-label="Open menu"
               >
-                <PanelLeftClose className="h-5 w-5" />
+                <Menu className="h-6 w-6" />
               </button>
               <div className="hidden lg:block flex-1" />
               <div className="flex items-center gap-4">
