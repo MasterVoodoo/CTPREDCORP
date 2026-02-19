@@ -61,7 +61,7 @@ export default function UnitDetailsPage({
       }
 
       // If not found in hardcoded data, fetch from database
-      const response = await fetch('http://localhost:5000/api/units');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/units`);
       if (!response.ok) {
         throw new Error('Failed to fetch units');
       }
@@ -82,10 +82,14 @@ export default function UnitDetailsPage({
     }
   };
 
+  // ✅ FIXED - Production ready
   const getImageUrl = (imagePath?: string) => {
     if (!imagePath) return '/images/units/default.jpg';
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5000${imagePath}`;
+    
+    // ✅ Use environment variable - works in dev & production
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
+    return `${API_BASE_URL}${imagePath}`;
   };
 
   // Function to get back button text based on unit ID

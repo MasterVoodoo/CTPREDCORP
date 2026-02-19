@@ -50,11 +50,14 @@ export default function FeaturedListings({
     fetchBuildings();
   }, []);
 
+  // ✅ FIXED: Production-ready API URL
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
+
   const fetchBuildings = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/buildings');
+      const response = await fetch(`${API_BASE_URL}/api/buildings`);
       if (!response.ok) {
-        throw new Error('Failed to fetch buildings');
+        throw new Error(`HTTP ${response.status}: Failed to fetch buildings`);
       }
       const data = await response.json();
       setBuildings(data);
@@ -67,10 +70,11 @@ export default function FeaturedListings({
     }
   };
 
+  // ✅ FIXED: Production image URLs
   const getImageUrl = (heroImage?: string) => {
     if (!heroImage) return '/images/buildings/default.jpg';
     if (heroImage.startsWith('http')) return heroImage;
-    return `http://localhost:5000${heroImage}`;
+    return `${API_BASE_URL}${heroImage}`;
   };
 
   const parseStats = (building: Building) => {

@@ -51,6 +51,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
 
   useEffect(() => {
     if (building.description) {
@@ -121,7 +122,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       uploadFormData.append('image', file);
 
       // IMPORTANT: Use query parameter for type
-      const response = await fetch('http://localhost:5000/api/uploads/single?type=buildings', {
+      const response = await fetch(`${API_BASE_URL}/api/uploads/single?type=buildings`, {
         method: 'POST',
         body: uploadFormData
       });
@@ -134,7 +135,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
       const data = await response.json();
       console.log('Building image uploaded:', data);
       setHeroImage(data.path);
-      setHeroImagePreview(`http://localhost:5000${data.path}`);
+      setHeroImagePreview(`${API_BASE_URL}${data.path}`);
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to upload image');
@@ -147,7 +148,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
   const handleRemoveNewImage = async () => {
     if (heroImage && heroImage !== building.hero_image) {
       try {
-        await fetch('http://localhost:5000/api/uploads', {
+        await fetch(`${API_BASE_URL}/api/uploads`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ path: heroImage })
@@ -344,7 +345,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
               {building.hero_image && !heroImagePreview && (
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Current Image:</p>
-                  <img src={building.hero_image.startsWith('http') ? building.hero_image : `http://localhost:5000${building.hero_image}`} alt="Current hero" className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300" />
+                  <img src={building.hero_image.startsWith('http') ? building.hero_image : `${API_BASE_URL}${building.hero_image}`} alt="Current hero" className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300" />
                 </div>
               )}
               
