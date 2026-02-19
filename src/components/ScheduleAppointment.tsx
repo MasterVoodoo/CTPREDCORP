@@ -440,7 +440,8 @@ Additional Notes: ${additionalNotes || 'N/A'}
                     type="submit"
                     size="lg"
                     className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
-                    disabled={isSubmitting}
+                    // disabled={isSubmitting}
+                    disabled
                   >
                     {isSubmitting ? "Sending..." : "Schedule My Appointment"}
                   </Button>
