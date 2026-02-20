@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
+import AppointmentManagement from '../components/AppointmentManagement';
 import AdminSidebar, { type AdminTabId } from '../components/AdminSidebar';
 import { Building2, Menu } from 'lucide-react';
 
@@ -323,14 +324,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
               </div>
             </div>
           )}
-          {activeTab === 'appointments' && (
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Appointment Management</h2>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <p className="text-gray-600">Appointment management coming soon...</p>
-              </div>
-            </div>
-          )}
+          {activeTab === 'appointments' && <AppointmentManagement />}
         </div>
         </main>
       </div>
