@@ -424,40 +424,40 @@ const AppointmentManagement = () => {
                       updateAppointmentStatus(selectedAppointment.id, 'confirmed');
                       setShowDetailModal(false);
                     }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
                   >
-                    <CheckCircle className="h-5 w-5" />
-                    Confirm
+                    <CheckCircle className="h-6 w-6" />
+                    <span>Confirm</span>
                   </button>
                   <button
                     onClick={() => {
                       updateAppointmentStatus(selectedAppointment.id, 'completed');
                       setShowDetailModal(false);
                     }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                   >
-                    <CheckCircle className="h-5 w-5" />
-                    Complete
+                    <CheckCircle className="h-6 w-6" />
+                    <span>Complete</span>
                   </button>
                   <button
                     onClick={() => {
                       updateAppointmentStatus(selectedAppointment.id, 'cancelled');
                       setShowDetailModal(false);
                     }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
                   >
-                    <XCircle className="h-5 w-5" />
-                    Cancel
+                    <XCircle className="h-6 w-6" />
+                    <span>Cancel</span>
                   </button>
                   <button
                     onClick={() => {
                       updateAppointmentStatus(selectedAppointment.id, 'pending');
                       setShowDetailModal(false);
                     }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg transition-colors"
                   >
-                    <AlertCircle className="h-5 w-5" />
-                    Set Pending
+                    <AlertCircle className="h-6 w-6" />
+                    <span>Set Pending</span>
                   </button>
                 </div>
               </div>
