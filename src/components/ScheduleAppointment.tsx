@@ -1,11 +1,11 @@
-import { useState, React } from "react";
+import { useState } from "react";
 import {
   Calendar,
   Clock,
   Building2,
   Phone,
   Mail,
-  User,
+  CheckCircle2,
 } from "lucide-react";
 import {
   Card,
@@ -32,6 +32,9 @@ import {
 } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 
+// Get API URL based on environment
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function ScheduleAppointment() {
   const [formData, setFormData] = useState({
     companyName: "",
@@ -45,6 +48,7 @@ export default function ScheduleAppointment() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessPopover, setShowSuccessPopover] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => {
@@ -76,62 +80,6 @@ export default function ScheduleAppointment() {
     }
   };
 
-  // Method 1: Client-side email using mailto
-  const sendEmailClientSide = () => {
-    const {
-      companyName,
-      phoneNumber,
-      email,
-      preferredDate,
-      preferredTime,
-      property,
-      floor,
-      additionalNotes,
-    } = formData;
-
-    const formattedDate = new Date(preferredDate).toLocaleDateString('en-GB');
-    
-    const subject = `Appointment Request from ${companyName}`;
-    const body = `
-Company Name: ${companyName}
-Email: ${email}
-Phone: ${phoneNumber}
-Preferred Date: ${formattedDate}
-Preferred Time: ${preferredTime}
-Property: ${property || 'Not specified'}
-Floor: ${floor !== '' && floor !== undefined ? getFloorDisplayName(Number(floor)) : 'Not specified'}
-Additional Notes: ${additionalNotes || 'N/A'}
-    `.trim();
-
-    // Create mailto link
-    const mailtoLink = `mailto:aseantower@ctpred.com.ph?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-  };
-
-  // Method 2: Server-side email submission (requires backend API)
-  const sendEmailServerSide = async () => {
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send email');
-      }
-
-      return true;
-    } catch (error) {
-      console.error('Error sending email:', error);
-      return false;
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -152,20 +100,33 @@ Additional Notes: ${additionalNotes || 'N/A'}
     }
 
     try {
-      // Choose one method below:
+      // Send appointment via backend API
+      const response = await fetch(`${API_URL}/api/email/send-appointment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          floor: getFloorDisplayName(Number(formData.floor))
+        }),
+      });
 
-      // Method 1: Client-side email (opens user's email client)
-      sendEmailClientSide();
+      const data = await response.json();
 
-      // Method 2: Server-side email (requires backend implementation)
-      // const success = await sendEmailServerSide();
-      // if (!success) {
-      //   toast.error("Failed to send appointment request. Please try again.");
-      //   return;
-      // }
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Failed to send appointment request');
+      }
 
+      // Show success popover
+      setShowSuccessPopover(true);
+      
+      // Also show toast notification
       toast.success(
-        "Appointment request submitted successfully! We'll contact you soon.",
+        "Appointment request sent successfully! Check your email for confirmation.",
+        {
+          duration: 5000,
+        }
       );
 
       // Reset form
@@ -179,9 +140,19 @@ Additional Notes: ${additionalNotes || 'N/A'}
         floor: "",
         additionalNotes: "",
       });
+
+      // Hide success popover after 5 seconds
+      setTimeout(() => {
+        setShowSuccessPopover(false);
+      }, 5000);
+
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("An error occurred. Please try again.");
+      toast.error(
+        error instanceof Error 
+          ? error.message 
+          : "Failed to send appointment request. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -195,6 +166,32 @@ Additional Notes: ${additionalNotes || 'N/A'}
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Success Popover */}
+      {showSuccessPopover && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-5">
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-lg max-w-md">
+            <div className="flex items-start">
+              <CheckCircle2 className="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-green-800 font-semibold mb-1">
+                  Appointment Request Sent!
+                </h3>
+                <p className="text-green-700 text-sm">
+                  We've sent confirmation emails to you and our team. 
+                  We'll contact you within 24 hours to confirm your appointment.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSuccessPopover(false)}
+                className="ml-4 text-green-500 hover:text-green-700"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-r from-primary to-accent">
         <div className="container mx-auto px-4">
@@ -440,8 +437,7 @@ Additional Notes: ${additionalNotes || 'N/A'}
                     type="submit"
                     size="lg"
                     className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
-                    // disabled={isSubmitting}
-                    disabled
+                    disabled={isSubmitting}
                   >
                     {isSubmitting ? "Sending..." : "Schedule My Appointment"}
                   </Button>
