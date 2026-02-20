@@ -61,43 +61,7 @@ app.use('/api/financial', financialRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/admin/appointments', appointmentsRouter);
 app.use('/api/uploads', uploadsRouter);
-// app.use('/api/email', emailRouter);
-
-// ---------------------- DIRECT ROUTE WORKAROUND - bypasses router issue ---------------------- //
-app.post('/api/email/send-appointment', async (req, res) => {
-  const { promisePool } = require('./config/database');
-  
-  try {
-    const {
-      companyName, phoneNumber, email, preferredDate, 
-      preferredTime, property, floor, additionalNotes
-    } = req.body;
-
-    console.log('📧 Direct route - Received appointment request');
-
-    if (!companyName || !phoneNumber || !email || !preferredDate || !preferredTime || !property || !floor) {
-      return res.status(400).json({ success: false, message: 'Missing required fields' });
-    }
-
-    // Save to database
-    const insertQuery = `
-      INSERT INTO appointments 
-      (company_name, phone_number, email, preferred_date, preferred_time, property, floor, additional_notes, status, created_at) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())
-    `;
-    
-    await promisePool.query(insertQuery, [
-      companyName, phoneNumber, email, preferredDate, 
-      preferredTime, property, floor, additionalNotes || ''
-    ]);
-
-    console.log('✅ Saved to database successfully');
-    res.json({ success: true, message: 'Appointment request sent successfully' });
-  } catch (error) {
-    console.error('❌ Error:', error.message);
-    res.status(500).json({ success: false, message: 'Failed to process request: ' + error.message });
-  }
-});
+app.use('/api/email', emailRouter);
 
 // -------------------- Health Check -------------------- //
 app.get('/api/health', (req, res) => {

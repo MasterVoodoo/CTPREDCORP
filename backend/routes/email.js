@@ -16,7 +16,15 @@ router.post('/send-appointment', async (req, res) => {
       additionalNotes
     } = req.body;
 
-    console.log('📧 Received appointment request:', { companyName, email, property, floor });
+    console.log('📧 Received appointment request:', { 
+      companyName, 
+      email, 
+      property, 
+      floor,
+      preferredDate,
+      preferredTime,
+      additionalNotes
+    });
 
     // Validate required fields
     if (!companyName || !phoneNumber || !email || !preferredDate || !preferredTime || !property || !floor) {
@@ -60,10 +68,12 @@ router.post('/send-appointment', async (req, res) => {
         await transporter.verify();
         console.log('✅ SMTP connection verified');
 
-        const formattedDate = new Date(preferredDate).toLocaleDateString('en-US', {
+        // Format date without timezone conversion issues
+        const formattedDate = new Date(preferredDate + 'T00:00:00').toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
-          day: 'numeric'
+          day: 'numeric',
+          timeZone: 'UTC'
         });
 
         // Format time to 12-hour format with AM/PM
@@ -122,7 +132,7 @@ router.post('/send-appointment', async (req, res) => {
           </div>
         `;
 
-        // Email to sender (confirmation)
+        // Email to sender (confirmation) - NOW INCLUDES ADDITIONAL NOTES
         const senderEmailContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #c41e3a;">Appointment Request Confirmation</h2>
@@ -145,6 +155,12 @@ router.post('/send-appointment', async (req, res) => {
                 <td style="padding: 10px; font-weight: bold;">Floor:</td>
                 <td style="padding: 10px;">${floor}</td>
               </tr>
+              ${additionalNotes ? `
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold; vertical-align: top;">Additional Notes:</td>
+                <td style="padding: 10px;">${additionalNotes}</td>
+              </tr>
+              ` : ''}
             </table>
             <p>Our team will contact you within 24 hours to confirm your appointment.</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
