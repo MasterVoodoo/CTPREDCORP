@@ -252,7 +252,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           {activeTab === 'overview' && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
                 {/* Buildings Card - Red - DYNAMIC */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
