@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building } from 'lucide-react';
+import { Building, Eye, EyeOff } from 'lucide-react';
 
 interface AdminLoginProps {
   onLoginSuccess: () => void;
@@ -12,6 +12,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,14 +125,22 @@ const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   disabled={loading}
                   placeholder="Enter your password"
-                  className="block w-full pl-10 px-8 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
+                  className="block w-full pl-10 pr-12 px-8 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 

@@ -6,6 +6,7 @@ import { Badge } from "./ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { motion, AnimatePresence } from "framer-motion";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface Building {
   id: string;
@@ -49,6 +50,9 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("units");
 
+    // ✅ FIXED: Production API URL
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
+
   // Default building features (copied from other view details pages)
   const defaultBuildingFeatures = [
     {
@@ -81,24 +85,24 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
     fetchBuildingData();
   }, [buildingId]);
 
+  // ✅ FIXED: All API calls use VITE_API_URL
   const fetchBuildingData = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Fetch building details
-      const buildingResponse = await fetch(`http://localhost:5000/api/buildings/${buildingId}`);
+      // ✅ FIXED: Line ~85
+      const buildingResponse = await fetch(`${API_BASE_URL}/api/buildings/${buildingId}`);
       if (!buildingResponse.ok) {
         throw new Error('Building not found');
       }
       const buildingData = await buildingResponse.json();
       setBuilding(buildingData);
 
-      // Fetch units for this building
-      const unitsResponse = await fetch('http://localhost:5000/api/units');
+      // ✅ FIXED: Line ~92
+      const unitsResponse = await fetch(`${API_BASE_URL}/api/units`);
       if (unitsResponse.ok) {
         const allUnits = await unitsResponse.json();
-        // Filter units that belong to this building
         const buildingUnits = allUnits.filter((unit: Unit) => unit.building === buildingId);
         setUnits(buildingUnits);
       }
@@ -110,10 +114,11 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
     }
   };
 
+  // ✅ FIXED: Line ~115 - Images work in production
   const getImageUrl = (imagePath?: string) => {
     if (!imagePath) return '/images/buildings/default.jpg';
     if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5000${imagePath}`;
+    return `${API_BASE_URL}${imagePath}`;
   };
 
   const parseStats = (stats: any) => {
@@ -173,12 +178,6 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
       }
     }
     return [];
-  };
-
-  // Helper function to get floor display name
-  const getFloorDisplayName = (floor: number): string => {
-    if (floor === 0) return "Ground Floor";
-    return `Floor ${floor}`;
   };
 
   const getStatusColor = (status: string) => {

@@ -29,6 +29,7 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
   const [uploadingFiles, setUploadingFiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -55,7 +56,7 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
         formData.append('image', file);
 
         // IMPORTANT: Use query parameter for type
-        const response = await fetch('http://localhost:5000/api/uploads/single?type=units', {
+        const response = await fetch(`${API_BASE_URL}/api/uploads/single?type=units`, {
           method: 'POST',
           body: formData
         });
@@ -82,7 +83,7 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
 
   const handleRemoveImage = async (index: number, imagePath: string) => {
     try {
-      await fetch('http://localhost:5000/api/uploads', {
+      await fetch(`${API_BASE_URL}/api/uploads`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path: imagePath })
@@ -309,7 +310,7 @@ export default function UnitAddModal({ buildings, onClose, onSave }: Props) {
                     {images.map((img, index) => (
                       <div key={index} className="relative group">
                         <img
-                          src={`http://localhost:5000${img}`}
+                          src={`${API_BASE_URL}${img}`}
                           alt={`Unit image ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
                           onError={(e) => {

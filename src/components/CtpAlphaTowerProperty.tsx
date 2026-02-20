@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByBuilding, getBuildingById } from "../data/ctpData";
 import { motion, AnimatePresence } from "framer-motion";
+import { getFloorDisplayName as getFloorDisplayNameOrdinal } from "../utils/floorDisplay";
 
 interface CtpAlphaTowerPropertyProps {
   onBack: () => void;
@@ -32,11 +33,11 @@ export default function CtpAlphaTowerProperty({ onBack, onViewDetails }: CtpAlph
   const totalOccupiedUnits = totalUnits - totalAvailableUnits;
   const occupancyRate = totalUnits > 0 ? Math.round((totalOccupiedUnits / totalUnits) * 100) : 0;
 
-  // Helper function to get floor display name
+  // Helper function to get floor display name (with building-specific labels)
   const getFloorDisplayName = (floor: number): string => {
     if (floor === 0) return "Ground Floor";
     if (floor === 12) return "Penthouse";
-    return `Floor ${floor}`;
+    return getFloorDisplayNameOrdinal(floor);
   };
 
   // Function to get status color styling

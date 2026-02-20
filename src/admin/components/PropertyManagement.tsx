@@ -3,6 +3,7 @@ import BuildingEditModal from './BuildingEditModal';
 import BuildingAddModal from './BuildingAddModal';
 import UnitAddModal from './UnitAddModal';
 import UnitEditModal from './UnitEditModal';
+import { getFloorDisplayName } from '../../utils/floorDisplay';
 
 interface Building {
   id: string;
@@ -38,7 +39,14 @@ interface Unit {
   images?: string[];
 }
 
-export default function PropertyManagement() {
+interface PropertyManagementProps {
+  /** Open Add Building modal when component mounts (e.g. from sidebar "Add Building") */
+  openAddBuildingModal?: boolean;
+  /** Open Add Unit modal when component mounts (e.g. from sidebar "Add Units") */
+  openAddUnitModal?: boolean;
+}
+
+export default function PropertyManagement({ openAddBuildingModal, openAddUnitModal }: PropertyManagementProps = {}) {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [allUnits, setAllUnits] = useState<Unit[]>([]);
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
@@ -64,11 +72,20 @@ export default function PropertyManagement() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterCondition, setFilterCondition] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
 
   useEffect(() => {
     loadBuildings();
     loadAllUnits();
   }, []);
+
+  // Open add modals when navigated from sidebar
+  useEffect(() => {
+    if (openAddBuildingModal) setShowAddBuildingModal(true);
+  }, [openAddBuildingModal]);
+  useEffect(() => {
+    if (openAddUnitModal) setShowAddUnitModal(true);
+  }, [openAddUnitModal]);
 
   useEffect(() => {
     applyFilters();
@@ -114,7 +131,7 @@ export default function PropertyManagement() {
 
   const loadBuildings = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/buildings');
+      const response = await fetch(`${API_BASE_URL}/api/buildings`);
       if (!response.ok) throw new Error('Failed to load buildings');
       const data = await response.json();
       setBuildings(data);
@@ -129,7 +146,7 @@ export default function PropertyManagement() {
 
   const loadAllUnits = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/units/admin/all');
+      const response = await fetch('http://localhost:5000/api/units');
       if (!response.ok) throw new Error('Failed to load units');
       const data = await response.json();
       setAllUnits(Array.isArray(data) ? data : []);
@@ -172,7 +189,7 @@ export default function PropertyManagement() {
   const handleAddUnit = async (unitData: any) => {
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch('http://localhost:5000/api/units', {
+      const response = await fetch(`${API_BASE_URL}/api/units`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -204,7 +221,7 @@ export default function PropertyManagement() {
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/units/${editingUnit.id}`, {
+      const response = await fetch(`${API_BASE_URL} /api/units/${editingUnit.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -237,7 +254,7 @@ export default function PropertyManagement() {
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/units/${unitToDelete.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/units/${unitToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -259,7 +276,7 @@ export default function PropertyManagement() {
   const handleAddBuilding = async (buildingData: any) => {
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch('http://localhost:5000/api/buildings', {
+      const response = await fetch(`${API_BASE_URL}/api/buildings`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -293,7 +310,7 @@ export default function PropertyManagement() {
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/buildings/${editingBuilding.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/buildings/${editingBuilding.id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -327,7 +344,7 @@ export default function PropertyManagement() {
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/buildings/${buildingToDelete.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/buildings/${buildingToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -692,7 +709,7 @@ export default function PropertyManagement() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Floor {unit.floor}
+                          {getFloorDisplayName(unit.floor)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{unit.size} sqm</td>

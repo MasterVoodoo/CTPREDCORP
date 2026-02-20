@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getUnitsByStatus, getBuildingById } from "../data/ctpData";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 import { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
@@ -271,7 +272,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
 
                   <div className="flex items-center text-gray-600">
                   <Hotel className="h-4 w-4 mr-2" />
-                    <p className="text-sm text-gray-500">{unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}</p>
+                    <p className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</p>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">

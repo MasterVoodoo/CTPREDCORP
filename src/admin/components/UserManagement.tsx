@@ -35,6 +35,8 @@ export default function UserManagement() {
   });
   const [formError, setFormError] = useState('');
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -42,7 +44,7 @@ export default function UserManagement() {
   const loadUsers = async () => {
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -80,7 +82,7 @@ export default function UserManagement() {
     const token = localStorage.getItem('adminToken');
     
     try {
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +114,7 @@ export default function UserManagement() {
   const handleToggleActive = async (userId: number, isActive: boolean) => {
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +141,7 @@ export default function UserManagement() {
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userToDelete.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users/${userToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

@@ -35,6 +35,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [manualIdEdit, setManualIdEdit] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
 
   // Auto-generate URL-safe ID from building name
   const generateIdFromName = (name: string): string => {
@@ -89,7 +90,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
       uploadFormData.append('image', file);
 
       // Send type as query parameter instead of body
-      const response = await fetch('http://localhost:5000/api/uploads/single?type=buildings', {
+      const response = await fetch(`${API_BASE_URL}/api/uploads/single?type=buildings`, {
         method: 'POST',
         body: uploadFormData
       });
@@ -101,7 +102,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
 
       const data = await response.json();
       setHeroImage(data.path);
-      setHeroImagePreview(`http://localhost:5000${data.path}`);
+      setHeroImagePreview(`${API_BASE_URL}${data.path}`);
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to upload image');
@@ -114,7 +115,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   const handleRemoveImage = async () => {
     if (heroImage) {
       try {
-        await fetch('http://localhost:5000/api/uploads', {
+        await fetch(`${API_BASE_URL}/api/uploads`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ path: heroImage })

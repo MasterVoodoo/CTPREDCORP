@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { getUnitsByBuilding, getBuildingById, Unit } from "../data/ctpData";
+import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface SearchResultsProps {
   buildingId: string;
@@ -77,7 +78,7 @@ export default function SearchResults({
               </h1>
               <div className="flex items-center space-x-2 text-gray-600 mt-1">
                 <MapPin className="h-4 w-4" />
-                <span>{building?.displayName} - {floor === 0 ? "Ground Floor" : `Floor ${floor}`}</span>
+                <span>{building?.displayName} - {getFloorDisplayName(floor)}</span>
               </div>
             </div>
           </div>
@@ -93,7 +94,7 @@ export default function SearchResults({
               No units found
             </h2>
             <p className="text-gray-600 mb-6">
-              There are no units available on {floor === 0 ? "Ground Floor" : `Floor ${floor}`} at {building?.displayName}. 
+              There are no units available on {getFloorDisplayName(floor)} at {building?.displayName}. 
               Try searching for a different floor or building.
             </p>
             <div className="space-x-4">
@@ -116,7 +117,7 @@ export default function SearchResults({
                   {filteredUnits.length} {filteredUnits.length === 1 ? 'Unit' : 'Units'} Found
                 </h2>
                 <p className="text-gray-600">
-                  {floor === 0 ? "Ground Floor" : `Floor ${floor}`} at {building?.displayName} • {building?.location}
+                  {getFloorDisplayName(floor)} at {building?.displayName} • {building?.location}
                 </p>
               </div>
               <div className="text-right">
@@ -157,7 +158,7 @@ export default function SearchResults({
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
                         <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
-                        {unit.floor === 0 ? "Ground Floor" : `Floor ${unit.floor}`}
+                        {getFloorDisplayName(unit.floor)}
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <Square className="h-4 w-4 mr-2 flex-shrink-0" />

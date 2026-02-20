@@ -82,7 +82,7 @@ export default function About() {
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="border-l-4 border-l-primary">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-gray-900">
+                  <CardTitle className="text-2xl text-gray-900" >
                     Our Mission
                   </CardTitle>
                 </CardHeader>
