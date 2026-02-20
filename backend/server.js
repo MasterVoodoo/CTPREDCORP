@@ -11,6 +11,7 @@ const financialRouter = require('./routes/financial');
 const adminRouter = require('./routes/admin');
 const uploadsRouter = require('./routes/uploads');
 const emailRouter = require('./routes/email');
+const appointmentsRouter = require('./routes/appointments');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -54,6 +55,7 @@ app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/admin/appointments', appointmentsRouter);
 app.use('/api/uploads', uploadsRouter);
 app.use('/api/email', emailRouter);
 
@@ -118,6 +120,7 @@ const startServer = async () => {
     console.log('📝 Environment:', process.env.NODE_ENV || 'development');
     console.log('🔐 Admin API: http://localhost:' + PORT + '/api/admin');
     console.log('📧 Email API: http://localhost:' + PORT + '/api/email');
+    console.log('📅 Appointments API: http://localhost:' + PORT + '/api/admin/appointments');
     console.log('🌐 Allowed CORS origins:', allowedOrigins);
     
     if (isProduction) {
