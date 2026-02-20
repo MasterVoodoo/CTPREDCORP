@@ -415,10 +415,11 @@ const AppointmentManagement = () => {
                 </div>
               )}
 
-              {/* Status Management */}
+              {/* Status Management - 2x2 Grid */}
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Update Status</h4>
                 <div className="grid grid-cols-2 gap-3">
+                  {/* Row 1: Confirm & Complete */}
                   <button
                     onClick={() => {
                       updateAppointmentStatus(selectedAppointment.id, 'confirmed');
@@ -439,6 +440,7 @@ const AppointmentManagement = () => {
                     <CheckCircle className="h-6 w-6" />
                     <span>Complete</span>
                   </button>
+                  {/* Row 2: Cancel & Set Pending */}
                   <button
                     onClick={() => {
                       updateAppointmentStatus(selectedAppointment.id, 'cancelled');
