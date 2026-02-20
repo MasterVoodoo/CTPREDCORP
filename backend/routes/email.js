@@ -41,18 +41,11 @@ router.post('/send-appointment', async (req, res) => {
           user: process.env.SMTP_USER
         });
 
-        // Import and check nodemailer
+        // Import nodemailer
         const nodemailer = require('nodemailer');
-        console.log('Nodemailer loaded:', typeof nodemailer);
-        console.log('createTransporter exists:', typeof nodemailer.createTransporter);
-        console.log('Nodemailer keys:', Object.keys(nodemailer));
 
-        if (typeof nodemailer.createTransporter !== 'function') {
-          throw new Error('nodemailer.createTransporter is not a function - nodemailer may be corrupted');
-        }
-
-        // Configure nodemailer transporter
-        const transporter = nodemailer.createTransporter({
+        // Configure nodemailer transporter - NOTE: it's createTransport not createTransporter!
+        const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT || '587'),
           secure: process.env.SMTP_SECURE === 'true',
@@ -161,7 +154,6 @@ router.post('/send-appointment', async (req, res) => {
   } catch (error) {
     console.error('❌ Error processing appointment:', error);
     console.error('Error details:', error.message);
-    console.error('Stack trace:', error.stack);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to send appointment request. Please try again.',
