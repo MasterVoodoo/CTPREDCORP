@@ -146,7 +146,7 @@ export default function PropertyManagement({ openAddBuildingModal, openAddUnitMo
 
   const loadAllUnits = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/units');
+      const response = await fetch(`${API_BASE_URL}/api/units`);
       if (!response.ok) throw new Error('Failed to load units');
       const data = await response.json();
       setAllUnits(Array.isArray(data) ? data : []);

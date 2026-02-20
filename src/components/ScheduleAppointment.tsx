@@ -33,7 +33,7 @@ import {
 import { getFloorDisplayName } from "../utils/floorDisplay";
 
 // Get API URL based on environment
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
 
 export default function ScheduleAppointment() {
   const [formData, setFormData] = useState({
