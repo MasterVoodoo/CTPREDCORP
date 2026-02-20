@@ -15,6 +15,16 @@ interface Appointment {
   created_at: string;
 }
 
+// Helper to build API URL correctly
+const getApiUrl = (endpoint: string) => {
+  const baseUrl = import.meta.env.VITE_API_URL || '';
+  // Remove trailing slash from baseUrl if present
+  const cleanBase = baseUrl.replace(/\/$/, '');
+  // Ensure endpoint starts with /
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  return `${cleanBase}${cleanEndpoint}`;
+};
+
 const AppointmentManagement = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +42,10 @@ const AppointmentManagement = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/appointments`, {
+      const url = getApiUrl('/api/admin/appointments');
+      console.log('Fetching appointments from:', url);
+      
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -42,7 +55,9 @@ const AppointmentManagement = () => {
         const data = await response.json();
         setAppointments(data);
       } else {
-        console.error('Failed to fetch appointments');
+        console.error('Failed to fetch appointments. Status:', response.status);
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
       }
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -54,7 +69,9 @@ const AppointmentManagement = () => {
   const updateAppointmentStatus = async (id: number, status: 'pending' | 'confirmed' | 'cancelled' | 'completed') => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/appointments/${id}/status`, {
+      const url = getApiUrl(`/api/admin/appointments/${id}/status`);
+      
+      const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +82,8 @@ const AppointmentManagement = () => {
 
       if (response.ok) {
         fetchAppointments();
+      } else {
+        console.error('Failed to update status:', response.status);
       }
     } catch (error) {
       console.error('Error updating appointment status:', error);
@@ -74,7 +93,9 @@ const AppointmentManagement = () => {
   const deleteAppointment = async (id: number) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/appointments/${id}`, {
+      const url = getApiUrl(`/api/admin/appointments/${id}`);
+      
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -85,6 +106,8 @@ const AppointmentManagement = () => {
         setShowDeleteConfirm(false);
         setAppointmentToDelete(null);
         fetchAppointments();
+      } else {
+        console.error('Failed to delete:', response.status);
       }
     } catch (error) {
       console.error('Error deleting appointment:', error);
@@ -350,7 +373,7 @@ const AppointmentManagement = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Appointment Details</h3>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-red-700 transition-colors cursor-pointer"
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <XCircle className="h-6 w-6" />
                 </button>
@@ -425,7 +448,7 @@ const AppointmentManagement = () => {
                       updateAppointmentStatus(selectedAppointment.id, 'confirmed');
                       setShowDetailModal(false);
                     }}
-                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-green-500 hover:bg-green-700 cursor-pointer text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
                   >
                     <CheckCircle className="h-6 w-6" />
                     <span>Confirm</span>
@@ -435,7 +458,7 @@ const AppointmentManagement = () => {
                       updateAppointmentStatus(selectedAppointment.id, 'completed');
                       setShowDetailModal(false);
                     }}
-                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 border border-black bg-blue-100 cursor-pointer hover:bg-blue-400 text-black font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                   >
                     <CheckCircle className="h-6 w-6" />
                     <span>Complete</span>
@@ -446,7 +469,7 @@ const AppointmentManagement = () => {
                       updateAppointmentStatus(selectedAppointment.id, 'cancelled');
                       setShowDetailModal(false);
                     }}
-                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-red-500 hover:bg-red-700 cursor-pointer text-white font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
                   >
                     <XCircle className="h-6 w-6" />
                     <span>Cancel</span>
@@ -456,7 +479,7 @@ const AppointmentManagement = () => {
                       updateAppointmentStatus(selectedAppointment.id, 'pending');
                       setShowDetailModal(false);
                     }}
-                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 border border-black bg-yellow-100 cursor-pointer hover:bg-yellow-700 text-black  font-semibold rounded-lg transition-colors"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg transition-colors"
                   >
                     <AlertCircle className="h-6 w-6" />
                     <span>Set Pending</span>
