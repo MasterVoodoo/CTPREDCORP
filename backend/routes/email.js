@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer').default || require('nodemailer');
 const { promisePool } = require('../config/database');
 
 // Email sending endpoint
@@ -17,6 +17,8 @@ router.post('/send-appointment', async (req, res) => {
       additionalNotes
     } = req.body;
 
+    console.log('📧 Received appointment request:', { companyName, email, property, floor });
+
     // Validate required fields
     if (!companyName || !phoneNumber || !email || !preferredDate || !preferredTime || !property || !floor) {
       return res.status(400).json({ 
@@ -25,16 +27,37 @@ router.post('/send-appointment', async (req, res) => {
       });
     }
 
+    // Check if SMTP is configured
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+      console.warn('⚠️ SMTP not configured, skipping email sending');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Email service not configured. Please contact administrator.' 
+      });
+    }
+
+    console.log('📬 Creating nodemailer transporter...');
+    console.log('SMTP Config:', {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      user: process.env.SMTP_USER
+    });
+
     // Configure nodemailer transporter
     const transporter = nodemailer.createTransporter({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      secure: process.env.SMTP_SECURE === 'true',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD
       }
     });
+
+    // Verify transporter configuration
+    console.log('✅ Verifying SMTP connection...');
+    await transporter.verify();
+    console.log('✅ SMTP connection verified');
 
     const formattedDate = new Date(preferredDate).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -72,6 +95,7 @@ router.post('/send-appointment', async (req, res) => {
       <p>Best regards,<br>CTP RED Corporation</p>
     `;
 
+    console.log('📤 Sending email to company:', process.env.COMPANY_EMAIL);
     // Send email to company
     await transporter.sendMail({
       from: process.env.SMTP_FROM_EMAIL,
@@ -79,7 +103,9 @@ router.post('/send-appointment', async (req, res) => {
       subject: `New Appointment Request from ${companyName}`,
       html: companyEmailContent
     });
+    console.log('✅ Company email sent');
 
+    console.log('📤 Sending confirmation email to:', email);
     // Send confirmation email to sender
     await transporter.sendMail({
       from: process.env.SMTP_FROM_EMAIL,
@@ -87,9 +113,11 @@ router.post('/send-appointment', async (req, res) => {
       subject: 'Appointment Request Confirmation - CTP RED',
       html: senderEmailContent
     });
+    console.log('✅ Confirmation email sent');
 
     // Save to database for admin panel
     try {
+      console.log('💾 Saving to database...');
       const insertQuery = `
         INSERT INTO appointments 
         (company_name, phone_number, email, preferred_date, preferred_time, property, floor, additional_notes, status, created_at) 
@@ -106,8 +134,9 @@ router.post('/send-appointment', async (req, res) => {
         floor,
         additionalNotes || ''
       ]);
+      console.log('✅ Saved to database');
     } catch (dbError) {
-      console.error('Database error (non-critical):', dbError.message);
+      console.error('⚠️ Database error (non-critical):', dbError.message);
       // Continue even if database save fails - emails were sent
     }
 
@@ -117,7 +146,9 @@ router.post('/send-appointment', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error sending appointment email:', error);
+    console.error('❌ Error sending appointment email:', error);
+    console.error('Error details:', error.message);
+    console.error('Stack trace:', error.stack);
     res.status(500).json({ 
       success: false, 
       message: 'Failed to send appointment request. Please try again.',
