@@ -3,7 +3,7 @@ import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
 import AppointmentManagement from '../components/AppointmentManagement';
 import AdminSidebar, { type AdminTabId } from '../components/AdminSidebar';
-import { Building2, Menu } from 'lucide-react';
+import { Building2, Menu, Calendar, AlertCircle } from 'lucide-react';
 
 interface AdminUser {
   id: number;
@@ -24,6 +24,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   const [loading, setLoading] = useState(true);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [buildingCount, setBuildingCount] = useState<number>(0);
+  const [appointmentStats, setAppointmentStats] = useState({ total: 0, pending: 0 });
   const [loadingStats, setLoadingStats] = useState(true);
 
   const setTabAndCloseSidebar = (tab: AdminTabId) => {
@@ -38,6 +39,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
   useEffect(() => {
     if (activeTab === 'overview') {
       fetchBuildingCount();
+      fetchAppointmentStats();
     }
   }, [activeTab]);
 
@@ -53,6 +55,26 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
       console.error('Failed to fetch building count:', error);
     } finally {
       setLoadingStats(false);
+    }
+  };
+
+  const fetchAppointmentStats = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/appointments/stats/summary`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const stats = await response.json();
+        setAppointmentStats({
+          total: stats.total || 0,
+          pending: stats.pending || 0
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch appointment stats:', error);
     }
   };
 
@@ -230,7 +252,7 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           {activeTab === 'overview' && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
                 {/* Buildings Card - Red - DYNAMIC */}
                 <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
                   <div className="flex items-center justify-between mb-4">
@@ -282,6 +304,48 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   <p className="text-4xl font-extrabold text-gray-900 mb-1">96%</p>
                   <p className="text-sm text-gray-600 font-medium">Current Rate</p>
                 </div>
+
+                {/* Total Appointments Card - Gray - DYNAMIC */}
+                <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 hover:border-gray-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center border-2 border-gray-200">
+                      <Calendar className="h-8 w-8 text-gray-600" />
+                    </div>
+                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-full">APPOINTMENTS</span>
+                  </div>
+                  {loadingStats ? (
+                    <div className="loading-pulse">
+                      <div className="h-10 w-24 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-4xl font-extrabold text-gray-900 mb-1">{appointmentStats.total}</p>
+                      <p className="text-sm text-gray-600 font-medium">Total Requests</p>
+                    </>
+                  )}
+                </div>
+
+                {/* Pending Appointments Card - Yellow - DYNAMIC */}
+                <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-yellow-100 hover:border-yellow-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center border-2 border-yellow-200">
+                      <AlertCircle className="h-8 w-8 text-yellow-600" />
+                    </div>
+                    <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">PENDING</span>
+                  </div>
+                  {loadingStats ? (
+                    <div className="loading-pulse">
+                      <div className="h-10 w-24 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-4xl font-extrabold text-gray-900 mb-1">{appointmentStats.pending}</p>
+                      <p className="text-sm text-gray-600 font-medium">Awaiting Review</p>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Quick Actions */}
@@ -293,12 +357,18 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                   </svg>
                   Quick Actions
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div onClick={() => setTabAndCloseSidebar('properties')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
                     <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                     </div>
                     <div className="text-left"><p className="font-semibold text-gray-900">Manage Properties</p><p className="text-sm text-gray-600">Update buildings and units</p></div>
+                  </div>
+                  <div onClick={() => setTabAndCloseSidebar('appointments')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
+                      <Calendar className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="text-left"><p className="font-semibold text-gray-900">Manage Appointments</p><p className="text-sm text-gray-600">View and respond to requests</p></div>
                   </div>
                   {user?.role === 'super_admin' && (
                     <div onClick={() => setTabAndCloseSidebar('users')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
