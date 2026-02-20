@@ -161,6 +161,8 @@ const AppointmentManagement = () => {
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-overlay { animation: fadeIn 0.2s ease-out; backdrop-filter: blur(2px); }
         .modal-content { animation: slideIn 0.3s ease-out; }
+        .stat-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15); }
       `}</style>
 
       {/* Header */}
@@ -169,36 +171,78 @@ const AppointmentManagement = () => {
         <p className="text-gray-600 mt-1">View and manage all appointment requests</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-sm border-2 border-gray-200 hover:shadow-md transition-shadow">
-          <p className="text-sm font-medium text-gray-600 mb-1">Total</p>
-          <p className="text-3xl font-bold text-gray-900">{statusCounts.all}</p>
+      {/* Stats Cards - Matching Dashboard Design */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
+        {/* Total Appointments Card - Gray */}
+        <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 hover:border-gray-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center border-2 border-gray-200">
+              <Calendar className="h-8 w-8 text-gray-600" />
+            </div>
+            <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-full">TOTAL</span>
+          </div>
+          <p className="text-4xl font-extrabold text-gray-900 mb-1">{statusCounts.all}</p>
+          <p className="text-sm text-gray-600 font-medium">All Appointments</p>
         </div>
-        <div className="bg-yellow-50 p-4 rounded-lg shadow-sm border-2 border-yellow-200 hover:shadow-md transition-shadow">
-          <p className="text-sm font-medium text-yellow-700 mb-1">Pending</p>
-          <p className="text-3xl font-bold text-yellow-900">{statusCounts.pending}</p>
+
+        {/* Pending Card - Yellow */}
+        <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-yellow-100 hover:border-yellow-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center border-2 border-yellow-200">
+              <AlertCircle className="h-8 w-8 text-yellow-600" />
+            </div>
+            <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">PENDING</span>
+          </div>
+          <p className="text-4xl font-extrabold text-gray-900 mb-1">{statusCounts.pending}</p>
+          <p className="text-sm text-gray-600 font-medium">Awaiting Review</p>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg shadow-sm border-2 border-green-200 hover:shadow-md transition-shadow">
-          <p className="text-sm font-medium text-green-700 mb-1">Confirmed</p>
-          <p className="text-3xl font-bold text-green-900">{statusCounts.confirmed}</p>
+
+        {/* Confirmed Card - Green */}
+        <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-green-100 hover:border-green-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center border-2 border-green-200">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">CONFIRMED</span>
+          </div>
+          <p className="text-4xl font-extrabold text-gray-900 mb-1">{statusCounts.confirmed}</p>
+          <p className="text-sm text-gray-600 font-medium">Appointments Set</p>
         </div>
-        <div className="bg-blue-50 p-4 rounded-lg shadow-sm border-2 border-blue-200 hover:shadow-md transition-shadow">
-          <p className="text-sm font-medium text-blue-700 mb-1">Completed</p>
-          <p className="text-3xl font-bold text-blue-900">{statusCounts.completed}</p>
+
+        {/* Completed Card - Blue */}
+        <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-blue-100 hover:border-blue-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center border-2 border-blue-200">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">COMPLETED</span>
+          </div>
+          <p className="text-4xl font-extrabold text-gray-900 mb-1">{statusCounts.completed}</p>
+          <p className="text-sm text-gray-600 font-medium">Successfully Done</p>
         </div>
-        <div className="bg-red-50 p-4 rounded-lg shadow-sm border-2 border-red-200 hover:shadow-md transition-shadow col-span-2 sm:col-span-1">
-          <p className="text-sm font-medium text-red-700 mb-1">Cancelled</p>
-          <p className="text-3xl font-bold text-red-900">{statusCounts.cancelled}</p>
+
+        {/* Cancelled Card - Red */}
+        <div className="stat-card bg-white p-6 rounded-xl shadow-md border-2 border-red-100 hover:border-red-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center border-2 border-red-200">
+              <XCircle className="h-8 w-8 text-red-600" />
+            </div>
+            <span className="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">CANCELLED</span>
+          </div>
+          <p className="text-4xl font-extrabold text-gray-900 mb-1">{statusCounts.cancelled}</p>
+          <p className="text-sm text-gray-600 font-medium">Not Proceeded</p>
         </div>
       </div>
 
       {/* Filter */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200 mb-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
           <div className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-gray-600" />
-            <span className="font-semibold text-gray-900">Filter:</span>
+            <Filter className="h-5 w-5 text-red-600" />
+            <span className="font-semibold text-gray-900">Filter by Status:</span>
           </div>
           <div className="flex gap-2 flex-wrap">
             {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map((status) => (
@@ -219,7 +263,7 @@ const AppointmentManagement = () => {
       </div>
 
       {/* Appointments Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
         {filteredAppointments.length === 0 ? (
           <div className="text-center py-12">
             <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-3" />
