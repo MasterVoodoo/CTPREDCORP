@@ -10,6 +10,7 @@ const unitsRouter = require('./routes/units');
 const financialRouter = require('./routes/financial');
 const adminRouter = require('./routes/admin');
 const uploadsRouter = require('./routes/uploads');
+const emailRouter = require('./routes/email');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -54,6 +55,7 @@ app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/uploads', uploadsRouter);
+app.use('/api/email', emailRouter);
 
 // -------------------- Health Check -------------------- //
 app.get('/api/health', (req, res) => {
@@ -115,6 +117,7 @@ const startServer = async () => {
     console.log('🚀 Server running on http://localhost:' + PORT);
     console.log('📝 Environment:', process.env.NODE_ENV || 'development');
     console.log('🔐 Admin API: http://localhost:' + PORT + '/api/admin');
+    console.log('📧 Email API: http://localhost:' + PORT + '/api/email');
     console.log('🌐 Allowed CORS origins:', allowedOrigins);
     
     if (isProduction) {
