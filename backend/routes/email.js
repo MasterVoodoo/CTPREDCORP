@@ -44,7 +44,7 @@ router.post('/send-appointment', async (req, res) => {
         // Import nodemailer
         const nodemailer = require('nodemailer');
 
-        // Configure nodemailer transporter - NOTE: it's createTransport not createTransporter!
+        // Configure nodemailer transporter
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT || '587'),
@@ -66,40 +66,88 @@ router.post('/send-appointment', async (req, res) => {
           day: 'numeric'
         });
 
+        // Use custom sender name with actual SMTP email
+        // Format: "Display Name <email@address.com>"
+        const fromEmail = `"CTP RED Corporation" <${process.env.SMTP_USER}>`;
+
         // Email to company
         const companyEmailContent = `
-          <h2>New Appointment Request</h2>
-          <p><strong>Company Name:</strong> ${companyName}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Phone:</strong> ${phoneNumber}</p>
-          <p><strong>Preferred Date:</strong> ${formattedDate}</p>
-          <p><strong>Preferred Time:</strong> ${preferredTime}</p>
-          <p><strong>Property:</strong> ${property}</p>
-          <p><strong>Floor:</strong> ${floor}</p>
-          <p><strong>Additional Notes:</strong> ${additionalNotes || 'N/A'}</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #c41e3a;">New Appointment Request</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold; width: 40%;">Company Name:</td>
+                <td style="padding: 10px;">${companyName}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Email:</td>
+                <td style="padding: 10px;">${email}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Phone:</td>
+                <td style="padding: 10px;">${phoneNumber}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Preferred Date:</td>
+                <td style="padding: 10px;">${formattedDate}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Preferred Time:</td>
+                <td style="padding: 10px;">${preferredTime}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Property:</td>
+                <td style="padding: 10px;">${property}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Floor:</td>
+                <td style="padding: 10px;">${floor}</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; font-weight: bold; vertical-align: top;">Additional Notes:</td>
+                <td style="padding: 10px;">${additionalNotes || 'N/A'}</td>
+              </tr>
+            </table>
+          </div>
         `;
 
         // Email to sender (confirmation)
         const senderEmailContent = `
-          <h2>Appointment Request Confirmation</h2>
-          <p>Dear ${companyName},</p>
-          <p>Thank you for your interest in CTP RED properties. We have received your appointment request with the following details:</p>
-          <p><strong>Date:</strong> ${formattedDate}</p>
-          <p><strong>Time:</strong> ${preferredTime}</p>
-          <p><strong>Property:</strong> ${property}</p>
-          <p><strong>Floor:</strong> ${floor}</p>
-          <p>Our team will contact you within 24 hours to confirm your appointment.</p>
-          <p>If you have any questions, please contact us at:</p>
-          <p>Phone: (02) 8334-2091</p>
-          <p>Email: aseantower@ctpred.com.ph</p>
-          <br>
-          <p>Best regards,<br>CTP RED Corporation</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #c41e3a;">Appointment Request Confirmation</h2>
+            <p>Dear ${companyName},</p>
+            <p>Thank you for your interest in CTP RED properties. We have received your appointment request with the following details:</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold; width: 40%;">Date:</td>
+                <td style="padding: 10px;">${formattedDate}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Time:</td>
+                <td style="padding: 10px;">${preferredTime}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Property:</td>
+                <td style="padding: 10px;">${property}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px; font-weight: bold;">Floor:</td>
+                <td style="padding: 10px;">${floor}</td>
+              </tr>
+            </table>
+            <p>Our team will contact you within 24 hours to confirm your appointment.</p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #666;">If you have any questions, please contact us at:</p>
+            <p style="color: #666;"><strong>Phone:</strong> (02) 8334-2091<br>
+            <strong>Email:</strong> aseantower@ctpred.com.ph</p>
+            <p style="margin-top: 30px;">Best regards,<br><strong>CTP RED Corporation</strong></p>
+          </div>
         `;
 
         console.log('📤 Sending email to company:', process.env.COMPANY_EMAIL);
         // Send email to company
         await transporter.sendMail({
-          from: process.env.SMTP_FROM_EMAIL,
+          from: fromEmail,
           to: process.env.COMPANY_EMAIL,
           subject: `New Appointment Request from ${companyName}`,
           html: companyEmailContent
@@ -109,7 +157,7 @@ router.post('/send-appointment', async (req, res) => {
         console.log('📤 Sending confirmation email to:', email);
         // Send confirmation email to sender
         await transporter.sendMail({
-          from: process.env.SMTP_FROM_EMAIL,
+          from: fromEmail,
           to: email,
           subject: 'Appointment Request Confirmation - CTP RED',
           html: senderEmailContent
