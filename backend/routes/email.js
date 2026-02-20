@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
-const db = require('../config/database');
+const { promisePool } = require('../config/database');
 
 // Email sending endpoint
 router.post('/send-appointment', async (req, res) => {
@@ -28,7 +28,7 @@ router.post('/send-appointment', async (req, res) => {
     // Configure nodemailer transporter
     const transporter = nodemailer.createTransporter({
       host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
+      port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
       auth: {
         user: process.env.SMTP_USER,
@@ -89,22 +89,27 @@ router.post('/send-appointment', async (req, res) => {
     });
 
     // Save to database for admin panel
-    const insertQuery = `
-      INSERT INTO appointments 
-      (company_name, phone_number, email, preferred_date, preferred_time, property, floor, additional_notes, status, created_at) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())
-    `;
-    
-    await db.query(insertQuery, [
-      companyName,
-      phoneNumber,
-      email,
-      preferredDate,
-      preferredTime,
-      property,
-      floor,
-      additionalNotes || ''
-    ]);
+    try {
+      const insertQuery = `
+        INSERT INTO appointments 
+        (company_name, phone_number, email, preferred_date, preferred_time, property, floor, additional_notes, status, created_at) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())
+      `;
+      
+      await promisePool.query(insertQuery, [
+        companyName,
+        phoneNumber,
+        email,
+        preferredDate,
+        preferredTime,
+        property,
+        floor,
+        additionalNotes || ''
+      ]);
+    } catch (dbError) {
+      console.error('Database error (non-critical):', dbError.message);
+      // Continue even if database save fails - emails were sent
+    }
 
     res.json({ 
       success: true, 
@@ -115,7 +120,8 @@ router.post('/send-appointment', async (req, res) => {
     console.error('Error sending appointment email:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Failed to send appointment request. Please try again.' 
+      message: 'Failed to send appointment request. Please try again.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
