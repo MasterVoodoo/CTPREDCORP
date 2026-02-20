@@ -170,34 +170,36 @@ const AppointmentManagement = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-sm border-2 border-gray-200">
-          <p className="text-sm text-gray-600 mb-1">Total</p>
-          <p className="text-2xl font-bold text-gray-900">{statusCounts.all}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <div className="bg-white p-4 rounded-lg shadow-sm border-2 border-gray-200 hover:shadow-md transition-shadow">
+          <p className="text-sm font-medium text-gray-600 mb-1">Total</p>
+          <p className="text-3xl font-bold text-gray-900">{statusCounts.all}</p>
         </div>
-        <div className="bg-yellow-50 p-4 rounded-lg shadow-sm border-2 border-yellow-200">
-          <p className="text-sm text-yellow-700 mb-1">Pending</p>
-          <p className="text-2xl font-bold text-yellow-900">{statusCounts.pending}</p>
+        <div className="bg-yellow-50 p-4 rounded-lg shadow-sm border-2 border-yellow-200 hover:shadow-md transition-shadow">
+          <p className="text-sm font-medium text-yellow-700 mb-1">Pending</p>
+          <p className="text-3xl font-bold text-yellow-900">{statusCounts.pending}</p>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg shadow-sm border-2 border-green-200">
-          <p className="text-sm text-green-700 mb-1">Confirmed</p>
-          <p className="text-2xl font-bold text-green-900">{statusCounts.confirmed}</p>
+        <div className="bg-green-50 p-4 rounded-lg shadow-sm border-2 border-green-200 hover:shadow-md transition-shadow">
+          <p className="text-sm font-medium text-green-700 mb-1">Confirmed</p>
+          <p className="text-3xl font-bold text-green-900">{statusCounts.confirmed}</p>
         </div>
-        <div className="bg-blue-50 p-4 rounded-lg shadow-sm border-2 border-blue-200">
-          <p className="text-sm text-blue-700 mb-1">Completed</p>
-          <p className="text-2xl font-bold text-blue-900">{statusCounts.completed}</p>
+        <div className="bg-blue-50 p-4 rounded-lg shadow-sm border-2 border-blue-200 hover:shadow-md transition-shadow">
+          <p className="text-sm font-medium text-blue-700 mb-1">Completed</p>
+          <p className="text-3xl font-bold text-blue-900">{statusCounts.completed}</p>
         </div>
-        <div className="bg-red-50 p-4 rounded-lg shadow-sm border-2 border-red-200">
-          <p className="text-sm text-red-700 mb-1">Cancelled</p>
-          <p className="text-2xl font-bold text-red-900">{statusCounts.cancelled}</p>
+        <div className="bg-red-50 p-4 rounded-lg shadow-sm border-2 border-red-200 hover:shadow-md transition-shadow col-span-2 sm:col-span-1">
+          <p className="text-sm font-medium text-red-700 mb-1">Cancelled</p>
+          <p className="text-3xl font-bold text-red-900">{statusCounts.cancelled}</p>
         </div>
       </div>
 
       {/* Filter */}
       <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div className="flex items-center gap-3">
-          <Filter className="h-5 w-5 text-gray-600" />
-          <span className="font-semibold text-gray-900">Filter by Status:</span>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Filter className="h-5 w-5 text-gray-600" />
+            <span className="font-semibold text-gray-900">Filter:</span>
+          </div>
           <div className="flex gap-2 flex-wrap">
             {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map((status) => (
               <button
@@ -270,7 +272,7 @@ const AppointmentManagement = () => {
                             setSelectedAppointment(appointment);
                             setShowDetailModal(true);
                           }}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 hover:text-blue-900 transition-colors"
                           title="View Details"
                         >
                           <Eye className="h-5 w-5" />
@@ -280,7 +282,7 @@ const AppointmentManagement = () => {
                             setAppointmentToDelete(appointment.id);
                             setShowDeleteConfirm(true);
                           }}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-900 transition-colors"
                           title="Delete"
                         >
                           <Trash2 className="h-5 w-5" />
@@ -304,7 +306,7 @@ const AppointmentManagement = () => {
                 <h3 className="text-2xl font-bold text-gray-900">Appointment Details</h3>
                 <button
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <XCircle className="h-6 w-6" />
                 </button>
