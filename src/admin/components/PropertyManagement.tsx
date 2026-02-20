@@ -129,7 +129,7 @@ export default function PropertyManagement() {
 
   const loadAllUnits = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/units');
+      const response = await fetch('http://localhost:5000/api/units/admin/all');
       if (!response.ok) throw new Error('Failed to load units');
       const data = await response.json();
       setAllUnits(Array.isArray(data) ? data : []);
