@@ -66,6 +66,17 @@ router.post('/send-appointment', async (req, res) => {
           day: 'numeric'
         });
 
+        // Format time to 12-hour format with AM/PM
+        const formatTime = (timeString) => {
+          const [hours, minutes] = timeString.split(':');
+          const hour = parseInt(hours);
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          const displayHour = hour % 12 || 12;
+          return `${displayHour}:${minutes} ${ampm}`;
+        };
+
+        const formattedTime = formatTime(preferredTime);
+
         // Use custom sender name with actual SMTP email
         // Format: "Display Name <email@address.com>"
         const fromEmail = `"CTP RED Corporation" <${process.env.SMTP_USER}>`;
@@ -93,7 +104,7 @@ router.post('/send-appointment', async (req, res) => {
               </tr>
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px; font-weight: bold;">Preferred Time:</td>
-                <td style="padding: 10px;">${preferredTime}</td>
+                <td style="padding: 10px;">${formattedTime}</td>
               </tr>
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px; font-weight: bold;">Property:</td>
@@ -124,7 +135,7 @@ router.post('/send-appointment', async (req, res) => {
               </tr>
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px; font-weight: bold;">Time:</td>
-                <td style="padding: 10px;">${preferredTime}</td>
+                <td style="padding: 10px;">${formattedTime}</td>
               </tr>
               <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding: 10px; font-weight: bold;">Property:</td>
