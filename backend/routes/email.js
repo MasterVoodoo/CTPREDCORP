@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer').default || require('nodemailer');
 const { promisePool } = require('../config/database');
 
 // Email sending endpoint
@@ -42,6 +41,9 @@ router.post('/send-appointment', async (req, res) => {
       port: process.env.SMTP_PORT,
       user: process.env.SMTP_USER
     });
+
+    // Import nodemailer here to avoid module issues
+    const nodemailer = require('nodemailer');
 
     // Configure nodemailer transporter
     const transporter = nodemailer.createTransporter({
