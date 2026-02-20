@@ -23,7 +23,8 @@ const allowedOrigins = [
   process.env.FRONTEND_URL || 'https://ctpred.com.ph',
   'http://localhost:5173',
   'http://localhost:3000',
-  'http://127.0.0.1:5173'
+  'http://127.0.0.1:5173',
+  'https://www.ctpred.com.ph'
 ].filter(Boolean); // Remove empty values
 
 app.use(cors({
@@ -50,7 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve images from src/assets folder (if exists)
 app.use('/src/assets', express.static(path.join(__dirname, '../src/assets')));
 
-// -------------------- API Routes -------------------- //
+// -------------------- API Routes (Always Active) -------------------- //
 app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
@@ -65,11 +66,12 @@ app.get('/api/health', (req, res) => {
     status: 'OK', 
     message: 'CTP RED API is running',
     environment: process.env.NODE_ENV,
-    allowedOrigins: allowedOrigins
+    allowedOrigins: allowedOrigins,
+    timestamp: new Date().toISOString()
   });
 });
 
-// -------------------- Serve Frontend (Development Only) -------------------- //
+// -------------------- Serve Frontend -------------------- //
 if (!isProduction) {
   // Development: Serve frontend from dist folder
   const distPath = path.join(__dirname, '../dist');
@@ -79,16 +81,10 @@ if (!isProduction) {
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
+  console.log('🔧 Development mode: Backend also serving frontend from dist/');
 } else {
-  // Production: Only serve API routes - 404 everything else
-  app.use((req, res) => {
-    if (!req.path.startsWith('/api/')) {
-      return res.status(404).json({ 
-        error: 'Not Found',
-        message: 'API endpoint not found. Frontend should be served by Apache from httpdocs.'
-      });
-    }
-  });
+  console.log('✅ Production mode: Backend serving API routes only');
+  console.log('ℹ️  Frontend should be served separately (Apache/Nginx)');
 }
 
 // -------------------- Error Handling -------------------- //
@@ -96,10 +92,37 @@ app.use((err, req, res, next) => {
   console.error('🚨 Server Error:', err.stack);
   console.error('Request URL:', req.originalUrl);
   console.error('Origin:', req.headers.origin);
+  console.error('Method:', req.method);
+  
+  // Send appropriate error response
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({ 
+      error: 'CORS Error',
+      message: 'Origin not allowed',
+      origin: req.headers.origin
+    });
+  }
   
   res.status(500).json({ 
     error: 'Server error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
+});
+
+// -------------------- 404 Handler (Must be last) -------------------- //
+app.use((req, res) => {
+  console.log(`⚠️ 404 - Route not found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ 
+    error: 'Not Found',
+    message: `Route ${req.originalUrl} not found`,
+    availableRoutes: [
+      '/api/health',
+      '/api/buildings',
+      '/api/units',
+      '/api/admin',
+      '/api/email/send-appointment',
+      '/api/admin/appointments'
+    ]
   });
 });
 
@@ -115,20 +138,22 @@ const startServer = async () => {
     process.exit(1);
   }
   
-  app.listen(PORT, () => {
-    console.log('🚀 Server running on http://localhost:' + PORT);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log('\n========================================');
+    console.log('🚀 CTP RED Backend Server Started');
+    console.log('========================================');
+    console.log('📍 Server URL: http://localhost:' + PORT);
     console.log('📝 Environment:', process.env.NODE_ENV || 'development');
-    console.log('🔐 Admin API: http://localhost:' + PORT + '/api/admin');
-    console.log('📧 Email API: http://localhost:' + PORT + '/api/email');
-    console.log('📅 Appointments API: http://localhost:' + PORT + '/api/admin/appointments');
-    console.log('🌐 Allowed CORS origins:', allowedOrigins);
-    
-    if (isProduction) {
-      console.log('✅ Production mode: Backend serving API routes only');
-      console.log('ℹ️  Frontend should be served by Apache/Nginx from httpdocs');
-    } else {
-      console.log('🔧 Development mode: Backend also serving frontend');
-    }
+    console.log('\n📌 API Endpoints:');
+    console.log('   - Health: http://localhost:' + PORT + '/api/health');
+    console.log('   - Admin: http://localhost:' + PORT + '/api/admin');
+    console.log('   - Email: http://localhost:' + PORT + '/api/email/send-appointment');
+    console.log('   - Appointments: http://localhost:' + PORT + '/api/admin/appointments');
+    console.log('   - Buildings: http://localhost:' + PORT + '/api/buildings');
+    console.log('   - Units: http://localhost:' + PORT + '/api/units');
+    console.log('\n🌐 CORS Allowed Origins:');
+    allowedOrigins.forEach(origin => console.log('   -', origin));
+    console.log('========================================\n');
   });
 };
 
