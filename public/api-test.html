@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTP RED API Diagnostics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #b91c1c;
+        }
+        pre {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #dc2626;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 CTP RED API Diagnostics</h1>
+    
+    <div class="card">
+        <h2>Configuration</h2>
+        <p><strong>API Base URL:</strong> <code id="apiUrl">Detecting...</code></p>
+        <p><strong>Current Origin:</strong> <code id="origin"></code></p>
+    </div>
+
+    <div class="card">
+        <h2>Test 1: Health Check</h2>
+        <button onclick="testHealth()">Test /api/health</button>
+        <div id="healthResult" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card">
+        <h2>Test 2: Appointment Endpoint</h2>
+        <button onclick="testAppointment()">Test /api/email/send-appointment</button>
+        <div id="appointmentResult" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card">
+        <h2>Test 3: Direct Backend Test</h2>
+        <button onclick="testDirect()">Test http://localhost:5000/api/health</button>
+        <div id="directResult" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        // Detect API URL (same as frontend uses)
+        const API_URL = import.meta.env.VITE_API_URL || window.location.origin;
+        document.getElementById('apiUrl').textContent = API_URL || '(same domain)';
+        document.getElementById('origin').textContent = window.location.origin;
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.innerHTML = '<div class="loading"></div> Testing...';
+            
+            try {
+                const url = `${API_URL}/api/health`;
+                console.log('Testing:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Success!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Failed: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+
+        async function testAppointment() {
+            const resultDiv = document.getElementById('appointmentResult');
+            resultDiv.innerHTML = '<div class="loading"></div> Testing...';
+            
+            try {
+                const url = `${API_URL}/api/email/send-appointment`;
+                console.log('Testing:', url);
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        companyName: 'Test Company',
+                        email: 'test@test.com',
+                        phoneNumber: '1234567890',
+                        preferredDate: '2026-03-01',
+                        preferredTime: '10:00',
+                        property: 'Test Building',
+                        floor: '1st Floor'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Success!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Failed: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+
+        async function testDirect() {
+            const resultDiv = document.getElementById('directResult');
+            resultDiv.innerHTML = '<div class="loading"></div> Testing...';
+            
+            try {
+                const url = 'http://localhost:5000/api/health';
+                console.log('Testing:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ Success!</p>
+                    <p>Backend is running on localhost:5000</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ Failed: ${error.message}</p>
+                    <p>This is expected if backend is not on localhost:5000</p>
+                    <p><strong>Solution:</strong> Backend needs to be started in Plesk Node.js or via PM2</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
