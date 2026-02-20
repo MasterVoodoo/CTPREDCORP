@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import { getApiUrl } from '../utils/api';
 
 export default function AdminApp() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,7 +22,10 @@ export default function AdminApp() {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/verify`, {
+      const url = getApiUrl('/api/admin/verify');
+      console.log('Checking auth at:', url);
+      
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -30,6 +34,7 @@ export default function AdminApp() {
       if (response.ok) {
         setIsAuthenticated(true);
       } else {
+        console.warn('Auth verification failed:', response.status);
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setIsAuthenticated(false);
