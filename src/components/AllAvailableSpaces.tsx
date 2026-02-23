@@ -280,7 +280,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                       <p className="text-2xl font-bold text-primary">
                         ₱{unit.price.toLocaleString()}
                       </p>
-                      <p className="text-sm text-gray-500">per month</p>
+                      <p className="text-sm text-gray-500">per sqm</p>
                     </div>
                     <Button
                       className="bg-primary hover:bg-accent text-white cursor-pointer"

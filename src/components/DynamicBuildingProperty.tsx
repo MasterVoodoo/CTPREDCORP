@@ -444,7 +444,7 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
                                 <div className="text-2xl font-bold text-primary">
                                   ₱{unit.price.toLocaleString()}
                                 </div>
-                                <div className="text-sm text-gray-500">per month</div>
+                                <div className="text-sm text-gray-500">per sqm</div>
                               </div>
                               <Button 
                                 size="sm" 
