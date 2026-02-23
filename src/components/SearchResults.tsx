@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
-import { ArrowLeft, MapPin, Building2, Square } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { ArrowLeft, MapPin, Building2, Square, Hotel } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { getUnitsByBuilding, getBuildingById, Unit } from "../data/ctpData";
+import { getUnitsByBuilding, getBuildingById, Unit, getPublicUnits } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface SearchResultsProps {
   buildingId: string;
-  floor: number;
+  floor?: number;
+  condition?: string;
   onBack: () => void;
   onViewDetails: (unitId: string) => void;
 }
@@ -16,24 +18,78 @@ interface SearchResultsProps {
 export default function SearchResults({ 
   buildingId, 
   floor, 
+  condition,
   onBack, 
   onViewDetails 
 }: SearchResultsProps) {
-  const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const building = getBuildingById(buildingId);
+  const building = useMemo(() => getBuildingById(buildingId), [buildingId]);
 
-  useEffect(() => {
+  // Dynamically filter units based on search criteria
+  const filteredUnits = useMemo(() => {
     setLoading(true);
     
-    // Get units for the specified building and floor
-    const buildingUnits = getUnitsByBuilding(buildingId);
-    const floorUnits = buildingUnits.filter(unit => unit.floor === floor);
+    let units: Unit[] = [];
     
-    setFilteredUnits(floorUnits);
+    // If building is specified, get units for that building
+    if (buildingId && buildingId !== "all") {
+      units = getUnitsByBuilding(buildingId);
+    } else {
+      // If no building specified, get all public units
+      units = getPublicUnits();
+    }
+    
+    // Filter by floor if specified
+    if (floor !== undefined && floor !== null) {
+      units = units.filter(unit => unit.floor === floor);
+    }
+    
+    // Filter by condition if specified
+    if (condition && condition !== "" && condition !== "all") {
+      units = units.filter(unit => unit.condition === condition);
+    }
+    
     setLoading(false);
-  }, [buildingId, floor]);
+    return units;
+  }, [buildingId, floor, condition]);
+
+  // Get statistics dynamically
+  const stats = useMemo(() => {
+    const available = filteredUnits.filter(u => u.status === 'Available').length;
+    const comingSoon = filteredUnits.filter(u => u.status === 'Coming Soon').length;
+    const taken = filteredUnits.filter(u => u.status === 'Taken').length;
+    
+    return { available, comingSoon, taken };
+  }, [filteredUnits]);
+
+  // Get condition badge color dynamically
+  const getConditionColor = (condition: string) => {
+    switch (condition) {
+      case "Fitted":
+        return "bg-green-100 text-green-800";
+      case "Warm Shell":
+        return "bg-yellow-100 text-yellow-800";
+      case "Bare":
+        return "bg-blue-100 text-blue-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  // Get status badge variant dynamically
+  const getStatusVariant = (status: string): "default" | "secondary" | "destructive" => {
+    switch (status) {
+      case "Available":
+        return "default";
+      case "Coming Soon":
+        return "secondary";
+      case "Taken":
+        return "destructive";
+      default:
+        return "secondary";
+    }
+  };
 
   if (loading) {
     return (
@@ -78,7 +134,11 @@ export default function SearchResults({
               </h1>
               <div className="flex items-center space-x-2 text-gray-600 mt-1">
                 <MapPin className="h-4 w-4" />
-                <span>{building?.displayName} - {getFloorDisplayName(floor)}</span>
+                <span>
+                  {building?.displayName || "All Buildings"}
+                  {floor !== undefined && floor !== null && ` - ${getFloorDisplayName(floor)}`}
+                  {condition && condition !== "all" && ` - ${condition}`}
+                </span>
               </div>
             </div>
           </div>
@@ -94,19 +154,23 @@ export default function SearchResults({
               No units found
             </h2>
             <p className="text-gray-600 mb-6">
-              There are no units available on {getFloorDisplayName(floor)} at {building?.displayName}. 
-              Try searching for a different floor or building.
+              There are no units matching your search criteria.
+              {floor !== undefined && floor !== null && ` Try searching for a different floor`}
+              {condition && condition !== "all" && ` or condition`}
+              {building && ` at ${building.displayName}`}.
             </p>
             <div className="space-x-4">
               <Button onClick={onBack} variant="outline" className="cursor-pointer">
                 Try Different Search
               </Button>
-              <Button 
-                onClick={() => window.location.hash = `#${buildingId}`}
-                className="bg-primary hover:bg-primary/90 cursor-pointer"
-              >
-                View All {building?.displayName} Units
-              </Button>
+              {building && (
+                <Button 
+                  onClick={() => window.location.hash = `#${buildingId}`}
+                  className="bg-primary hover:bg-primary/90 cursor-pointer"
+                >
+                  View All {building.displayName} Units
+                </Button>
+              )}
             </div>
           </div>
         ) : (
@@ -117,61 +181,83 @@ export default function SearchResults({
                   {filteredUnits.length} {filteredUnits.length === 1 ? 'Unit' : 'Units'} Found
                 </h2>
                 <p className="text-gray-600">
-                  {getFloorDisplayName(floor)} at {building?.displayName} • {building?.location}
+                  {building?.displayName || "All Buildings"}
+                  {floor !== undefined && floor !== null && ` • ${getFloorDisplayName(floor)}`}
+                  {condition && condition !== "all" && ` • ${condition}`}
+                  {building?.location && ` • ${building.location}`}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-600">
-                  {filteredUnits.filter(u => u.status === 'Available').length} Available
-                </p>
-                <p className="text-sm text-gray-600">
-                  {filteredUnits.filter(u => u.status === 'Coming Soon').length} Coming Soon
-                </p>
+                {stats.available > 0 && (
+                  <p className="text-sm text-gray-600">
+                    {stats.available} Available
+                  </p>
+                )}
+                {stats.comingSoon > 0 && (
+                  <p className="text-sm text-gray-600">
+                    {stats.comingSoon} Coming Soon
+                  </p>
+                )}
+                {stats.taken > 0 && (
+                  <p className="text-sm text-gray-600">
+                    {stats.taken} Taken
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredUnits.map((unit) => (
                 <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-video overflow-hidden">
-                    <img
+                  <div className="relative">
+                    <ImageWithFallback
                       src={unit.image}
                       alt={unit.title}
-                      className="w-full h-full object-cover transition-transform hover:scale-105"
+                      className="w-full h-48 object-cover"
                     />
+                    <Badge 
+                      variant={getStatusVariant(unit.status)}
+                      className="absolute top-4 right-4"
+                    >
+                      {unit.status}
+                    </Badge>
+                    <Badge className={`absolute top-4 left-4 ${getConditionColor(unit.condition)}`}>
+                      {unit.condition}
+                    </Badge>
                   </div>
                   
                   <div className="p-6">
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="mb-3">
                       <h3 className="text-lg font-semibold text-gray-900 leading-tight">
                         {unit.title}
                       </h3>
-                      <Badge 
-                        variant={unit.status === "Available" ? "default" : 
-                                unit.status === "Coming Soon" ? "secondary" : "destructive"}
-                        className="ml-2 flex-shrink-0"
-                      >
-                        {unit.status}
-                      </Badge>
                     </div>
 
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
-                        <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <Building2 className="h-4 w-4 mr-2 flex-shrink-0" />
+                        {building?.displayName || unit.building}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Hotel className="h-4 w-4 mr-2 flex-shrink-0" />
                         {getFloorDisplayName(unit.floor)}
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <Square className="h-4 w-4 mr-2 flex-shrink-0" />
                         {unit.size.toLocaleString()} sq m
                       </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                        {unit.location}
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between pt-4 border-t">
                       <div>
                         <span className="text-2xl font-bold text-primary">
                           ₱{unit.price.toLocaleString()}
                         </span>
-                        <span className="text-gray-600">/month</span>
+                        <p className="text-sm text-gray-500">per sqm</p>
                       </div>
                       
                       <Button
@@ -182,8 +268,6 @@ export default function SearchResults({
                         View Details
                       </Button>
                     </div>
-
-
                   </div>
                 </Card>
               ))}
