@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { getUnitsByStatus, getBuildingsList, getBuildingById } from "../data/ctpData";
+import { getUnitsByStatus, getBuildingsList, getBuildingById, getUnitsByBuilding, getPublicUnits } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -52,18 +52,16 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
     }
   }, [initialFilters]);
 
-  // Apply filters dynamically
+  // Apply filters dynamically using proper building IDs
   const filteredUnits = useMemo(() => {
     let filtered = availableUnits;
 
-    // Filter by building
+    // Filter by building using actual database building IDs
     if (filterBuilding !== "all") {
-      filtered = filtered.filter(unit => {
-        // Extract building prefix from unit ID
-        const unitPrefix = unit.id.split('-')[0];
-        return filterBuilding === unit.building || unit.id.startsWith(filterBuilding) || 
-               (filterBuilding.includes(unitPrefix.toLowerCase()));
-      });
+      // Use the getUnitsByBuilding function which properly handles building ID filtering
+      const buildingUnits = getUnitsByBuilding(filterBuilding);
+      // Filter to only available units from this building
+      filtered = buildingUnits.filter(unit => unit.status === "Available");
     }
 
     // Filter by condition
@@ -80,9 +78,17 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
     
     switch (sortBy) {
       case "price-asc":
-        return sorted.sort((a, b) => a.price - b.price);
+        return sorted.sort((a, b) => {
+          const priceA = typeof a.price === 'number' ? a.price : parseFloat(String(a.price).replace(/[^0-9.]/g, ''));
+          const priceB = typeof b.price === 'number' ? b.price : parseFloat(String(b.price).replace(/[^0-9.]/g, ''));
+          return priceA - priceB;
+        });
       case "price-desc":
-        return sorted.sort((a, b) => b.price - a.price);
+        return sorted.sort((a, b) => {
+          const priceA = typeof a.price === 'number' ? a.price : parseFloat(String(a.price).replace(/[^0-9.]/g, ''));
+          const priceB = typeof b.price === 'number' ? b.price : parseFloat(String(b.price).replace(/[^0-9.]/g, ''));
+          return priceB - priceA;
+        });
       case "size-asc":
         return sorted.sort((a, b) => a.size - b.size);
       case "size-desc":
@@ -98,23 +104,27 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
 
   // Dynamically get building display name from unit
   const getBuildingDisplayName = (unit: any) => {
-    // Try to get building info from the building property
-    const building = getBuildingById(unit.building);
-    if (building) {
-      return building.displayName;
+    // First, try to find the building by checking unit ID prefix
+    let buildingId = '';
+    
+    // Map unit ID prefixes to building IDs
+    if (unit.id.startsWith('CRC-')) {
+      buildingId = 'ctp-red-corp';
+    } else if (unit.id.startsWith('CAT-')) {
+      buildingId = 'ctp-alpha-tower';
+    } else if (unit.id.startsWith('CBF-')) {
+      buildingId = 'ctp-bf-building';
     }
     
-    // Fallback: try to extract from unit ID prefix
-    const prefix = unit.id.split('-')[0];
-    const buildingByPrefix = buildingsList.find(b => 
-      b.id.toLowerCase().includes(prefix.toLowerCase())
-    );
-    
-    if (buildingByPrefix) {
-      return buildingByPrefix.displayName;
+    // Get building info using the ID
+    if (buildingId) {
+      const building = getBuildingById(buildingId);
+      if (building) {
+        return building.displayName;
+      }
     }
     
-    // Final fallback: return the building property directly
+    // Fallback to unit's building property
     return unit.building || "Unknown Building";
   };
 
@@ -129,6 +139,19 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  // Format price for display
+  const formatPrice = (price: number | string) => {
+    if (typeof price === 'number') {
+      return `₱${price.toLocaleString()}`;
+    }
+    // If it's a string, check if it already has currency symbol
+    const priceStr = String(price);
+    if (priceStr.includes('₱') || priceStr.includes('per')) {
+      return priceStr;
+    }
+    return `₱${priceStr}`;
   };
 
   return (
@@ -302,7 +325,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div>
                       <p className="text-2xl font-bold text-primary">
-                        ₱{unit.price.toLocaleString()}
+                        {formatPrice(unit.price)}
                       </p>
                       <p className="text-sm text-gray-500">per sqm</p>
                     </div>
