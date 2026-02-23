@@ -4,6 +4,9 @@
 const getAPIBaseURL = () => {
   const envURL = import.meta.env.VITE_API_URL;
   
+  console.log('🔍 Environment VITE_API_URL:', envURL);
+  console.log('🔍 All env vars:', import.meta.env);
+  
   // If env URL already includes /api, use it as is
   if (envURL && envURL.includes('/api')) {
     return envURL;
@@ -39,6 +42,18 @@ async function fetchAPI(endpoint: string, options?: RequestInit) {
       ...options,
     });
 
+    console.log('📊 Response status:', response.status);
+    console.log('📊 Response headers:', response.headers);
+    
+    // Check if response is actually JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.error('❌ Response is not JSON! Content-Type:', contentType);
+      const text = await response.text();
+      console.error('❌ Response body (first 200 chars):', text.substring(0, 200));
+      throw new Error(`Expected JSON but got ${contentType}. This usually means the API route doesn't exist or backend is serving HTML.`);
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`❌ API Error ${response.status}:`, errorText);
@@ -46,10 +61,14 @@ async function fetchAPI(endpoint: string, options?: RequestInit) {
     }
 
     const data = await response.json();
-    console.log('✅ API Response:', data);
+    console.log('✅ API Response received, items:', Array.isArray(data) ? data.length : 'object');
     return data;
   } catch (error) {
     console.error(`❌ Error fetching ${endpoint}:`, error);
+    console.error('💡 Troubleshooting:');
+    console.error('   1. Is backend running? Check http://localhost:5000/api/health');
+    console.error('   2. Check backend console for errors');
+    console.error('   3. Try curl:', `curl ${url}`);
     throw error;
   }
 }
