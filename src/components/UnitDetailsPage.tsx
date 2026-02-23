@@ -311,7 +311,7 @@ export default function UnitDetailsPage({
                     ₱{unit.price.toLocaleString()}
                   </div>
                   <div className="text-sm text-gray-500">
-                    Base rent • Additional costs may apply
+                    Per sqm
                   </div>
                 </div>
               </div>
