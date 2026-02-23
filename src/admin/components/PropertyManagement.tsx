@@ -221,7 +221,7 @@ export default function PropertyManagement({ openAddBuildingModal, openAddUnitMo
 
     const token = localStorage.getItem('adminToken');
     try {
-      const response = await fetch(`${API_BASE_URL} /api/units/${editingUnit.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/units/${editingUnit.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
