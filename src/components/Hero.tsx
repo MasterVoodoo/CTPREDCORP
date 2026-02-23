@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, Building } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Card } from "./ui/card";
-import { getBuildingsList, companyOverview, getPublicUnits } from "../data/ctpData";
+import { companyOverview } from "../data/ctpData";
+import { fetchAllBuildings, fetchAllUnits } from "../services/api";
 import PanningVideo from "../assets/ctp_pan.gif";
-// dsadasdasdasd
 
 interface HeroProps {
   onSearch?: (building: string, condition: string) => void;
@@ -20,31 +20,54 @@ interface HeroProps {
 export default function Hero({ onSearch }: HeroProps) {
   const [selectedBuilding, setSelectedBuilding] = useState<string>("");
   const [selectedCondition, setSelectedCondition] = useState<string>("");
+  
+  // State for API data
+  const [buildings, setBuildings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Dynamically get buildings list
-  const buildings = useMemo(() => getBuildingsList(), []);
-
-  // Dynamically extract all unique conditions from available units
-  const conditionOptions = useMemo(() => {
-    const allUnits = getPublicUnits();
-    const conditions = new Set<string>();
-    
-    allUnits.forEach(unit => {
-      if (unit.condition) {
-        conditions.add(unit.condition);
+  // Fetch buildings and units from API on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch buildings and units in parallel
+        const [buildingsData, unitsData] = await Promise.all([
+          fetchAllBuildings(),
+          fetchAllUnits()
+        ]);
+        
+        setBuildings(buildingsData);
+        
+        // Extract unique conditions from units
+        const conditions = new Set<string>();
+        unitsData.forEach((unit: any) => {
+          if (unit.condition) {
+            conditions.add(unit.condition);
+          }
+        });
+        
+        // Store conditions for dropdown
+        const conditionsArray = Array.from(conditions).sort();
+        setConditionOptions(conditionsArray.map(c => ({ value: c, label: c })));
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+        // Fallback to empty arrays if API fails
+        setBuildings([]);
+      } finally {
+        setLoading(false);
       }
-    });
+    };
     
-    // Convert to array and sort alphabetically
-    return Array.from(conditions).sort().map(condition => ({
-      value: condition,
-      label: condition
-    }));
+    fetchData();
   }, []);
+
+  // Dynamically extracted condition options
+  const [conditionOptions, setConditionOptions] = useState<Array<{value: string, label: string}>>([]);
 
   const handleSearch = () => {
     if (onSearch) {
-      // Pass the search parameters - building is optional, condition is optional
+      // Pass the search parameters - building ID and condition from database
       onSearch(selectedBuilding, selectedCondition);
     }
   };
@@ -73,10 +96,6 @@ export default function Hero({ onSearch }: HeroProps) {
             <img
               className="absolute top-1/2 left-1/2 w-[177.77vh] h-[56.25vw] min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 scale-110 object-cover"
               src={PanningVideo}
-              // autoPlay
-              // muted
-              // loop
-              // playsInline
             />
             <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
           </div>
@@ -110,9 +129,10 @@ export default function Hero({ onSearch }: HeroProps) {
             <Select
               value={selectedBuilding}
               onValueChange={setSelectedBuilding}
+              disabled={loading}
             >
               <SelectTrigger className="w-full cursor-pointer">
-                <SelectValue placeholder="Any building" />
+                <SelectValue placeholder={loading ? "Loading buildings..." : "Any building"} />
               </SelectTrigger>
               <SelectContent>
                 {buildings.map((building) => (
@@ -125,7 +145,7 @@ export default function Hero({ onSearch }: HeroProps) {
                       <Building className="h-8 w-8" />
                       <div>
                         <div className="font-medium">
-                          {building.displayName}
+                          {building.display_name || building.displayName}
                         </div>
                         <div className="text-sm text-gray-500 cursor-pointer">
                           {building.location}
@@ -143,9 +163,10 @@ export default function Hero({ onSearch }: HeroProps) {
             <Select
               value={selectedCondition}
               onValueChange={setSelectedCondition}
+              disabled={loading}
             >
               <SelectTrigger className="w-full cursor-pointer">
-                <SelectValue placeholder="Any condition" />
+                <SelectValue placeholder={loading ? "Loading..." : "Any condition"} />
               </SelectTrigger>
               <SelectContent>
                 {conditionOptions.map((condition) => (
@@ -163,7 +184,8 @@ export default function Hero({ onSearch }: HeroProps) {
 
           <Button
             onClick={handleSearch}
-            className="bg-primary hover:bg-accent text-white h-10 cursor-pointer"
+            disabled={loading}
+            className="bg-primary hover:bg-accent text-white h-10 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Search className="h-4 w-4 mr-2" />
             Search Offices
