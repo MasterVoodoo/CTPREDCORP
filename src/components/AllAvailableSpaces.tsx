@@ -4,10 +4,10 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { getUnitsByStatus, getBuildingsList, getBuildingById, getUnitsByBuilding, getPublicUnits } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { fetchAllBuildings, fetchUnitsByStatus } from "../services/api";
 
 interface AllAvailableSpacesProps {
   onBack: () => void;
@@ -26,12 +26,38 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
   const [filterCondition, setFilterCondition] = useState<string>(
     initialFilters?.condition || "all"
   );
+  
+  // State for API data
+  const [availableUnits, setAvailableUnits] = useState<any[]>([]);
+  const [buildingsList, setBuildingsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Get all available units dynamically
-  const availableUnits = useMemo(() => getUnitsByStatus("Available"), []);
-
-  // Dynamically get all buildings
-  const buildingsList = useMemo(() => getBuildingsList(), []);
+  // Fetch data from API on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch buildings and units in parallel
+        const [buildingsData, unitsData] = await Promise.all([
+          fetchAllBuildings(),
+          fetchUnitsByStatus("Available")
+        ]);
+        
+        setBuildingsList(buildingsData);
+        setAvailableUnits(unitsData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load data. Please ensure the backend is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   // Dynamically extract all unique conditions from available units
   const availableConditions = useMemo(() => {
@@ -52,16 +78,13 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
     }
   }, [initialFilters]);
 
-  // Apply filters dynamically using proper building IDs
+  // Apply filters dynamically
   const filteredUnits = useMemo(() => {
     let filtered = availableUnits;
 
-    // Filter by building using actual database building IDs
+    // Filter by building
     if (filterBuilding !== "all") {
-      // Use the getUnitsByBuilding function which properly handles building ID filtering
-      const buildingUnits = getUnitsByBuilding(filterBuilding);
-      // Filter to only available units from this building
-      filtered = buildingUnits.filter(unit => unit.status === "Available");
+      filtered = filtered.filter(unit => unit.building === filterBuilding);
     }
 
     // Filter by condition
@@ -79,14 +102,14 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
     switch (sortBy) {
       case "price-asc":
         return sorted.sort((a, b) => {
-          const priceA = typeof a.price === 'number' ? a.price : parseFloat(String(a.price).replace(/[^0-9.]/g, ''));
-          const priceB = typeof b.price === 'number' ? b.price : parseFloat(String(b.price).replace(/[^0-9.]/g, ''));
+          const priceA = parseFloat(String(a.price));
+          const priceB = parseFloat(String(b.price));
           return priceA - priceB;
         });
       case "price-desc":
         return sorted.sort((a, b) => {
-          const priceA = typeof a.price === 'number' ? a.price : parseFloat(String(a.price).replace(/[^0-9.]/g, ''));
-          const priceB = typeof b.price === 'number' ? b.price : parseFloat(String(b.price).replace(/[^0-9.]/g, ''));
+          const priceA = parseFloat(String(a.price));
+          const priceB = parseFloat(String(b.price));
           return priceB - priceA;
         });
       case "size-asc":
@@ -102,30 +125,10 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
     }
   }, [filteredUnits, sortBy]);
 
-  // Dynamically get building display name from unit
+  // Get building display name from unit
   const getBuildingDisplayName = (unit: any) => {
-    // First, try to find the building by checking unit ID prefix
-    let buildingId = '';
-    
-    // Map unit ID prefixes to building IDs
-    if (unit.id.startsWith('CRC-')) {
-      buildingId = 'ctp-red-corp';
-    } else if (unit.id.startsWith('CAT-')) {
-      buildingId = 'ctp-alpha-tower';
-    } else if (unit.id.startsWith('CBF-')) {
-      buildingId = 'ctp-bf-building';
-    }
-    
-    // Get building info using the ID
-    if (buildingId) {
-      const building = getBuildingById(buildingId);
-      if (building) {
-        return building.displayName;
-      }
-    }
-    
-    // Fallback to unit's building property
-    return unit.building || "Unknown Building";
+    const building = buildingsList.find(b => b.id === unit.building);
+    return building?.display_name || building?.displayName || unit.building;
   };
 
   const getConditionColor = (condition: string) => {
@@ -143,16 +146,48 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
 
   // Format price for display
   const formatPrice = (price: number | string) => {
-    if (typeof price === 'number') {
-      return `₱${price.toLocaleString()}`;
-    }
-    // If it's a string, check if it already has currency symbol
-    const priceStr = String(price);
-    if (priceStr.includes('₱') || priceStr.includes('per')) {
-      return priceStr;
-    }
-    return `₱${priceStr}`;
+    const priceNum = parseFloat(String(price));
+    return `₱${priceNum.toLocaleString()}`;
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/2 mb-8"></div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-96 bg-gray-300 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <Card className="text-center py-12">
+            <CardContent>
+              <Building2 className="h-16 w-16 text-red-400 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-gray-700 mb-2">Error Loading Data</h3>
+              <p className="text-gray-500 mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()} className="cursor-pointer">
+                Retry
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -205,7 +240,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                         value={building.id} 
                         className="cursor-pointer"
                       >
-                        {building.displayName}
+                        {building.display_name || building.displayName}
                       </SelectItem>
                     ))}
                   </SelectContent>
