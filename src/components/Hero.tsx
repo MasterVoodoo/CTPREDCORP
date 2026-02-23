@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, Building } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Card } from "./ui/card";
-import { getBuildingsList, companyOverview } from "../data/ctpData";
+import { getBuildingsList, companyOverview, getPublicUnits } from "../data/ctpData";
 import PanningVideo from "../assets/ctp_pan.gif";
 // dsadasdasdasd
 
@@ -21,13 +21,26 @@ export default function Hero({ onSearch }: HeroProps) {
   const [selectedBuilding, setSelectedBuilding] = useState<string>("");
   const [selectedCondition, setSelectedCondition] = useState<string>("");
 
-  const buildings = getBuildingsList();
+  // Dynamically get buildings list
+  const buildings = useMemo(() => getBuildingsList(), []);
 
-  const conditionOptions = [
-    { value: "Bare", label: "Bare" },
-    { value: "Warm Shell", label: "Warm Shell" },
-    { value: "Fitted", label: "Fitted" },
-  ];
+  // Dynamically extract all unique conditions from available units
+  const conditionOptions = useMemo(() => {
+    const allUnits = getPublicUnits();
+    const conditions = new Set<string>();
+    
+    allUnits.forEach(unit => {
+      if (unit.condition) {
+        conditions.add(unit.condition);
+      }
+    });
+    
+    // Convert to array and sort alphabetically
+    return Array.from(conditions).sort().map(condition => ({
+      value: condition,
+      label: condition
+    }));
+  }, []);
 
   const handleSearch = () => {
     if (onSearch) {
