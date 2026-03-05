@@ -19,9 +19,9 @@ export default function ContactPage() {
 
   // External map URLs for each building (kept in sync with Footer.tsx)
   const mapLinks: Record<string, string> = {
-    "ctp-alpha": "https://maps.app.goo.gl/rzPgQHFY49L4UYpRA",
-    "ctp-asean": "https://maps.app.goo.gl/3Qw6E7DdYSKUzcsj9",
-    "ctp-bf": "https://maps.app.goo.gl/aGPvpMu35rYTxBAw7",
+    "ctp-alpha": "https://maps.app.goo.gl/sEuUs9kYiUzavb5U8",
+    "ctp-asean": "https://maps.app.goo.gl/SwS97qpZrRFdHjCd7",
+    "ctp-bf": "https://maps.app.goo.gl/FDLhceApcqf47dcK6",
   };
 
   // Map embeds for each building
