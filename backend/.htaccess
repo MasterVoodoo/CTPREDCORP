@@ -1,6 +1,7 @@
 PassengerEnabled on
-PassengerAppRoot /home/sysuser_5/httpdocs/backend
+PassengerAppRoot /var/www/vhosts/ctpred.com.ph/httpdocs/backend
 PassengerAppType node
 PassengerStartupFile server.js
-PassengerNodejs /usr/bin/node
+PassengerNodejs /usr/local/bin/node
 PassengerAppEnv production
+PassengerFriendlyErrorPages on

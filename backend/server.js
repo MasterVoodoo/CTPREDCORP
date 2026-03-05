@@ -2,16 +2,41 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-require('dotenv').config();
 
-const { testConnection } = require('./config/database');
-const buildingsRouter = require('./routes/buildings');
-const unitsRouter = require('./routes/units');
-const financialRouter = require('./routes/financial');
-const adminRouter = require('./routes/admin');
-const uploadsRouter = require('./routes/uploads');
-const emailRouter = require('./routes/email');
-const appointmentsRouter = require('./routes/appointments');
+// Enable detailed error reporting
+process.env.DEBUG = 'passenger*';
+
+// Load environment variables
+require('dotenv').config();
+console.log('🔍 Environment variables loaded');
+console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+console.log('🔍 PORT:', process.env.PORT);
+
+// Load required modules
+let testConnection;
+let buildingsRouter;
+let unitsRouter;
+let financialRouter;
+let adminRouter;
+let uploadsRouter;
+let emailRouter;
+let appointmentsRouter;
+
+try {
+  ({ testConnection } = require('./config/database'));
+  buildingsRouter = require('./routes/buildings');
+  unitsRouter = require('./routes/units');
+  financialRouter = require('./routes/financial');
+  adminRouter = require('./routes/admin');
+  uploadsRouter = require('./routes/uploads');
+  emailRouter = require('./routes/email');
+  appointmentsRouter = require('./routes/appointments');
+  console.log('✅ All routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading modules:', error);
+  console.error('❌ Stack trace:', error.stack);
+  process.exit(1);
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -131,33 +156,57 @@ app.use((req, res) => {
 
 // -------------------- Start Server -------------------- //
 const startServer = async () => {
-  console.log('🔄 Testing database connection...');
-  const dbConnected = await testConnection();
+  console.log('🔄 Starting server initialization...');
   
-  if (!dbConnected) {
-    console.error('❌ Failed to connect to database. Please check your configuration.');
-    console.error('DB_HOST:', process.env.DB_HOST);
-    console.error('DB_NAME:', process.env.DB_NAME);
+  try {
+    // Test database connection
+    console.log('🔄 Testing database connection...');
+    const dbConnected = await testConnection();
+    
+    if (!dbConnected) {
+      console.error('❌ Failed to connect to database. Please check your configuration.');
+      console.error('DB_HOST:', process.env.DB_HOST);
+      console.error('DB_NAME:', process.env.DB_NAME);
+      process.exit(1);
+    }
+    
+    // Start server
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log('\n========================================');
+      console.log('🚀 CTP RED Backend Server Started');
+      console.log('========================================');
+      console.log('📍 Server URL: http://localhost:' + PORT);
+      console.log('📝 Environment:', process.env.NODE_ENV || 'development');
+      console.log('\n📌 API Endpoints:');
+      console.log('   - Health: http://localhost:' + PORT + '/api/health');
+      console.log('   - Admin: http://localhost:' + PORT + '/api/admin');
+      console.log('   - Email: http://localhost:' + PORT + '/api/email/send-appointment');
+      console.log('   - Appointments: http://localhost:' + PORT + '/api/admin/appointments');
+      console.log('   - Buildings: http://localhost:' + PORT + '/api/buildings');
+      console.log('   - Units: http://localhost:' + PORT + '/api/units');
+      console.log('\n🌐 CORS Allowed Origins:');
+      allowedOrigins.forEach(origin => console.log('   -', origin));
+      console.log('========================================\n');
+    });
+  } catch (error) {
+    console.error('❌ Server startup failed:', error);
+    console.error('❌ Stack trace:', error.stack);
     process.exit(1);
   }
-  
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log('\n========================================');
-    console.log('🚀 CTP RED Backend Server Started');
-    console.log('========================================');
-    console.log('📍 Server URL: http://localhost:' + PORT);
-    console.log('📝 Environment:', process.env.NODE_ENV || 'development');
-    console.log('\n📌 API Endpoints:');
-    console.log('   - Health: http://localhost:' + PORT + '/api/health');
-    console.log('   - Admin: http://localhost:' + PORT + '/api/admin');
-    console.log('   - Email: http://localhost:' + PORT + '/api/email/send-appointment');
-    console.log('   - Appointments: http://localhost:' + PORT + '/api/admin/appointments');
-    console.log('   - Buildings: http://localhost:' + PORT + '/api/buildings');
-    console.log('   - Units: http://localhost:' + PORT + '/api/units');
-    console.log('\n🌐 CORS Allowed Origins:');
-    allowedOrigins.forEach(origin => console.log('   -', origin));
-    console.log('========================================\n');
-  });
 };
 
+// Catch unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  console.error('❌ Stack trace:', error.stack);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection:', reason);
+  process.exit(1);
+});
+
+// Start the server
+console.log('🚀 Attempting to start CTP RED Backend Server...');
 startServer();
