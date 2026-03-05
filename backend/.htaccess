@@ -1,13 +1,6 @@
-# Phusion Passenger Configuration for Node.js
 PassengerEnabled on
-PassengerAppRoot /home/ctpredco/public_html/backend
+PassengerAppRoot /home/sysuser_5/httpdocs/backend
 PassengerAppType node
-PassengerStartupFile app.js
+PassengerStartupFile server.js
 PassengerNodejs /usr/bin/node
-
-# Environment
-SetEnv NODE_ENV production
-
-# Restart the app when files change (development only, remove in production)
-# PassengerMaxPoolSize 1
-# PassengerMinInstances 1
+PassengerAppEnv production
