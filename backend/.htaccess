@@ -3,5 +3,5 @@ PassengerAppRoot /var/www/vhosts/ctpred.com.ph/httpdocs/backend
 PassengerAppType node
 PassengerStartupFile server.js
 PassengerNodejs /usr/local/bin/node
-PassengerAppEnv production
+PassengerAppEnv development
 PassengerFriendlyErrorPages on
