@@ -159,19 +159,8 @@ const startServer = async () => {
   console.log('🔄 Starting server initialization...');
   
   try {
-    // Test database connection
-    console.log('🔄 Testing database connection...');
-    const dbConnected = await testConnection();
-    
-    if (!dbConnected) {
-      console.error('❌ Failed to connect to database. Please check your configuration.');
-      console.error('DB_HOST:', process.env.DB_HOST);
-      console.error('DB_NAME:', process.env.DB_NAME);
-      process.exit(1);
-    }
-    
-    // Start server
-    app.listen(PORT, '0.0.0.0', () => {
+    // Start server FIRST, then test database connection
+    app.listen(PORT, '0.0.0.0', async () => {
       console.log('\n========================================');
       console.log('🚀 CTP RED Backend Server Started');
       console.log('========================================');
@@ -187,6 +176,22 @@ const startServer = async () => {
       console.log('\n🌐 CORS Allowed Origins:');
       allowedOrigins.forEach(origin => console.log('   -', origin));
       console.log('========================================\n');
+      
+      // Test database connection AFTER server starts
+      console.log('🔄 Testing database connection...');
+      try {
+        const dbConnected = await testConnection();
+        if (dbConnected) {
+          console.log('✅ Database connection successful');
+        } else {
+          console.error('⚠️  Database connection failed - some features may not work');
+          console.error('DB_HOST:', process.env.DB_HOST);
+          console.error('DB_NAME:', process.env.DB_NAME);
+        }
+      } catch (dbError) {
+        console.error('⚠️  Database connection error:', dbError.message);
+        console.error('⚠️  Some features may not work');
+      }
     });
   } catch (error) {
     console.error('❌ Server startup failed:', error);
