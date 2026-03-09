@@ -21,7 +21,7 @@ export default function BuildingPage() {
     return null;
   }
 
-  if (buildingId === 'ctp-asean-corp') {
+  if (buildingId === 'ctp-asean-tower') {
     return <CtpRedCorpProperty onBack={handleBack} onViewDetails={handleViewDetails} />;
   }
 

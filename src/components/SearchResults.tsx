@@ -1,11 +1,24 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, MapPin, Building2, Square, Hotel } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { getUnitsByBuilding, getBuildingById, Unit, getPublicUnits } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+
+interface Unit {
+  id: string;
+  title: string;
+  building: string;
+  location: string;
+  floor: number;
+  size: number;
+  capacity: number;
+  price: number;
+  status: string;
+  condition: string;
+  image: string;
+}
 
 interface SearchResultsProps {
   buildingId: string;
@@ -23,45 +36,65 @@ export default function SearchResults({
   onViewDetails 
 }: SearchResultsProps) {
   const [loading, setLoading] = useState(true);
+  const [building, setBuilding] = useState<any>(null);
+  const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
+  const [stats, setStats] = useState({ available: 0, comingSoon: 0, taken: 0 });
 
-  const building = useMemo(() => getBuildingById(buildingId), [buildingId]);
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  // Dynamically filter units based on search criteria
-  const filteredUnits = useMemo(() => {
-    setLoading(true);
-    
-    let units: Unit[] = [];
-    
-    // If building is specified, get units for that building
-    if (buildingId && buildingId !== "all") {
-      units = getUnitsByBuilding(buildingId);
-    } else {
-      // If no building specified, get all public units
-      units = getPublicUnits();
-    }
-    
-    // Filter by floor if specified
-    if (floor !== undefined && floor !== null) {
-      units = units.filter(unit => unit.floor === floor);
-    }
-    
-    // Filter by condition if specified
-    if (condition && condition !== "" && condition !== "all") {
-      units = units.filter(unit => unit.condition === condition);
-    }
-    
-    setLoading(false);
-    return units;
+  useEffect(() => {
+    fetchData();
   }, [buildingId, floor, condition]);
 
-  // Get statistics dynamically
-  const stats = useMemo(() => {
-    const available = filteredUnits.filter(u => u.status === 'Available').length;
-    const comingSoon = filteredUnits.filter(u => u.status === 'Coming Soon').length;
-    const taken = filteredUnits.filter(u => u.status === 'Taken').length;
-    
-    return { available, comingSoon, taken };
-  }, [filteredUnits]);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch building and units
+      const [buildingRes, unitsRes] = await Promise.all([
+        buildingId && buildingId !== "all" 
+          ? fetch(`${API_BASE_URL}/api/buildings/${buildingId}`)
+          : Promise.resolve(null),
+        fetch(`${API_BASE_URL}/api/units`)
+      ]);
+
+      if (buildingRes && buildingRes.ok) {
+        const buildingData = await buildingRes.json();
+        setBuilding(buildingData);
+      }
+
+      if (unitsRes.ok) {
+        let units: Unit[] = await unitsRes.json();
+        
+        // Filter by building if specified
+        if (buildingId && buildingId !== "all") {
+          units = units.filter(unit => unit.building === buildingId);
+        }
+        
+        // Filter by floor if specified
+        if (floor !== undefined && floor !== null) {
+          units = units.filter(unit => unit.floor === floor);
+        }
+        
+        // Filter by condition if specified
+        if (condition && condition !== "" && condition !== "all") {
+          units = units.filter(unit => unit.condition === condition);
+        }
+        
+        setFilteredUnits(units);
+        
+        // Calculate stats
+        const available = units.filter(u => u.status === 'Available').length;
+        const comingSoon = units.filter(u => u.status === 'Coming Soon').length;
+        const taken = units.filter(u => u.status === 'Taken' || u.status === 'Occupied').length;
+        setStats({ available, comingSoon, taken });
+      }
+    } catch (err) {
+      console.error('Error fetching search results:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Get condition badge color dynamically
   const getConditionColor = (condition: string) => {

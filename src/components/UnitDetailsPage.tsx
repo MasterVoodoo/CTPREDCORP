@@ -8,7 +8,6 @@ import {
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { getUnitById } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 
 interface Unit {
@@ -52,28 +51,14 @@ export default function UnitDetailsPage({
     setError(null);
     
     try {
-      // First try to get from hardcoded data (for legacy units)
-      const hardcodedUnit = getUnitById(unitId);
-      if (hardcodedUnit) {
-        setUnit(hardcodedUnit);
-        setLoading(false);
-        return;
-      }
-
-      // If not found in hardcoded data, fetch from database
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/units`);
+      // Fetch unit from database
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/units/${unitId}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch units');
-      }
-      
-      const allUnits = await response.json();
-      const foundUnit = allUnits.find((u: Unit) => u.id === unitId);
-      
-      if (!foundUnit) {
         throw new Error('Unit not found');
       }
       
-      setUnit(foundUnit);
+      const unitData = await response.json();
+      setUnit(unitData);
     } catch (err: any) {
       console.error('Error fetching unit data:', err);
       setError(err.message || 'Failed to load unit');
