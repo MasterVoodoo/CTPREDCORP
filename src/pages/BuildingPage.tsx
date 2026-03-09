@@ -1,8 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import DynamicBuildingProperty from '@/components/DynamicBuildingProperty';
-import CtpRedCorpProperty from '@/components/CtpRedCorpProperty';
-import CtpAlphaTowerProperty from '@/components/CtpAlphaTowerProperty';
-import CtpBfBuildingProperty from '@/components/CtpBfBuildingProperty';
 
 export default function BuildingPage() {
   const { buildingId } = useParams<{ buildingId: string }>();
@@ -21,18 +18,8 @@ export default function BuildingPage() {
     return null;
   }
 
-  if (buildingId === 'ctp-asean-tower') {
-    return <CtpRedCorpProperty onBack={handleBack} onViewDetails={handleViewDetails} />;
-  }
-
-  if (buildingId === 'ctp-alpha-tower') {
-    return <CtpAlphaTowerProperty onBack={handleBack} onViewDetails={handleViewDetails} />;
-  }
-
-  if (buildingId === 'ctp-bf-building') {
-    return <CtpBfBuildingProperty onBack={handleBack} onViewDetails={handleViewDetails} />;
-  }
-
+  // Use DynamicBuildingProperty for ALL buildings (including legacy ones)
+  // This ensures all buildings fetch data from the database
   return (
     <DynamicBuildingProperty 
       buildingId={buildingId}

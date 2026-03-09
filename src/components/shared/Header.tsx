@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const navigationItems = {
   properties: [
-    { label: "CTP Asean Tower", to: "/properties/ctp-red-corp" },
+    { label: "CTP Asean Tower", to: "/properties/ctp-asean-tower" },
     { label: "CTP Alpha Tower", to: "/properties/ctp-alpha-tower" },
     { label: "CTP BF", to: "/properties/ctp-bf-building" },
   ],
