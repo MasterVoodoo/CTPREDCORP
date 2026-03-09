@@ -1,6 +1,6 @@
 import { Building, Users, Award, Clock } from "lucide-react";
-import { Card, CardContent } from "./ui/card";
-import { companyStatistics, simpleBuildingStatistics, companyOverview } from "../data/ctpData";
+import { Card, CardContent } from "@/components/ui/card";
+import { companyStatistics, simpleBuildingStatistics, companyOverview } from "@/data/ctpData";
 
 const stats = [
   {

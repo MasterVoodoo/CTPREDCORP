@@ -1,14 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import './index.css';
-import App from './App.tsx';
-import AdminApp from './admin/AdminApp.tsx';
-
-// Check if we're on the admin route
-const isAdminRoute = window.location.pathname.startsWith('/admin');
+import App from './App';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isAdminRoute ? <AdminApp /> : <App />}
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );

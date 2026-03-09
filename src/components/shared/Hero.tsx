@@ -1,17 +1,17 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search, Building } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Card } from "./ui/card";
-import { companyOverview } from "../data/ctpData";
-import { fetchAllBuildings, fetchAllUnits } from "../services/api";
-import PanningVideo from "../assets/ctp_pan.gif";
+} from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
+import { companyOverview } from "@/data/ctpData";
+import { fetchAllBuildings, fetchAllUnits } from "@/services/api";
+import PanningVideo from "@/assets/ctp_pan.gif";
 
 interface HeroProps {
   onSearch?: (building: string, condition: string) => void;

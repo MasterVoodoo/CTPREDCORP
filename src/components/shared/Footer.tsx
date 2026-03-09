@@ -9,7 +9,7 @@ import {
   Linkedin,
   Instagram,
 } from "lucide-react";
-import { Separator } from "./ui/separator";
+import { Separator } from "@/components/ui/separator";
 //import ctpLogo from "figma:asset/8ed115b5c30a60d213ba162e5cfc8f35f079d16b.png";
 
 const buildings = [
