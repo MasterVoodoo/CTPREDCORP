@@ -1,368 +1,300 @@
-# 🎛️ Plesk Deployment Guide (No SSH Required)
+# Plesk Deployment Guide - Fix Backend 500 Error
 
-## Overview
+## Problem
+Backend API returns 500 error: "Web application could not be started by Phusion Passenger"
 
-This guide shows how to deploy and manage the CTP RED application entirely through Plesk Panel, without SSH access.
+## Root Cause
+Phusion Passenger (Node.js server in Plesk) cannot start the backend application.
 
----
+## Solution
 
-## 🚨 Current Issue: Backend Not Running
+### 1. File Structure for Plesk
 
-The error you're seeing means the Node.js backend server is not running. In Plesk, you need to set up Node.js application hosting.
+Your deployment should look like this:
+```
+httpdocs/
+├── index.html (from dist/)
+├── assets/ (from dist/assets/)
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── config/
+│   ├── routes/
+│   └── ...
+├── package.json (ROOT - for Passenger)
+└── .htaccess
+```
 
----
+### 2. Create Root package.json
 
-## ✅ Step-by-Step Setup in Plesk
+Create `package.json` in the **root directory** (same level as index.html):
 
-### Step 1: Enable Node.js in Plesk
+```json
+{
+  "name": "ctpredcorp-production",
+  "version": "1.0.0",
+  "description": "CTP RED CORP Website",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.5",
+    "nodemailer": "^6.10.1"
+  }
+}
+```
 
-1. **Log into Plesk Panel**
-2. **Go to your domain** (ctpred.com.ph)
-3. **Look for "Node.js" in the left sidebar**
-   - If you don't see it, Node.js extension needs to be installed by your hosting provider
+### 3. Configure Plesk Node.js Settings
 
----
+1. **Login to Plesk**
+2. Go to **Domains** → **ctpred.com.ph**
+3. Click **Node.js**
+4. Set these values:
 
-### Step 2: Set Up Node.js Application
+```
+✅ Node.js: Enabled
+✅ Node.js Version: 18.x (or latest LTS)
+✅ Application Mode: production
+✅ Application Root: /httpdocs
+✅ Application Startup File: backend/server.js
+✅ Application URL: (leave empty or /)
+```
 
-#### Option A: Using Plesk Node.js Manager
+5. Click **Enable Node.js** and **NPM Install**
 
-1. **Click "Node.js"** in your domain settings
-2. **Click "Enable Node.js"**
-3. **Configure:**
-   ```
-   Node.js version: 18.x or 20.x (latest LTS)
-   Application mode: production
-   Application root: /backend
-   Application startup file: server.js
-   ```
-4. **Click "Enable Node.js"**
-5. **Set Environment Variables:**
-   - Click "Environment Variables" or "Custom environment variables"
-   - Add these:
-     ```
-     NODE_ENV=production
-     PORT=5000
-     DB_HOST=localhost
-     DB_USER=your_database_user
-     DB_PASSWORD=your_database_password
-     DB_NAME=ctpred
-     JWT_SECRET=your-secure-random-string
-     CLIENT_URL=https://ctpred.com.ph
-     FRONTEND_URL=https://ctpred.com.ph
-     ```
+### 4. Environment Variables in Plesk
 
-6. **Click "Restart App"**
+In Plesk Node.js settings, add these **Custom Environment Variables**:
 
-#### Option B: Using Plesk Scheduled Tasks (If Node.js Manager unavailable)
+```
+NODE_ENV=production
+PORT=5000
+DB_HOST=localhost
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=ctpredcorp
+JWT_SECRET=your-secret-key-here
+CLIENT_URL=https://ctpred.com.ph
+FRONTEND_URL=https://ctpred.com.ph
+```
 
-If Plesk doesn't have Node.js manager, you can run the backend as a scheduled task:
+### 5. Update .htaccess for API Routing
 
-1. **Go to "Scheduled Tasks"** (Cron Jobs)
-2. **Add New Task:**
-   ```
-   Command: cd /var/www/vhosts/ctpred.com.ph/CTPREDCORP/backend && node server.js >> /var/www/vhosts/ctpred.com.ph/logs/node.log 2>&1 &
-   Schedule: @reboot (run once at startup)
-   ```
+Create/update `.htaccess` in root:
 
-**⚠️ Note:** This is not ideal for production but works if Node.js hosting is not available.
+```apache
+# Passenger configuration
+PassengerEnabled on
+PassengerAppRoot /var/www/vhosts/ctpred.com.ph/httpdocs
+PassengerStartupFile backend/server.js
+PassengerAppType node
+PassengerNodejs /opt/plesk/node/18/bin/node
 
----
+# API routing - proxy to Node.js
+RewriteEngine On
 
-### Step 3: Upload Backend Files via Plesk File Manager
+# API requests go to Node.js backend
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^(.*)$ http://localhost:5000/$1 [P,L]
 
-1. **Go to "Files" → "File Manager"**
-2. **Navigate to your domain folder** (e.g., `/httpdocs/`)
-3. **Create folder structure:**
-   ```
-   /httpdocs/          (frontend files)
-   /backend/           (backend application)
-   ```
+# All other requests serve React app
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L]
 
-4. **Upload backend files:**
-   - Option 1: Upload `backend` folder as ZIP and extract
-   - Option 2: Use Git in Plesk (if available)
-   - Option 3: Use FTP client (FileZilla)
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+```
 
-5. **Create `.env` file in `/backend/` folder:**
-   - Click "+ Add File" → Name it `.env`
-   - Edit and paste:
-     ```env
-     NODE_ENV=production
-     PORT=5000
-     DB_HOST=localhost
-     DB_USER=your_db_user
-     DB_PASSWORD=your_db_password
-     DB_NAME=ctpred
-     DB_PORT=3306
-     JWT_SECRET=your-secure-secret-key-here
-     CLIENT_URL=https://ctpred.com.ph
-     FRONTEND_URL=https://ctpred.com.ph
-     COMPANY_EMAIL=aseantower@ctpred.com.ph
-     ```
+### 6. Alternative: Separate Backend Port
 
----
+If Passenger doesn't work, run backend on separate port:
 
-### Step 4: Install Backend Dependencies in Plesk
+**Option A: Use PM2 (Recommended)**
 
-#### If Plesk has Node.js Manager:
-1. **Go to Node.js settings**
-2. **Click "NPM Install"** or run `npm install` button
-3. Wait for installation to complete
+1. SSH into server
+2. Install PM2:
+```bash
+npm install -g pm2
+```
 
-#### If using Plesk Terminal (if available):
-1. **Go to "Tools & Settings" → "Web Terminal"**
-2. **Run:**
-   ```bash
-   cd /var/www/vhosts/ctpred.com.ph/backend
-   npm install
-   ```
+3. Create `ecosystem.config.js` in backend folder:
+```javascript
+module.exports = {
+  apps: [{
+    name: 'ctpredcorp-api',
+    script: './server.js',
+    cwd: '/var/www/vhosts/ctpred.com.ph/httpdocs/backend',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 5000,
+      DB_HOST: 'localhost',
+      DB_USER: 'your_db_user',
+      DB_PASSWORD: 'your_db_password',
+      DB_NAME: 'ctpredcorp',
+      JWT_SECRET: 'your-secret-key'
+    }
+  }]
+};
+```
 
-#### If no terminal access:
-You'll need to:
-1. Install dependencies locally on your computer
-2. Upload the entire `node_modules` folder (large, not recommended)
-3. OR ask hosting provider to enable SSH/Terminal access
+4. Start backend:
+```bash
+cd /var/www/vhosts/ctpred.com.ph/httpdocs/backend
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+```
 
----
+5. Update `.htaccess` to proxy to port 5000:
+```apache
+RewriteEngine On
 
-### Step 5: Configure Database in Plesk
+# API proxy to backend on port 5000
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ http://localhost:5000/api/$1 [P,L]
 
-1. **Go to "Databases" → "MySQL Databases"**
-2. **Create database:**
-   - Database name: `ctpred`
-   - User: Create new user with password
-   - Grant all privileges
+# React app routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L]
+```
 
-3. **Import database structure:**
-   - Click "phpMyAdmin"
-   - Select `ctpred` database
-   - Click "Import"
-   - Upload your SQL file or create tables manually
+### 7. Check Logs
 
-4. **Verify tables exist:**
-   - Check for: `appointments`, `buildings`, `units`, `admin_users`, etc.
+**Passenger Logs:**
+```bash
+tail -f /var/log/passenger.log
+```
 
----
+**Node.js App Logs (if using PM2):**
+```bash
+pm2 logs ctpredcorp-api
+```
 
-### Step 6: Build and Upload Frontend
+**Apache Error Logs:**
+```bash
+tail -f /var/www/vhosts/ctpred.com.ph/logs/error_log
+```
 
-#### On Your Local Computer:
+### 8. Test Backend
+
+Once configured, test:
 
 ```bash
-cd /path/to/CTPREDCORP
-git pull origin main
-npm install
-npm run build
+# Test health endpoint
+curl https://ctpred.com.ph/api/health
+
+# Test buildings endpoint
+curl https://ctpred.com.ph/api/buildings
+
+# Expected response:
+# {"status":"OK","message":"CTP RED API is running",...}
 ```
 
-This creates a `dist/` folder with built files.
+### 9. Common Issues & Fixes
 
-#### Upload to Plesk:
-
-1. **Go to "Files" → "File Manager"**
-2. **Navigate to `/httpdocs/`**
-3. **Delete old files** (backup first!)
-4. **Upload all files from `dist/` folder:**
-   - `index.html`
-   - `assets/` folder
-   - `src/` folder (if contains images)
-   - Any other files from `dist/`
-
-5. **Verify `.htaccess` exists in `/httpdocs/`:**
-   ```apache
-   <IfModule mod_rewrite.c>
-   RewriteEngine On
-   
-   # API PROXY to Node.js backend
-   RewriteCond %{REQUEST_URI} ^/api/ [NC]
-   RewriteRule ^api/(.*)$ http://127.0.0.1:5000/api/$1 [P,L]
-   
-   # Serve static files
-   RewriteCond %{REQUEST_FILENAME} -f [OR]
-   RewriteCond %{REQUEST_FILENAME} -d
-   RewriteRule ^ - [L]
-   
-   # SPA fallback
-   RewriteRule ^ /index.html [L]
-   </IfModule>
-   
-   <IfModule mod_mime.c>
-       AddType application/javascript .js
-       AddType module application/javascript .mjs
-       AddType text/css .css
-   </IfModule>
-   ```
-
----
-
-### Step 7: Enable Apache Modules in Plesk
-
-**⚠️ Critical:** Apache needs `mod_proxy` to forward API requests to Node.js
-
-1. **Go to "Tools & Settings"**
-2. **Click "Apache Web Server"**
-3. **Look for "Modules" or contact your hosting provider**
-4. **Required modules:**
-   - `mod_rewrite` (should be enabled by default)
-   - `mod_proxy`
-   - `mod_proxy_http`
-
-**If you can't enable these:**
-- Contact your hosting provider: "Please enable mod_proxy and mod_proxy_http for Apache"
-- Without these, API proxying won't work
-
----
-
-### Step 8: Test Everything
-
-#### Test Backend (in Plesk):
-
-1. **Check if Node.js app is running:**
-   - Go to Node.js settings
-   - Status should show "Running" or "Active"
-
-2. **Check logs:**
-   - Look for "Logs" or "Application logs"
-   - Should see: "Server running on http://localhost:5000"
-
-#### Test in Browser:
-
-1. **Open browser DevTools** (F12)
-2. **Visit:** `https://ctpred.com.ph/api/health`
-3. **Should see:** `{"status":"OK","message":"CTP RED API is running"}`
-
-4. **Try appointment form:**
-   - Fill and submit
-   - Check Network tab for `/api/email/send-appointment`
-   - Should return: `{"success":true}`
-
----
-
-## 🔄 Alternative: Contact Hosting Provider
-
-If Plesk doesn't have Node.js support, you need to ask your hosting provider:
-
-```
-Hello,
-
-I need to run a Node.js application on my domain (ctpred.com.ph).
-Can you please:
-
-1. Enable Node.js hosting for my domain
-2. Enable Apache modules: mod_proxy and mod_proxy_http
-3. Allow my Node.js app to run on port 5000
-4. OR provide SSH access so I can manage it myself
-
-The application is already built and ready to deploy.
-
-Thank you!
+#### Issue: "Cannot find module"
+**Fix:** Run `npm install` in backend folder
+```bash
+cd /var/www/vhosts/ctpred.com.ph/httpdocs/backend
+npm install --production
 ```
 
----
+#### Issue: Database connection failed
+**Fix:** Check database credentials in environment variables
+```bash
+# Test database connection
+mysql -u your_db_user -p ctpredcorp
+```
 
-## 🎯 Troubleshooting Without SSH
+#### Issue: Port already in use
+**Fix:** Kill process on port 5000
+```bash
+lsof -ti:5000 | xargs kill -9
+```
 
-### Backend Not Starting?
+#### Issue: Permission denied
+**Fix:** Set correct permissions
+```bash
+chown -R www-data:www-data /var/www/vhosts/ctpred.com.ph/httpdocs
+chmod -R 755 /var/www/vhosts/ctpred.com.ph/httpdocs
+```
 
-**Check in Plesk:**
-- **Node.js Status:** Should show "Running"
-- **Logs:** Look for error messages
-- **Port:** Make sure port 5000 is not used by another app
+### 10. Verification Checklist
 
-**Common Errors:**
+- [ ] Root `package.json` exists
+- [ ] Backend `package.json` has all dependencies
+- [ ] `npm install` completed successfully
+- [ ] Environment variables set in Plesk
+- [ ] Node.js enabled in Plesk
+- [ ] `.htaccess` configured for API routing
+- [ ] Database accessible from server
+- [ ] `/api/health` returns 200 OK
+- [ ] `/api/buildings` returns data
+- [ ] Website loads without errors
 
-**"Port already in use"**
-- Stop other Node.js apps in Plesk
-- Change PORT in .env to different number (e.g., 5001)
-- Update .htaccess to match new port
+### 11. Quick Fix Commands
 
-**"Cannot connect to database"**
-- Verify DB credentials in `.env`
-- Check database exists in Plesk → Databases
-- Try phpMyAdmin to test connection
+Run these in SSH:
 
-**"Module not found"**
-- Run "NPM Install" again in Node.js settings
-- Or upload node_modules folder
+```bash
+# Navigate to site root
+cd /var/www/vhosts/ctpred.com.ph/httpdocs
 
-### Frontend Issues?
+# Install dependencies
+cd backend && npm install --production && cd ..
 
-**Check:**
-- All files from `dist/` are in `/httpdocs/`
-- `.htaccess` exists and is correct
-- `index.html` is in root of `/httpdocs/`
+# Restart Passenger
+touch tmp/restart.txt
 
-**Clear cache:**
-- Browser: Ctrl+Shift+R (hard refresh)
-- Plesk: May have cache settings to clear
+# Or restart Apache
+systemctl restart apache2
 
----
+# Check if backend is running
+curl http://localhost:5000/api/health
+```
 
-## 📋 Quick Checklist
+### 12. Recommended: Use PM2 Instead of Passenger
 
-- [ ] Node.js enabled in Plesk for domain
-- [ ] Backend files uploaded to `/backend/` folder
-- [ ] `.env` file created with all variables
-- [ ] NPM dependencies installed
-- [ ] Database created and tables imported
-- [ ] Node.js application is running (check status)
-- [ ] Frontend built locally: `npm run build`
-- [ ] Frontend files uploaded to `/httpdocs/`
-- [ ] `.htaccess` is correct and in `/httpdocs/`
-- [ ] mod_proxy enabled in Apache
-- [ ] Test: `/api/health` returns JSON
-- [ ] Test: Appointment form works
+Passenger can be tricky with Node.js. PM2 is more reliable:
 
----
+```bash
+# Install PM2
+npm install -g pm2
 
-## 🆘 If Still Not Working
+# Start backend
+cd /var/www/vhosts/ctpred.com.ph/httpdocs/backend
+pm2 start server.js --name ctpredcorp-api
 
-**Provide these details:**
+# Save and auto-start on reboot
+pm2 save
+pm2 startup
 
-1. **Plesk version:** (check bottom-right corner)
-2. **Node.js status:** Screenshot from Plesk Node.js settings
-3. **Logs:** Copy any error messages from Node.js logs
-4. **Browser error:** Screenshot of browser console (F12)
-5. **Hosting provider:** Who provides your hosting?
+# Monitor
+pm2 monit
+```
 
-**Most likely issue:** Hosting plan doesn't support Node.js
+## Summary
 
-**Solution options:**
-1. Upgrade hosting plan to include Node.js
-2. Use separate backend hosting (e.g., DigitalOcean, Railway, Render)
-3. Request SSH access from provider
-4. Switch to a Node.js-friendly host
+The issue is that Passenger cannot start your Node.js backend. The solution is to either:
 
----
+1. **Configure Passenger properly** (complex, not recommended)
+2. **Use PM2** (recommended, more reliable)
 
-## 🚀 Alternative Backend Hosting
-
-If your current host doesn't support Node.js, you can host the backend separately:
-
-### Free/Cheap Options:
-
-**Railway.app** (Recommended):
-- Deploy backend in 5 minutes
-- Free tier available
-- Automatic deployments from GitHub
-- Get backend URL: `https://your-app.railway.app`
-
-**Render.com:**
-- Similar to Railway
-- Free tier with limitations
-- Easy deployment
-
-**Then:**
-1. Deploy backend to Railway/Render
-2. Get backend URL (e.g., `https://ctpred-api.railway.app`)
-3. Update `.env.production` in your repo:
-   ```
-   VITE_API_URL=https://ctpred-api.railway.app
-   ```
-4. Rebuild frontend: `npm run build`
-5. Upload to Plesk `/httpdocs/`
-
----
-
-**Last Updated:** February 20, 2026
+PM2 will run your backend on port 5000, and Apache will proxy `/api/*` requests to it.

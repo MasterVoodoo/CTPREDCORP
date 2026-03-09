@@ -1,21 +1,29 @@
 module.exports = {
   apps: [{
-    name: 'ctpredcorp-backend',
+    name: 'ctpredcorp-api',
     script: './server.js',
+    cwd: '/var/www/vhosts/ctpred.com.ph/httpdocs/backend',
     instances: 1,
-    exec_mode: 'fork',
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
     env: {
       NODE_ENV: 'production',
+      PORT: 5000,
+      // Database credentials - UPDATE THESE
+      DB_HOST: 'localhost',
+      DB_USER: 'your_db_user',
+      DB_PASSWORD: 'your_db_password',
+      DB_NAME: 'ctpredcorp',
+      // JWT Secret - UPDATE THIS
+      JWT_SECRET: 'your-super-secret-jwt-key-change-this',
+      // URLs
+      CLIENT_URL: 'https://ctpred.com.ph',
+      FRONTEND_URL: 'https://ctpred.com.ph'
     },
     error_file: './logs/err.log',
     out_file: './logs/out.log',
-    log_file: './logs/combined.log',
-    time: true,
-    watch: false,
-    max_memory_restart: '500M',
-    restart_delay: 4000,
-    autorestart: true,
-    max_restarts: 10,
-    min_uptime: '10s',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    merge_logs: true
   }]
 };
