@@ -16,12 +16,12 @@ export default function BuildingPage() {
     navigate(`/units/${unitId}`);
   };
 
-  if (!buildingId) {
+  if (!buildingId) {  
     navigate('/properties');
     return null;
   }
 
-  if (buildingId === 'ctp-red-corp') {
+  if (buildingId === 'ctp-asean-corp') {
     return <CtpRedCorpProperty onBack={handleBack} onViewDetails={handleViewDetails} />;
   }
 

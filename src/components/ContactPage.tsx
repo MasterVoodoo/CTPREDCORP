@@ -329,7 +329,7 @@ export default function ContactPage() {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => handleGetDirections("ctp-asean")}
+            onClick={() => handleGetDirections("ctp-alpha")}
           >
             Get Directions
           </Button>
@@ -339,7 +339,7 @@ export default function ContactPage() {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => handleGetDirections("ctp-alpha")}
+            onClick={() => handleGetDirections("ctp-bf")}
           >
             Get Directions
           </Button>
@@ -349,7 +349,7 @@ export default function ContactPage() {
           <Button 
             variant="outline" 
             className="w-full"
-            onClick={() => handleGetDirections("ctp-bf")}
+            onClick={() => handleGetDirections("ctp-asean")}
           >
             Get Directions
           </Button>
