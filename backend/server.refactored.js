@@ -24,12 +24,16 @@ const allowedOrigins = [
   process.env.CLIENT_URL || 'https://ctpred.com.ph',
   process.env.FRONTEND_URL || 'https://ctpred.com.ph',
   'https://ctpred.com.ph',
+  'http://ctpred.com.ph',
   'https://www.ctpred.com.ph',
+  'http://www.ctpred.com.ph',
   'https://ctpredcorp.com.ph',
+  'http://ctpredcorp.com.ph',
   'https://www.ctpredcorp.com.ph',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173',
+  'http://127.0.0.1:5000'
 ].filter(Boolean);
 
 app.use(
