@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
 import AppointmentManagement from '../components/AppointmentManagement';
-import SiteSettings from '../components/SiteSettings';
 import AdminSidebar, { type AdminTabId } from '../components/AdminSidebar';
 import { Building2, Menu, Calendar, AlertCircle } from 'lucide-react';
 
@@ -396,7 +395,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
             </div>
           )}
           {activeTab === 'appointments' && <AppointmentManagement />}
-          {activeTab === 'settings' && <SiteSettings />}
         </div>
         </main>
       </div>

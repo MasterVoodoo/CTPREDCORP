@@ -8,7 +8,6 @@ import { getFloorDisplayName } from "../utils/floorDisplay";
 import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { fetchAllBuildings, fetchUnitsByStatus } from "../services/api";
-import { useSettings } from "@/hooks/useSettings";
 
 interface AllAvailableSpacesProps {
   onBack: () => void;
@@ -20,7 +19,7 @@ interface AllAvailableSpacesProps {
 }
 
 export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilters }: AllAvailableSpacesProps) {
-  const [sortBy, setSortBy] = useState<string>("price-asc");
+  const [sortBy, setSortBy] = useState<string>("size-asc");
   const [filterBuilding, setFilterBuilding] = useState<string>(
     initialFilters?.building || "all"
   );
@@ -33,7 +32,6 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
   const [buildingsList, setBuildingsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { settings } = useSettings();
 
   // Fetch data from API on component mount
   useEffect(() => {
@@ -279,8 +277,6 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="price-asc" className="cursor-pointer">Price: Low to High</SelectItem>
-                    <SelectItem value="price-desc" className="cursor-pointer">Price: High to Low</SelectItem>
                     <SelectItem value="size-asc" className="cursor-pointer">Size: Small to Large</SelectItem>
                     <SelectItem value="size-desc" className="cursor-pointer">Size: Large to Small</SelectItem>
                     <SelectItem value="floor-asc" className="cursor-pointer">Floor: Low to High</SelectItem>
@@ -296,7 +292,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   onClick={() => {
                     setFilterBuilding("all");
                     setFilterCondition("all");
-                    setSortBy("price-asc");
+                    setSortBy("size-asc");
                   }}
                   className="w-full cursor-pointer"
                 >
@@ -359,17 +355,9 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                     <p className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t">
-                    {settings.show_unit_prices && (
-                      <div>
-                        <p className="text-2xl font-bold text-primary">
-                          {formatPrice(unit.price)}
-                        </p>
-                        <p className="text-sm text-gray-500">per sqm</p>
-                      </div>
-                    )}
+                  <div className="flex items-center justify-end pt-4 border-t">
                     <Button
-                      className="bg-primary hover:bg-accent text-white cursor-pointer ml-auto"
+                      className="bg-primary hover:bg-accent text-white cursor-pointer"
                       onClick={() => onViewDetails(unit.id)}
                     >
                       View Details

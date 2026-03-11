@@ -5,7 +5,6 @@ import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { getFloorDisplayName } from "../utils/floorDisplay";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { useSettings } from "@/hooks/useSettings";
 
 interface Unit {
   id: string;
@@ -40,7 +39,6 @@ export default function SearchResults({
   const [building, setBuilding] = useState<any>(null);
   const [filteredUnits, setFilteredUnits] = useState<Unit[]>([]);
   const [stats, setStats] = useState({ available: 0, comingSoon: 0, taken: 0 });
-  const { settings } = useSettings();
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -287,19 +285,10 @@ export default function SearchResults({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t">
-                      {settings.show_unit_prices && (
-                        <div>
-                          <span className="text-2xl font-bold text-primary">
-                            ₱{unit.price.toLocaleString()}
-                          </span>
-                          <p className="text-sm text-gray-500">per sqm</p>
-                        </div>
-                      )}
-                      
+                    <div className="flex items-center justify-end pt-4 border-t">
                       <Button
                         onClick={() => onViewDetails(unit.id)}
-                        className="bg-primary hover:bg-primary/90 cursor-pointer ml-auto"
+                        className="bg-primary hover:bg-primary/90 cursor-pointer"
                         disabled={unit.status === "Taken"}
                       >
                         View Details
