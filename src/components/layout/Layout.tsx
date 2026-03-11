@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Header from '@/components/shared/Header';
 import Footer from '@/components/shared/Footer';
-import ScrollToTop from '@/components/shared/ScrollToTop';
+import QuotationButton from '@/components/shared/QuotationButton';
 
 export const Layout = () => {
   return (
@@ -11,7 +11,7 @@ export const Layout = () => {
         <Outlet />
       </main>
       <Footer />
-      <ScrollToTop />
+      <QuotationButton />
     </div>
   );
 };
