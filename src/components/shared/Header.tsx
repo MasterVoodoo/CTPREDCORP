@@ -323,12 +323,6 @@ export default function Header() {
               onItemClick={closeMobileMenu}
             />
 
-            <MobileAccordion
-              title="Services"
-              items={navigationItems.services}
-              onItemClick={closeMobileMenu}
-            />
-
             <Link
               to="/tenant-portal"
               onClick={closeMobileMenu}
