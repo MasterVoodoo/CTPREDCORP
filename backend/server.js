@@ -84,6 +84,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/src/assets', express.static(path.join(__dirname, '../src/assets')));
 
 // -------------------- API Routes (Always Active) -------------------- //
+const settingsRouter = require('./routes/settings');
+
 app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
@@ -91,6 +93,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/admin/appointments', appointmentsRouter);
 app.use('/api/uploads', uploadsRouter);
 app.use('/api/email', emailRouter);
+app.use('/api/settings', settingsRouter);
 
 // -------------------- Health Check -------------------- //
 app.get('/api/health', (req, res) => {

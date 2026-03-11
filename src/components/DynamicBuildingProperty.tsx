@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { motion, AnimatePresence } from "framer-motion";
 import { getFloorDisplayName } from "../utils/floorDisplay";
+import { useSettings } from "@/hooks/useSettings";
 
 interface Building {
   id: string;
@@ -49,6 +50,7 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("units");
+  const { settings } = useSettings();
 
     // ✅ FIXED: Production API URL
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
@@ -440,15 +442,17 @@ export default function DynamicBuildingProperty({ buildingId, onBack, onViewDeta
                             )}
 
                             <div className="flex justify-between items-center">
-                              <div>
-                                <div className="text-2xl font-bold text-primary">
-                                  ₱{unit.price.toLocaleString()}
+                              {settings.show_unit_prices && (
+                                <div>
+                                  <div className="text-2xl font-bold text-primary">
+                                    ₱{unit.price.toLocaleString()}
+                                  </div>
+                                  <div className="text-sm text-gray-500">per sqm</div>
                                 </div>
-                                <div className="text-sm text-gray-500">per sqm</div>
-                              </div>
+                              )}
                               <Button 
                                 size="sm" 
-                                className="bg-primary hover:bg-accent text-white cursor-pointer"
+                                className="bg-primary hover:bg-accent text-white cursor-pointer ml-auto"
                                 onClick={() => onViewDetails?.(unit.id)}
                               >
                                 View Details

@@ -8,6 +8,7 @@ import { getFloorDisplayName } from "../utils/floorDisplay";
 import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { fetchAllBuildings, fetchUnitsByStatus } from "../services/api";
+import { useSettings } from "@/hooks/useSettings";
 
 interface AllAvailableSpacesProps {
   onBack: () => void;
@@ -32,6 +33,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
   const [buildingsList, setBuildingsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { settings } = useSettings();
 
   // Fetch data from API on component mount
   useEffect(() => {
@@ -358,14 +360,16 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">
-                    <div>
-                      <p className="text-2xl font-bold text-primary">
-                        {formatPrice(unit.price)}
-                      </p>
-                      <p className="text-sm text-gray-500">per sqm</p>
-                    </div>
+                    {settings.show_unit_prices && (
+                      <div>
+                        <p className="text-2xl font-bold text-primary">
+                          {formatPrice(unit.price)}
+                        </p>
+                        <p className="text-sm text-gray-500">per sqm</p>
+                      </div>
+                    )}
                     <Button
-                      className="bg-primary hover:bg-accent text-white cursor-pointer"
+                      className="bg-primary hover:bg-accent text-white cursor-pointer ml-auto"
                       onClick={() => onViewDetails(unit.id)}
                     >
                       View Details

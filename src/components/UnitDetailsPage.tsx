@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { getFloorDisplayName } from "../utils/floorDisplay";
+import { useSettings } from "@/hooks/useSettings";
 
 interface Unit {
   id: string;
@@ -41,6 +42,7 @@ export default function UnitDetailsPage({
   const [unit, setUnit] = useState<Unit | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { settings } = useSettings();
 
   useEffect(() => {
     fetchUnitData();
@@ -290,16 +292,18 @@ export default function UnitDetailsPage({
               </div>
 
               {/* Pricing */}
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 mb-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">
-                    ₱{unit.price.toLocaleString()}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    Per sqm
+              {settings.show_unit_prices && (
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 mb-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-primary mb-2">
+                      ₱{unit.price.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Per sqm
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* CTA Buttons */}
               <div className="space-y-3">
