@@ -1,0 +1,3 @@
+# This directory is required by Phusion Passenger
+# Passenger expects a 'public' directory to exist
+# Keep this file so the directory is tracked in git

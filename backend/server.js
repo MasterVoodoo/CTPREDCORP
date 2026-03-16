@@ -2,17 +2,41 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const fs = require('fs');
-require('dotenv').config();
 
-const { testConnection } = require('./config/database');
-const buildingsRouter = require('./routes/buildings');
-const unitsRouter = require('./routes/units');
-const financialRouter = require('./routes/financial');
-const adminRouter = require('./routes/admin');
-const uploadsRouter = require('./routes/uploads');
-const emailRouter = require('./routes/email');
-const appointmentsRouter = require('./routes/appointments');
+// Enable detailed error reporting
+process.env.DEBUG = 'passenger*';
+
+// Load environment variables
+require('dotenv').config();
+console.log('🔍 Environment variables loaded');
+console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+console.log('🔍 PORT:', process.env.PORT);
+
+// Load required modules
+let testConnection;
+let buildingsRouter;
+let unitsRouter;
+let financialRouter;
+let adminRouter;
+let uploadsRouter;
+let emailRouter;
+let appointmentsRouter;
+
+try {
+  ({ testConnection } = require('./config/database'));
+  buildingsRouter = require('./routes/buildings');
+  unitsRouter = require('./routes/units');
+  financialRouter = require('./routes/financial');
+  adminRouter = require('./routes/admin');
+  uploadsRouter = require('./routes/uploads');
+  emailRouter = require('./routes/email');
+  appointmentsRouter = require('./routes/appointments');
+  console.log('✅ All routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading modules:', error);
+  console.error('❌ Stack trace:', error.stack);
+  process.exit(1);
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;

@@ -4,10 +4,10 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { getUnitsByStatus, getBuildingById } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { fetchAllBuildings, fetchUnitsByStatus } from "../services/api";
 
 interface AllAvailableSpacesProps {
   onBack: () => void;
@@ -19,95 +19,116 @@ interface AllAvailableSpacesProps {
 }
 
 export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilters }: AllAvailableSpacesProps) {
-  // Convert building name to building ID for filtering
-  const getBuildingIdFromName = (buildingName: string) => {
-    switch (buildingName) {
-      case "ctp-red-corp":
-        return "ctp-red-corp";
-      case "ctp-alpha-tower":
-        return "ctp-alpha-tower";
-      case "ctp-bf-building":
-        return "ctp-bf-building";
-      default:
-        return "all";
-    }
-  };
-
   const [sortBy, setSortBy] = useState<string>("price-asc");
   const [filterBuilding, setFilterBuilding] = useState<string>(
-    initialFilters?.building ? getBuildingIdFromName(initialFilters.building) : "all"
+    initialFilters?.building || "all"
   );
   const [filterCondition, setFilterCondition] = useState<string>(
     initialFilters?.condition || "all"
   );
+  
+  // State for API data
+  const [availableUnits, setAvailableUnits] = useState<any[]>([]);
+  const [buildingsList, setBuildingsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data from API on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch buildings and units in parallel
+        const [buildingsData, unitsData] = await Promise.all([
+          fetchAllBuildings(),
+          fetchUnitsByStatus("Available")
+        ]);
+        
+        setBuildingsList(buildingsData);
+        setAvailableUnits(unitsData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError('Failed to load data. Please ensure the backend is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+
+  // Dynamically extract all unique conditions from available units
+  const availableConditions = useMemo(() => {
+    const conditions = new Set<string>();
+    availableUnits.forEach(unit => {
+      if (unit.condition) {
+        conditions.add(unit.condition);
+      }
+    });
+    return Array.from(conditions).sort();
+  }, [availableUnits]);
 
   // Update filters when initialFilters prop changes
   useEffect(() => {
     if (initialFilters) {
-      setFilterBuilding(initialFilters.building ? getBuildingIdFromName(initialFilters.building) : "all");
+      setFilterBuilding(initialFilters.building || "all");
       setFilterCondition(initialFilters.condition || "all");
     }
   }, [initialFilters]);
 
-  // Get all available units
-  const availableUnits = getUnitsByStatus("Available");
+  // Apply filters dynamically
+  const filteredUnits = useMemo(() => {
+    let filtered = availableUnits;
 
-  // Apply filters
-  let filteredUnits = availableUnits;
+    // Filter by building
+    if (filterBuilding !== "all") {
+      filtered = filtered.filter(unit => unit.building === filterBuilding);
+    }
 
-  if (filterBuilding !== "all") {
-    filteredUnits = filteredUnits.filter(unit => {
-      switch (filterBuilding) {
-        case "ctp-red-corp":
-          return unit.id.startsWith("CRC-");
-        case "ctp-alpha-tower":
-          return unit.id.startsWith("CAT-");
-        case "ctp-bf-building":
-          return unit.id.startsWith("CBF-");
-        default:
-          return true;
-      }
-    });
-  }
+    // Filter by condition
+    if (filterCondition !== "all") {
+      filtered = filtered.filter(unit => unit.condition === filterCondition);
+    }
 
-  if (filterCondition !== "all") {
-    filteredUnits = filteredUnits.filter(unit => unit.condition === filterCondition);
-  }
+    return filtered;
+  }, [availableUnits, filterBuilding, filterCondition]);
 
-  // Apply sorting
-  const sortedUnits = [...filteredUnits].sort((a, b) => {
+  // Apply sorting dynamically
+  const sortedUnits = useMemo(() => {
+    const sorted = [...filteredUnits];
+    
     switch (sortBy) {
       case "price-asc":
-        return a.price - b.price;
+        return sorted.sort((a, b) => {
+          const priceA = parseFloat(String(a.price));
+          const priceB = parseFloat(String(b.price));
+          return priceA - priceB;
+        });
       case "price-desc":
-        return b.price - a.price;
+        return sorted.sort((a, b) => {
+          const priceA = parseFloat(String(a.price));
+          const priceB = parseFloat(String(b.price));
+          return priceB - priceA;
+        });
       case "size-asc":
-        return a.size - b.size;
+        return sorted.sort((a, b) => a.size - b.size);
       case "size-desc":
-        return b.size - a.size;
+        return sorted.sort((a, b) => b.size - a.size);
       case "floor-asc":
-        return a.floor - b.floor;
+        return sorted.sort((a, b) => a.floor - b.floor);
       case "floor-desc":
-        return b.floor - a.floor;
+        return sorted.sort((a, b) => b.floor - a.floor);
       default:
-        return 0;
+        return sorted;
     }
-  });
+  }, [filteredUnits, sortBy]);
 
-  // Get building info for display
-  const getBuildingName = (unitId: string) => {
-    if (unitId.startsWith("CRC-")) {
-      const building = getBuildingById("ctp-red-corp");
-      return building?.displayName || "CTP Asean Tower";
-    } else if (unitId.startsWith("CAT-")) {
-      const building = getBuildingById("ctp-alpha-tower");
-      return building?.displayName || "CTP Alpha Tower";
-    } else if (unitId.startsWith("CBF-")) {
-      const building = getBuildingById("ctp-bf-building");
-      return building?.displayName || "CTP BF Building";
-    } else {
-      return "CTP Tower One";
-    }
+  // Get building display name from unit
+  const getBuildingDisplayName = (unit: any) => {
+    const building = buildingsList.find(b => b.id === unit.building);
+    return building?.display_name || building?.displayName || unit.building;
   };
 
   const getConditionColor = (condition: string) => {
@@ -122,6 +143,51 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  // Format price for display
+  const formatPrice = (price: number | string) => {
+    const priceNum = parseFloat(String(price));
+    return `₱${priceNum.toLocaleString()}`;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/2 mb-8"></div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-96 bg-gray-300 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <Card className="text-center py-12">
+            <CardContent>
+              <Building2 className="h-16 w-16 text-red-400 mx-auto mb-4" />
+              <h3 className="text-xl font-medium text-gray-700 mb-2">Error Loading Data</h3>
+              <p className="text-gray-500 mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()} className="cursor-pointer">
+                Retry
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -159,6 +225,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-4 gap-4">
+              {/* Dynamic Building Filter */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Building</label>
                 <Select value={filterBuilding} onValueChange={setFilterBuilding}>
@@ -167,13 +234,20 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all" className="cursor-pointer">All Buildings</SelectItem>
-                    <SelectItem value="ctp-red-corp" className="cursor-pointer">CTP Asean Tower</SelectItem>
-                    <SelectItem value="ctp-alpha-tower" className="cursor-pointer">CTP Alpha Tower</SelectItem>
-                    <SelectItem value="ctp-bf-building" className="cursor-pointer">CTP BF Building</SelectItem>
+                    {buildingsList.map((building) => (
+                      <SelectItem 
+                        key={building.id} 
+                        value={building.id} 
+                        className="cursor-pointer"
+                      >
+                        {building.display_name || building.displayName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
+              {/* Dynamic Condition Filter */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Condition</label>
                 <Select value={filterCondition} onValueChange={setFilterCondition}>
@@ -182,13 +256,20 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all" className="cursor-pointer">All Conditions</SelectItem>
-                    <SelectItem value="Fitted" className="cursor-pointer">Fitted</SelectItem>
-                    <SelectItem value="Warm Shell" className="cursor-pointer">Warm Shell</SelectItem>
-                    <SelectItem value="Bare" className="cursor-pointer">Bare</SelectItem>
+                    {availableConditions.map((condition) => (
+                      <SelectItem 
+                        key={condition} 
+                        value={condition} 
+                        className="cursor-pointer"
+                      >
+                        {condition}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
+              {/* Sort Options */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Sort By</label>
                 <Select value={sortBy} onValueChange={setSortBy}>
@@ -206,6 +287,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                 </Select>
               </div>
 
+              {/* Clear Filters Button */}
               <div className="flex items-end">
                 <Button
                   variant="outline"
@@ -223,7 +305,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
           </CardContent>
         </Card>
 
-        {/* Units Grid */}
+        {/* Dynamic Units Grid */}
         {sortedUnits.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
@@ -255,7 +337,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   <div className="space-y-2">
                     <div className="flex items-center text-gray-600">
                       <Building2 className="h-4 w-4 mr-2" />
-                      <span className="text-sm">{getBuildingName(unit.id)}</span>
+                      <span className="text-sm">{getBuildingDisplayName(unit)}</span>
                     </div>
                     <div className="flex items-center text-gray-600">
                       <MapPin className="h-4 w-4 mr-2" />
@@ -271,16 +353,16 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
                   </div>
 
                   <div className="flex items-center text-gray-600">
-                  <Hotel className="h-4 w-4 mr-2" />
+                    <Hotel className="h-4 w-4 mr-2" />
                     <p className="text-sm text-gray-500">{getFloorDisplayName(unit.floor)}</p>
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">
                     <div>
                       <p className="text-2xl font-bold text-primary">
-                        ₱{unit.price.toLocaleString()}
+                        {formatPrice(unit.price)}
                       </p>
-                      <p className="text-sm text-gray-500">per month</p>
+                      <p className="text-sm text-gray-500">per sqm</p>
                     </div>
                     <Button
                       className="bg-primary hover:bg-accent text-white cursor-pointer"

@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
     res.json(units);
   } catch (error) {
     console.error('Error fetching units:', error);
-    res.status(500).json({ error: 'Failed to fetch units' });
+    res.json([]); // Return empty array instead of 500 error
   }
 });
 
