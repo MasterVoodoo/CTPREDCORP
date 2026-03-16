@@ -52,15 +52,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // -------------------- STATIC FILES -------------------- //
+const path = require('path');
+const fs = require('fs');
+
+// Uploads base folder
 const uploadsPath = path.join(__dirname, 'uploads');
 
-// Ensure uploads folder exists
-if (!fs.existsSync(uploadsPath)) {
-  fs.mkdirSync(uploadsPath, { recursive: true });
-}
+// Ensure folders exist
+const buildingsPath = path.join(uploadsPath, 'buildings');
+const unitsPath = path.join(uploadsPath, 'units');
 
+[uploadsPath, buildingsPath, unitsPath].forEach(folder => {
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+});
+
+// Serve uploads publicly
 app.use('/uploads', express.static(uploadsPath));
-
+console.log('✅ Serving uploads at /uploads');
 
 // -------------------- API ROUTES -------------------- //
 app.use('/api/buildings', buildingsRouter);
