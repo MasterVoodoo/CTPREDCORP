@@ -2,88 +2,75 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-
-// Enable detailed error reporting
-process.env.DEBUG = 'passenger*';
-
-// Load environment variables
+const fs = require('fs');
 require('dotenv').config();
-console.log('🔍 Environment variables loaded');
-console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
-console.log('🔍 PORT:', process.env.PORT);
 
-// Load required modules
-let testConnection;
-let buildingsRouter;
-let unitsRouter;
-let financialRouter;
-let adminRouter;
-let uploadsRouter;
-let emailRouter;
-let appointmentsRouter;
-
-try {
-  ({ testConnection } = require('./config/database'));
-  buildingsRouter = require('./routes/buildings');
-  unitsRouter = require('./routes/units');
-  financialRouter = require('./routes/financial');
-  adminRouter = require('./routes/admin');
-  uploadsRouter = require('./routes/uploads');
-  emailRouter = require('./routes/email');
-  appointmentsRouter = require('./routes/appointments');
-  console.log('✅ All routes loaded successfully');
-} catch (error) {
-  console.error('❌ Error loading modules:', error);
-  console.error('❌ Stack trace:', error.stack);
-  process.exit(1);
-}
+const { testConnection } = require('./config/database');
+const buildingsRouter = require('./routes/buildings');
+const unitsRouter = require('./routes/units');
+const financialRouter = require('./routes/financial');
+const adminRouter = require('./routes/admin');
+const uploadsRouter = require('./routes/uploads');
+const emailRouter = require('./routes/email');
+const appointmentsRouter = require('./routes/appointments');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const isProduction = process.env.NODE_ENV === 'production';
 
-// -------------------- FIXED CORS MIDDLEWARE -------------------- //
+
+// -------------------- CORS -------------------- //
 const allowedOrigins = [
   process.env.CLIENT_URL || 'https://ctpred.com.ph',
   process.env.FRONTEND_URL || 'https://ctpred.com.ph',
   'https://ctpred.com.ph',
-  'http://ctpred.com.ph',
   'https://www.ctpred.com.ph',
-  'http://www.ctpred.com.ph',
   'https://ctpredcorp.com.ph',
-  'http://ctpredcorp.com.ph',
   'https://www.ctpredcorp.com.ph',
   'http://localhost:5173',
   'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:5000'
-].filter(Boolean); // Remove empty values
+  'http://127.0.0.1:5173'
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (curl, mobile apps, etc.)
     if (!origin) return callback(null, true);
-    
-    // Check if origin is in allowed list
+
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
-    } else {
-      console.log(`❌ CORS blocked origin: ${origin}`);
-      return callback(new Error('Not allowed by CORS'));
     }
+
+    console.log(`❌ CORS blocked origin: ${origin}`);
+    return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  optionsSuccessStatus: 200 // For legacy browser support
+  optionsSuccessStatus: 200
 }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// -------------------- Serve Static Assets -------------------- //
-// Serve images from src/assets folder (if exists)
-app.use('/src/assets', express.static(path.join(__dirname, '../src/assets')));
 
-// -------------------- API Routes (Always Active) -------------------- //
+// -------------------- STATIC FILES -------------------- //
+const path = require('path');
+const fs = require('fs');
+
+// Uploads base folder
+const uploadsPath = path.join(__dirname, 'uploads');
+
+// Ensure folders exist
+const buildingsPath = path.join(uploadsPath, 'buildings');
+const unitsPath = path.join(uploadsPath, 'units');
+
+[uploadsPath, buildingsPath, unitsPath].forEach(folder => {
+  if (!fs.existsSync(folder)) fs.mkdirSync(folder, { recursive: true });
+});
+
+// Serve uploads publicly
+app.use('/uploads', express.static(uploadsPath));
+console.log('✅ Serving uploads at /uploads');
+
+// -------------------- API ROUTES -------------------- //
 app.use('/api/buildings', buildingsRouter);
 app.use('/api/units', unitsRouter);
 app.use('/api/financial', financialRouter);
@@ -92,130 +79,91 @@ app.use('/api/admin/appointments', appointmentsRouter);
 app.use('/api/uploads', uploadsRouter);
 app.use('/api/email', emailRouter);
 
-// -------------------- Health Check -------------------- //
+
+// -------------------- HEALTH CHECK -------------------- //
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'CTP RED API is running',
     environment: process.env.NODE_ENV,
-    allowedOrigins: allowedOrigins,
     timestamp: new Date().toISOString()
   });
 });
 
-// -------------------- Serve Frontend -------------------- //
+
+// -------------------- DEV FRONTEND SERVING -------------------- //
 if (!isProduction) {
-  // Development: Serve frontend from dist folder
+
   const distPath = path.join(__dirname, '../dist');
   app.use(express.static(distPath));
-  
-  // Catch-all route for client-side routing (development only)
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
-  console.log('🔧 Development mode: Backend also serving frontend from dist/');
+
+  console.log('🔧 Development mode: Backend serving frontend');
+
 } else {
-  console.log('✅ Production mode: Backend serving API routes only');
-  console.log('ℹ️  Frontend should be served separately (Apache/Nginx)');
+
+  console.log('✅ Production mode: API only');
 }
 
-// -------------------- Error Handling -------------------- //
+
+// -------------------- ERROR HANDLER -------------------- //
 app.use((err, req, res, next) => {
-  console.error('🚨 Server Error:', err.stack);
-  console.error('Request URL:', req.originalUrl);
-  console.error('Origin:', req.headers.origin);
-  console.error('Method:', req.method);
-  
-  // Send appropriate error response
+
+  console.error('🚨 Server Error:', err);
+
   if (err.message === 'Not allowed by CORS') {
-    return res.status(403).json({ 
+    return res.status(403).json({
       error: 'CORS Error',
-      message: 'Origin not allowed',
       origin: req.headers.origin
     });
   }
-  
-  res.status(500).json({ 
+
+  res.status(500).json({
     error: 'Server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+    message: isProduction ? 'Internal server error' : err.message
   });
+
 });
 
-// -------------------- 404 Handler (Must be last) -------------------- //
+
+// -------------------- 404 -------------------- //
 app.use((req, res) => {
-  console.log(`⚠️ 404 - Route not found: ${req.method} ${req.originalUrl}`);
-  res.status(404).json({ 
+
+  console.log(`⚠️ 404: ${req.method} ${req.originalUrl}`);
+
+  res.status(404).json({
     error: 'Not Found',
-    message: `Route ${req.originalUrl} not found`,
-    availableRoutes: [
-      '/api/health',
-      '/api/buildings',
-      '/api/units',
-      '/api/admin',
-      '/api/email/send-appointment',
-      '/api/admin/appointments'
-    ]
+    route: req.originalUrl
   });
+
 });
 
-// -------------------- Start Server -------------------- //
+
+// -------------------- START SERVER -------------------- //
 const startServer = async () => {
-  console.log('🔄 Starting server initialization...');
-  
-  try {
-    // Start server FIRST, then test database connection
-    app.listen(PORT, '0.0.0.0', async () => {
-      console.log('\n========================================');
-      console.log('🚀 CTP RED Backend Server Started');
-      console.log('========================================');
-      console.log('📍 Server URL: http://localhost:' + PORT);
-      console.log('📝 Environment:', process.env.NODE_ENV || 'development');
-      console.log('\n📌 API Endpoints:');
-      console.log('   - Health: http://localhost:' + PORT + '/api/health');
-      console.log('   - Admin: http://localhost:' + PORT + '/api/admin');
-      console.log('   - Email: http://localhost:' + PORT + '/api/email/send-appointment');
-      console.log('   - Appointments: http://localhost:' + PORT + '/api/admin/appointments');
-      console.log('   - Buildings: http://localhost:' + PORT + '/api/buildings');
-      console.log('   - Units: http://localhost:' + PORT + '/api/units');
-      console.log('\n🌐 CORS Allowed Origins:');
-      allowedOrigins.forEach(origin => console.log('   -', origin));
-      console.log('========================================\n');
-      
-      // Test database connection AFTER server starts
-      console.log('🔄 Testing database connection...');
-      try {
-        const dbConnected = await testConnection();
-        if (dbConnected) {
-          console.log('✅ Database connection successful');
-        } else {
-          console.error('⚠️  Database connection failed - some features may not work');
-          console.error('DB_HOST:', process.env.DB_HOST);
-          console.error('DB_NAME:', process.env.DB_NAME);
-        }
-      } catch (dbError) {
-        console.error('⚠️  Database connection error:', dbError.message);
-        console.error('⚠️  Some features may not work');
-      }
-    });
-  } catch (error) {
-    console.error('❌ Server startup failed:', error);
-    console.error('❌ Stack trace:', error.stack);
+
+  console.log('🔄 Testing database connection...');
+  const dbConnected = await testConnection();
+
+  if (!dbConnected) {
+    console.error('❌ Database connection failed');
     process.exit(1);
   }
+
+  app.listen(PORT, '0.0.0.0', () => {
+
+    console.log('\n========================================');
+    console.log('🚀 CTP RED Backend Running');
+    console.log('PORT:', PORT);
+    console.log('ENV:', process.env.NODE_ENV);
+    console.log('Uploads path:', uploadsPath);
+    console.log('========================================\n');
+
+  });
+
 };
 
-// Catch unhandled errors
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error);
-  console.error('❌ Stack trace:', error.stack);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection:', reason);
-  process.exit(1);
-});
-
-// Start the server
-console.log('🚀 Attempting to start CTP RED Backend Server...');
 startServer();

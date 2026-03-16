@@ -4,145 +4,66 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure upload directories exist
-const buildingsDir = path.join(__dirname, '../../src/assets/Buildings');
-const unitsDir = path.join(__dirname, '../../src/assets/Units');
+// -------------------- UPLOAD FOLDERS --------------------
+const uploadsBase = path.join(__dirname, '../uploads');
+const buildingsDir = path.join(uploadsBase, 'buildings');
+const unitsDir = path.join(uploadsBase, 'units');
 
-if (!fs.existsSync(buildingsDir)) {
-  fs.mkdirSync(buildingsDir, { recursive: true });
-}
+[uploadsBase, buildingsDir, unitsDir].forEach(dir => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
 
-if (!fs.existsSync(unitsDir)) {
-  fs.mkdirSync(unitsDir, { recursive: true });
-}
-
-// Configure multer for file uploads
-// NOTE: We can't access req.body.type in the destination callback reliably
-// So we'll upload to a temp location first, then move to correct folder
+// -------------------- MULTER CONFIG --------------------
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Use query parameter instead of body for type
-    const uploadType = req.query.type || 'units';
-    const dest = uploadType === 'buildings' ? buildingsDir : unitsDir;
-    console.log('Upload destination:', dest, 'for type:', uploadType);
-    cb(null, dest);
+  destination: (req, file, cb) => {
+    const type = req.query.type === 'buildings' ? 'buildings' : 'units';
+    cb(null, type === 'buildings' ? buildingsDir : unitsDir);
   },
-  filename: function (req, file, cb) {
-    // Generate unique filename: timestamp + original name
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const nameWithoutExt = path.basename(file.originalname, ext);
-    cb(null, nameWithoutExt + '-' + uniqueSuffix + ext);
+    const name = path.basename(file.originalname, ext).replace(/\s+/g, '-').toLowerCase();
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, `${name}-${unique}${ext}`);
   }
 });
 
-// File filter to only accept images
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|webp/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp)'));
-  }
+  const allowed = /jpeg|jpg|png|gif|webp/;
+  const extname = allowed.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowed.test(file.mimetype);
+  if (extname && mimetype) return cb(null, true);
+  cb(new Error('Only image files allowed (jpeg, jpg, png, gif, webp)'));
 };
 
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: fileFilter
-});
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }, fileFilter });
 
-// POST endpoint for single file upload
+// -------------------- ROUTES --------------------
+// Single file
 router.post('/single', upload.single('image'), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    // Get type from query parameter
-    const uploadType = req.query.type || 'units';
-    const relativePath = `/src/assets/${uploadType === 'buildings' ? 'Buildings' : 'Units'}/${req.file.filename}`;
-
-    console.log('File uploaded:', {
-      type: uploadType,
-      filename: req.file.filename,
-      path: relativePath,
-      destination: req.file.destination
-    });
-
-    res.json({
-      message: 'File uploaded successfully',
-      filename: req.file.filename,
-      path: relativePath,
-      size: req.file.size
-    });
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    res.status(500).json({ error: 'Failed to upload file' });
-  }
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const type = req.query.type === 'buildings' ? 'buildings' : 'units';
+  const urlPath = `/uploads/${type}/${req.file.filename}`;
+  res.json({ message: 'File uploaded', path: urlPath });
 });
 
-// POST endpoint for multiple file uploads
+// Multiple files
 router.post('/multiple', upload.array('images', 10), (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: 'No files uploaded' });
-    }
-
-    // Get type from query parameter
-    const uploadType = req.query.type || 'units';
-    const files = req.files.map(file => ({
-      filename: file.filename,
-      path: `/src/assets/${uploadType === 'buildings' ? 'Buildings' : 'Units'}/${file.filename}`,
-      size: file.size
-    }));
-
-    console.log(`${files.length} file(s) uploaded to ${uploadType}`);
-
-    res.json({
-      message: `${files.length} file(s) uploaded successfully`,
-      files: files
-    });
-  } catch (error) {
-    console.error('Error uploading files:', error);
-    res.status(500).json({ error: 'Failed to upload files' });
-  }
+  if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
+  const type = req.query.type === 'buildings' ? 'buildings' : 'units';
+  const files = req.files.map(f => ({ filename: f.filename, path: `/uploads/${type}/${f.filename}` }));
+  res.json({ message: `${files.length} file(s) uploaded`, files });
 });
 
-// DELETE endpoint to remove an image
+// Delete file
 router.delete('/', (req, res) => {
-  try {
-    const { path: imagePath } = req.body;
-    
-    if (!imagePath) {
-      return res.status(400).json({ error: 'Image path is required' });
-    }
+  const { path: imagePath } = req.body;
+  if (!imagePath) return res.status(400).json({ error: 'Image path required' });
 
-    // Convert relative path to absolute path
-    const absolutePath = path.join(__dirname, '../..', imagePath);
-    
-    console.log('Attempting to delete file:', absolutePath);
-    
-    // Check if file exists
-    if (!fs.existsSync(absolutePath)) {
-      console.log('File not found:', absolutePath);
-      return res.status(404).json({ error: 'File not found' });
-    }
+  const absolutePath = path.join(__dirname, '../', imagePath.replace(/^\/+/, ''));
+  if (!fs.existsSync(absolutePath)) return res.status(404).json({ error: 'File not found' });
 
-    // Delete the file
-    fs.unlinkSync(absolutePath);
-    console.log('File deleted successfully:', absolutePath);
-    
-    res.json({ message: 'File deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting file:', error);
-    res.status(500).json({ error: 'Failed to delete file' });
-  }
+  fs.unlinkSync(absolutePath);
+  res.json({ message: 'File deleted' });
 });
 
 module.exports = router;
