@@ -52,8 +52,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // -------------------- STATIC FILES -------------------- //
-const path = require('path');
-const fs = require('fs');
 
 // Uploads base folder
 const uploadsPath = path.join(__dirname, 'uploads');
