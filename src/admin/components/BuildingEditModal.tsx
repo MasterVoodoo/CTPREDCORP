@@ -47,6 +47,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
   });
 
   const [heroImage, setHeroImage] = useState<string>(building.hero_image || '');
+  const [heroImageId, setHeroImageId] = useState<number | null>(null);
   const [heroImagePreview, setHeroImagePreview] = useState<string>('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,6 +135,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
 
       const data = await response.json();
       console.log('Building image uploaded:', data);
+      setHeroImageId(data.imageId);
       setHeroImage(data.path);
       setHeroImagePreview(`${API_BASE_URL}${data.path}`);
       setError(null);
@@ -146,18 +148,19 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
   };
 
   const handleRemoveNewImage = async () => {
-    if (heroImage && heroImage !== building.hero_image) {
+    if (heroImageId) {
       try {
         await fetch(`${API_BASE_URL}/api/uploads`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ path: heroImage })
+          body: JSON.stringify({ imageId: heroImageId })
         });
       } catch (err) {
         console.error('Failed to delete image:', err);
       }
     }
     setHeroImage(building.hero_image || '');
+    setHeroImageId(null);
     setHeroImagePreview('');
   };
 
@@ -200,6 +203,7 @@ export default function BuildingEditModal({ building, onClose, onSave }: Props) 
         buildingHours: buildingHours,
         contact: contact,
         heroImage: heroImage,
+        heroImageId: heroImageId,
         badge: formData.badge,
         ctaTitle: formData.cta_title,
         ctaDescription: formData.cta_description,

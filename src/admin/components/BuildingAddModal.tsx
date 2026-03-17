@@ -30,6 +30,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   });
 
   const [heroImage, setHeroImage] = useState<string>('');
+  const [heroImageId, setHeroImageId] = useState<number | null>(null);
   const [heroImagePreview, setHeroImagePreview] = useState<string>('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,6 +102,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
       }
 
       const data = await response.json();
+      setHeroImageId(data.imageId);
       setHeroImage(data.path);
       setHeroImagePreview(`${API_BASE_URL}${data.path}`);
       setError(null);
@@ -113,18 +115,19 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
   };
 
   const handleRemoveImage = async () => {
-    if (heroImage) {
+    if (heroImageId) {
       try {
         await fetch(`${API_BASE_URL}/api/uploads`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ path: heroImage })
+          body: JSON.stringify({ imageId: heroImageId })
         });
       } catch (err) {
         console.error('Failed to delete image:', err);
       }
     }
     setHeroImage('');
+    setHeroImageId(null);
     setHeroImagePreview('');
   };
 
@@ -179,6 +182,7 @@ export default function BuildingAddModal({ onClose, onSave }: BuildingAddModalPr
         buildingHours: buildingHours,
         contact: contact,
         heroImage: heroImage || '',
+        heroImageId: heroImageId,
         badge: formData.badge,
         ctaTitle: formData.ctaTitle,
         ctaDescription: formData.ctaDescription,

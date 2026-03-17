@@ -11,6 +11,7 @@ const unitsRouter = require('./routes/units');
 const financialRouter = require('./routes/financial');
 const adminRouter = require('./routes/admin');
 const uploadsRouter = require('./routes/uploads');
+const imagesRouter = require('./routes/images');
 const emailRouter = require('./routes/email');
 const appointmentsRouter = require('./routes/appointments');
 
@@ -75,6 +76,7 @@ app.use('/api/financial', financialRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/admin/appointments', appointmentsRouter);
 app.use('/api/uploads', uploadsRouter);
+app.use('/api/images', imagesRouter);
 app.use('/api/email', emailRouter);
 
 

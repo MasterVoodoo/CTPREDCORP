@@ -37,6 +37,7 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
   });
 
   const [images, setImages] = useState<string[]>([]);
+  const [imageIds, setImageIds] = useState<number[]>([]);
   const [uploadingFiles, setUploadingFiles] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
 
     try {
       const uploadedPaths: string[] = [];
+      const uploadedIds: number[] = [];
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -95,9 +97,11 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
         const data = await response.json();
         console.log('Unit image uploaded:', data);
         uploadedPaths.push(data.path);
+        uploadedIds.push(data.imageId);
       }
 
       setImages([...images, ...uploadedPaths]);
+      setImageIds([...imageIds, ...uploadedIds]);
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to upload images');
@@ -109,15 +113,20 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
 
   const handleRemoveImage = async (index: number, imagePath: string) => {
     try {
-      await fetch(`${API_BASE_URL}/api/uploads`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: imagePath })
-      });
+      const imageId = imageIds[index];
+      if (imageId) {
+        await fetch(`${API_BASE_URL}/api/uploads`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageId })
+        });
+      }
       setImages(images.filter((_, i) => i !== index));
+      setImageIds(imageIds.filter((_, i) => i !== index));
     } catch (err) {
       console.error('Failed to delete image:', err);
       setImages(images.filter((_, i) => i !== index));
+      setImageIds(imageIds.filter((_, i) => i !== index));
     }
   };
 
@@ -151,6 +160,7 @@ export default function UnitEditModal({ unit, onClose, onSave }: Props) {
         condition: formData.condition,
         image: images[0] || unit.image || '/images/units/default.jpg',
         images: images.length > 0 ? images : ['/images/units/default.jpg'],
+        imageIds: imageIds,
         description: formData.description || `Unit ${formData.title}`,
         floorPlan: {},
         availability: {}
