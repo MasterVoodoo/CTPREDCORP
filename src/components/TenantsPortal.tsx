@@ -3,6 +3,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Button } from "./ui/button";
 import { ExternalLink } from "lucide-react";
 import EnvoyLogo from "../assets/CTP_Red/Envoy_logo.svg";
+import GatePassQr from "../assets/gatepassqr.png";
+import WorkPermitQr from "../assets/workpermitqr.png";
+import ParkingSlotQr from "../assets/parkingslotqr.png";
+
+const FORM_LINKS = [
+  {
+    title: "Gate Pass Form",
+    description: "Use this form to request gate pass processing.",
+    qrImage: GatePassQr,
+    href: "https://form.jotform.com/240713182251447",
+    buttonLabel: "Open Gate Pass Form",
+  },
+  {
+    title: "Work Permit Application",
+    description: "Submit work permit application requests here.",
+    qrImage: WorkPermitQr,
+    href: "https://form.jotform.com/240729047050451",
+    buttonLabel: "Open Work Permit Form",
+  },
+  {
+    title: "Parking Request Form",
+    description: "Request parking slots through this online form.",
+    qrImage: ParkingSlotQr,
+    href: "https://form.jotform.com/241961796932470",
+    buttonLabel: "Open Parking Request Form",
+  },
+];
 
 export default function TenantsPortal() {
 
@@ -118,6 +145,47 @@ export default function TenantsPortal() {
                     Access Envoy Platform
                   </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* QR Forms Section */}
+        <div className="mt-12">
+          <Card className="border-primary/20">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-gray-900">Quick Access Forms</CardTitle>
+              <CardDescription className="text-lg">
+                Scan any QR code or open the external link directly to submit your request.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {FORM_LINKS.map((form) => (
+                  <div key={form.title} className="bg-white rounded-lg border p-5 text-center shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{form.title}</h3>
+                    <p className="text-sm text-gray-600 mb-4">{form.description}</p>
+                    <a
+                      href={form.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block mb-4"
+                    >
+                      <img
+                        src={form.qrImage}
+                        alt={`${form.title} QR code`}
+                        className="mx-auto w-44 h-44 object-contain"
+                      />
+                    </a>
+                    <Button
+                      className="w-full bg-primary hover:bg-accent text-white cursor-pointer"
+                      onClick={() => window.open(form.href, "_blank")}
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      {form.buttonLabel}
+                    </Button>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
