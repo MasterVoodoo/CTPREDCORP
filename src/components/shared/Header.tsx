@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CTPRED_LOGO from "@/assets/CTPRED_LOGO.png";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navigationItems = {
-  properties: [
-    { label: "CTP Asean Tower", to: "/properties/ctp-asean-tower" },
-    { label: "CTP Alpha Tower", to: "/properties/ctp-alpha-tower" },
-    { label: "CTP BF", to: "/properties/ctp-bf-building" },
-  ],
   services: [
     { label: "Property Management", to: "/services#property-management" },
     { label: "Maintenance Services", to: "/services#maintenance" },
@@ -222,6 +217,44 @@ function MobileAccordion({
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [propertiesItems, setPropertiesItems] = useState<
+    Array<{ label: string; to: string }>
+  >([]);
+  const [isPropertiesLoading, setIsPropertiesLoading] = useState(true);
+
+  useEffect(() => {
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+    const fetchBuildings = async () => {
+      try {
+        setIsPropertiesLoading(true);
+        const res = await fetch(`${API_BASE_URL}/api/buildings`);
+        if (!res.ok) throw new Error("Failed to load properties");
+
+        const buildings: Array<{
+          id: string;
+          name?: string;
+          display_name?: string;
+        }> = await res.json();
+
+        setPropertiesItems(
+          buildings
+            .filter((b) => b?.id)
+            .map((b) => ({
+              label: b.display_name || b.name || b.id,
+              to: `/properties/${b.id}`,
+            }))
+        );
+      } catch (err) {
+        console.error("Error loading properties for navbar:", err);
+        setPropertiesItems([]);
+      } finally {
+        setIsPropertiesLoading(false);
+      }
+    };
+
+    fetchBuildings();
+  }, []);
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
@@ -258,11 +291,20 @@ export default function Header() {
                 dropdownTitle="About CTP RED CORP"
               />
 
-              <HoverDropdown
-                title="Properties"
-                items={navigationItems.properties}
-                dropdownTitle="Our Properties"
-              />
+              {propertiesItems.length > 0 ? (
+                <HoverDropdown
+                  title="Properties"
+                  items={propertiesItems}
+                  dropdownTitle="Our Properties"
+                />
+              ) : (
+                <Link
+                  to="/properties"
+                  className="text-gray-700 hover:text-primary transition-colors text-[15px] px-2 py-1"
+                >
+                  Properties
+                </Link>
+              )}
 
               <Link
                 to="/tenant-portal"
@@ -317,11 +359,21 @@ export default function Header() {
               onItemClick={closeMobileMenu}
             />
 
-            <MobileAccordion
-              title="Properties"
-              items={navigationItems.properties}
-              onItemClick={closeMobileMenu}
-            />
+            {propertiesItems.length > 0 ? (
+              <MobileAccordion
+                title="Properties"
+                items={propertiesItems}
+                onItemClick={closeMobileMenu}
+              />
+            ) : (
+              <Link
+                to="/properties"
+                onClick={closeMobileMenu}
+                className="block py-4 px-4 text-gray-700 hover:bg-gray-50 font-medium text-lg border-b border-gray-200 transition-colors duration-200"
+              >
+                Properties
+              </Link>
+            )}
 
             <Link
               to="/tenant-portal"
