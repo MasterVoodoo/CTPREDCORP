@@ -9,6 +9,24 @@ import { useState, useEffect, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { fetchAllBuildings, fetchUnitsByStatus } from "../services/api";
 
+function getApiBaseUrl(): string {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  return import.meta.env.DEV ? "http://localhost:5000" : "https://ctpred.com.ph";
+}
+
+/** Match UnitDetailsPage: relative `/api/images/…` paths need the backend origin. */
+function getUnitImageUrl(imagePath?: string | null): string {
+  if (!imagePath) return "/images/units/default.jpg";
+  if (imagePath.startsWith("http")) return imagePath;
+  return `${getApiBaseUrl()}${imagePath}`;
+}
+
+function getUnitPrimaryImagePath(unit: { image?: string; images?: string[] }): string | undefined {
+  if (unit.image) return unit.image;
+  if (Array.isArray(unit.images) && unit.images.length > 0) return unit.images[0];
+  return undefined;
+}
+
 interface AllAvailableSpacesProps {
   onBack: () => void;
   onViewDetails: (unitId: string) => void;
@@ -318,7 +336,7 @@ export default function AllAvailableSpaces({ onBack, onViewDetails, initialFilte
               <Card key={unit.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <ImageWithFallback
-                    src={unit.image}
+                    src={getUnitImageUrl(getUnitPrimaryImagePath(unit))}
                     alt={unit.title}
                     className="w-full h-48 object-cover"
                   />
