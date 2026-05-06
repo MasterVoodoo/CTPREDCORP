@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropertyManagement from '../components/PropertyManagement';
 import UserManagement from '../components/UserManagement';
-import AppointmentManagement from '../components/AppointmentManagement';
 import AdminSidebar, { type AdminTabId } from '../components/AdminSidebar';
 import { Building2, Menu, Calendar, AlertCircle } from 'lucide-react';
 
@@ -364,12 +363,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
                     </div>
                     <div className="text-left"><p className="font-semibold text-gray-900">Manage Properties</p><p className="text-sm text-gray-600">Update buildings and units</p></div>
                   </div>
-                  <div onClick={() => setTabAndCloseSidebar('appointments')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
-                      <Calendar className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="text-left"><p className="font-semibold text-gray-900">Manage Appointments</p><p className="text-sm text-gray-600">View and respond to requests</p></div>
-                  </div>
                   {user?.role === 'super_admin' && (
                     <div onClick={() => setTabAndCloseSidebar('users')} className="quick-action-card flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
                       <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-lg flex items-center justify-center shadow-md flex-shrink-0">
@@ -386,15 +379,6 @@ const AdminDashboard = ({ onLogout }: AdminDashboardProps) => {
           {activeTab === 'properties-add-building' && <PropertyManagement openAddBuildingModal />}
           {activeTab === 'properties-add-units' && <PropertyManagement openAddUnitModal />}
           {activeTab === 'users' && user?.role === 'super_admin' && <UserManagement />}
-          {activeTab === 'logs' && (
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Activity Logs</h2>
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <p className="text-gray-600">Activity log viewer coming soon...</p>
-              </div>
-            </div>
-          )}
-          {activeTab === 'appointments' && <AppointmentManagement />}
         </div>
         </main>
       </div>

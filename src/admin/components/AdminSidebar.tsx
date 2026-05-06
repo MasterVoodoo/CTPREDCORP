@@ -2,8 +2,6 @@ import {
   LayoutDashboard,
   Home,
   Users,
-  Activity,
-  CalendarCheck,
 } from 'lucide-react';
 import CTPRED_LOGO from '../../assets/CTPRED_LOGO.png';
 
@@ -12,9 +10,7 @@ export type AdminTabId =
   | 'properties'
   | 'properties-add-building'
   | 'properties-add-units'
-  | 'users'
-  | 'logs'
-  | 'appointments';
+  | 'users';
 
 export interface AdminSidebarProps {
   /** Whether the sidebar is expanded (desktop) or visible (mobile) */
@@ -134,26 +130,6 @@ export default function AdminSidebar({
               <span className="sidebar-text whitespace-nowrap">User Management</span>
             </button>
           )}
-
-          <button
-            onClick={() => handleNavigate('logs')}
-            className={`sidebar-link w-full flex items-center gap-3 px-3 py-1.5 rounded-lg text-left font-medium ${
-              activeTab === 'logs' ? 'active' : 'text-gray-700'
-            }`}
-          >
-            <Activity className="h-5 w-5 flex-shrink-0" />
-            <span className="sidebar-text whitespace-nowrap">Activity Logs</span>
-          </button>
-
-          <button
-            onClick={() => handleNavigate('appointments')}
-            className={`sidebar-link w-full flex items-center gap-3 px-3 py-1.5 rounded-lg text-left font-medium ${
-              activeTab === 'appointments' ? 'active' : 'text-gray-700'
-            }`}
-          >
-            <CalendarCheck className="h-5 w-5 flex-shrink-0" />
-            <span className="sidebar-text whitespace-nowrap">Appointment Management</span>
-          </button>
         </nav>
       </aside>
     </>
