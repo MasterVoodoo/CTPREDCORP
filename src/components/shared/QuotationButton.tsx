@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { buildMailtoLink, formatMailDate } from "@/utils/mailto";
 import {
   Select,
   SelectContent,
@@ -27,8 +28,35 @@ export default function QuotationButton() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add form submission logic later
-    console.log("Form submitted:", formData);
+
+    if (!formData.name || !formData.company || !formData.industry || !formData.email) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const requestDate = formatMailDate();
+    const subject = `${formData.company} - Request for Quotation - ${requestDate}`;
+    const body = [
+      "Request Type: Quotation",
+      `Date Submitted: ${requestDate}`,
+      "",
+      "Client Information",
+      `Full Name: ${formData.name}`,
+      `Company Name: ${formData.company}`,
+      `Industry: ${formData.industry}`,
+      `Email Address: ${formData.email}`,
+      `Phone Number: ${formData.phone || "Not provided"}`,
+      "",
+      "Space Requirements / Message",
+      formData.requirements || "Not provided",
+    ].join("\n");
+
+    window.location.href = buildMailtoLink({
+      cc: formData.sendCopy ? formData.email : undefined,
+      subject,
+      body,
+    });
+
     setIsOpen(false);
   };
 

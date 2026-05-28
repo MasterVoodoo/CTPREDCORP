@@ -31,9 +31,7 @@ import {
   getCtpBFAvailableFloors 
 } from "../data/ctpData";
 import { getFloorDisplayName } from "../utils/floorDisplay";
-
-// Get API URL based on environment
-const API_URL = import.meta.env.VITE_API_URL || 'https://ctpred.com.ph';
+import { buildMailtoLink, formatMailDate } from "../utils/mailto";
 
 export default function ScheduleAppointment() {
   const [formData, setFormData] = useState({
@@ -80,7 +78,7 @@ export default function ScheduleAppointment() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -99,31 +97,40 @@ export default function ScheduleAppointment() {
       return;
     }
 
+    const requestDate = formatMailDate();
+    const selectedFloor = getFloorDisplayName(Number(formData.floor));
+    const subject = `${formData.companyName} - Appointment Request - ${requestDate}`;
+    const body = [
+      "Request Type: Appointment",
+      `Date Submitted: ${requestDate}`,
+      "",
+      "Company Information",
+      `Company Name: ${formData.companyName}`,
+      `Phone Number: ${formData.phoneNumber}`,
+      `Email Address: ${formData.email}`,
+      "",
+      "Appointment Details",
+      `Preferred Date: ${formData.preferredDate}`,
+      `Preferred Time: ${formData.preferredTime}`,
+      `Property: ${formData.property}`,
+      `Preferred Floor: ${selectedFloor}`,
+      "",
+      "Additional Notes or Requirements",
+      formData.additionalNotes || "Not provided",
+    ].join("\n");
+
     try {
-      // Send appointment via backend API
-      const response = await fetch(`${API_URL}/api/email/send-appointment`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          floor: getFloorDisplayName(Number(formData.floor))
-        }),
+      window.location.href = buildMailtoLink({
+        subject,
+        body,
       });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || 'Failed to send appointment request');
-      }
 
       // Show success popover
       setShowSuccessPopover(true);
       
       // Also show toast notification
       toast.success(
-        "Appointment request sent successfully! Check your email for confirmation.",
+        "Your email client should open with the appointment request. Please review and send it.",
         {
           duration: 5000,
         }
@@ -151,7 +158,7 @@ export default function ScheduleAppointment() {
       toast.error(
         error instanceof Error 
           ? error.message 
-          : "Failed to send appointment request. Please try again."
+          : "Failed to open your email client. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -177,8 +184,8 @@ export default function ScheduleAppointment() {
                   Appointment Request Sent!
                 </h3>
                 <p className="text-green-700 text-sm">
-                  We've sent confirmation emails to you and our team. 
-                  We'll contact you within 24 hours to confirm your appointment.
+                  Your email client should open with the completed appointment request. 
+                  Please review and send it to complete your request.
                 </p>
               </div>
               <button
