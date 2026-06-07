@@ -273,14 +273,14 @@ export default function ScheduleAppointment() {
                     <Input
                       id="phoneNumber"
                       type="tel"
-                      placeholder="(555) 123-4567"
+                      placeholder="09123456789"
                       value={formData.phoneNumber}
-                      onChange={(e) =>
-                        handleInputChange(
-                          "phoneNumber",
-                          e.target.value,
-                        )
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        handleInputChange("phoneNumber", value);
+                      }}
+                      pattern="[0-9]*"
+                      inputMode="numeric"
                       className="bg-input-background border-gray-300 focus:border-primary"
                       required
                     />

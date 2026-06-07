@@ -122,7 +122,8 @@ export default function QuotationButton() {
               maxWidth: "500px",
               width: "100%",
               maxHeight: "90vh",
-              overflow: "auto",
+              display: "flex",
+              flexDirection: "column",
               position: "relative",
             }}
             onClick={(e) => e.stopPropagation()}
@@ -222,7 +223,7 @@ export default function QuotationButton() {
                     <SelectTrigger id="industry">
                       <SelectValue placeholder="Select your industry" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent style={{ zIndex: 10001 }}>
                       <SelectItem value="technology">Technology</SelectItem>
                       <SelectItem value="finance">Finance & Banking</SelectItem>
                       <SelectItem value="healthcare">Healthcare</SelectItem>
@@ -259,9 +260,14 @@ export default function QuotationButton() {
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="+63 912 345 6789"
+                    placeholder="09123456789"
                     value={formData.phone}
-                    onChange={(e) => handleChange("phone", e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      handleChange("phone", value);
+                    }}
+                    pattern="[0-9]*"
+                    inputMode="numeric"
                   />
                 </div>
 
